@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "moreinventorymod:block/storagebox_bronze_top",
+    "front": "moreinventorymod:block/storagebox_bronze_face",
+    "side": "moreinventorymod:block/storagebox_bronze_side"
+  }
+}

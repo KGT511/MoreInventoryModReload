@@ -1,0 +1,104 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "moreinventorymod:item/transporter"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1
+      },
+      "model": "moreinventorymod:item/transporter_chest"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 2
+      },
+      "model": "moreinventorymod:item/transporter_trapchest"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 3
+      },
+      "model": "moreinventorymod:item/transporter_furnace"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 4
+      },
+      "model": "moreinventorymod:item/transporter_dispenser"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 5
+      },
+      "model": "moreinventorymod:item/transporter_dropper"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 6
+      },
+      "model": "moreinventorymod:item/transporter_storagebox_wood"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 7
+      },
+      "model": "moreinventorymod:item/transporter_storagebox_iron"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 8
+      },
+      "model": "moreinventorymod:item/transporter_storagebox_gold"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 9
+      },
+      "model": "moreinventorymod:item/transporter_storagebox_diamond"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 10
+      },
+      "model": "moreinventorymod:item/transporter_storagebox_emerald"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 11
+      },
+      "model": "moreinventorymod:item/transporter_storagebox_copper"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 12
+      },
+      "model": "moreinventorymod:item/transporter_storagebox_tin"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 13
+      },
+      "model": "moreinventorymod:item/transporter_storagebox_bronze"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 14
+      },
+      "model": "moreinventorymod:item/transporter_storagebox_silver"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 15
+      },
+      "model": "moreinventorymod:item/transporter_storagebox_glass"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 99
+      },
+      "model": "moreinventorymod:item/transporter_furnace_lit"
+    }
+  ]
+}

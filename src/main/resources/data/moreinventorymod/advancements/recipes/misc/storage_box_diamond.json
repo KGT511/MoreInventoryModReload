@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "moreinventorymod:storage_box_diamond"
+    ]
+  },
+  "criteria": {
+    "has_storage_box": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "moreinventorymod:storage_box_wood"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "moreinventorymod:storage_box_diamond"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_storage_box",
+      "has_the_recipe"
+    ]
+  ]
+}

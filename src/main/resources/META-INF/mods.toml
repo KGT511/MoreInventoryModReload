@@ -39,7 +39,7 @@ displayName="More Inventory Mod Reload" #mandatory
 logoFile="moreinventorymod.png" #optional
 
 # A text field displayed in the mod UI
-credits="emenu" #optional
+credits="" #optional
 
 # A text field displayed in the mod UI
 authors="KGT511" #optional

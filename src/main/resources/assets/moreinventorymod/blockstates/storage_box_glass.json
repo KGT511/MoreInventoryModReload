@@ -1,0 +1,19 @@
+{
+    "variants": {
+        "facing=east": {
+            "model": "moreinventorymod:block/storage_box_glass",
+            "y": 90
+        },
+        "facing=north": {
+            "model": "moreinventorymod:block/storage_box_glass"
+        },
+        "facing=south": {
+            "model": "moreinventorymod:block/storage_box_glass",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "moreinventorymod:block/storage_box_glass",
+            "y": 270
+        }
+    }
+}
