@@ -1,7 +1,7 @@
 package moreinventory.tileentity;
 
-import moreinventory.block.BlockTransportManager;
-import moreinventory.container.ContainerTransportManager;
+import moreinventory.block.TransportBlock;
+import moreinventory.container.TransportContainer;
 import moreinventory.tileentity.storagebox.network.IStorageBoxNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
@@ -18,14 +18,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class TileEntityImporter extends BaseTileEntityTransportManager {
+public class ImporterTileEntity extends BaseTransportTileEntity {
     private boolean register = false;
     private boolean isWhite = false;//falseの時はブラックリストになる
 
     public static final String registerKey = "register";
     public static final String isWhiteKey = "is_white";
 
-    public TileEntityImporter() {
+    public ImporterTileEntity() {
         super(TileEntities.IMPORTER_TILE_TYPE);
     }
 
@@ -55,13 +55,13 @@ public class TileEntityImporter extends BaseTileEntityTransportManager {
 
     @Override
     protected Container createMenu(int id, PlayerInventory player) {
-        return new ContainerTransportManager(id, player, this);
+        return new TransportContainer(id, player, this);
     }
 
     public void putInBox(IInventory inventory) {
-        Direction out = this.world.getBlockState(this.pos).get(BlockTransportManager.FACING_OUT);
+        Direction out = this.world.getBlockState(this.pos).get(TransportBlock.FACING_OUT);
         BlockPos outPos = this.pos.offset(out);
-        Direction in = this.world.getBlockState(this.pos).get(BlockTransportManager.FACING_IN);
+        Direction in = this.world.getBlockState(this.pos).get(TransportBlock.FACING_IN);
 
         TileEntity tile = this.world.getTileEntity(outPos);
 
@@ -82,7 +82,7 @@ public class TileEntityImporter extends BaseTileEntityTransportManager {
                 ItemStack itemstack = inventory.getStackInSlot(slot);
                 if (itemstack != null && canExtract(itemstack)) {
                     if (canAccessFromSide(inventory, slot, in.getOpposite()) && canExtractFromSide(inventory, itemstack, slot, in.getOpposite())) {
-                        if (tile instanceof BaseTileEntityStorageBox && ((BaseTileEntityStorageBox) tile).getStorageBoxNetworkManager().storeToNetwork(itemstack, register, outPos)) {
+                        if (tile instanceof BaseStorageBoxTileEntity && ((BaseStorageBoxTileEntity) tile).getStorageBoxNetworkManager().storeToNetwork(itemstack, register, outPos)) {
 
                             return;
                         }
@@ -107,7 +107,7 @@ public class TileEntityImporter extends BaseTileEntityTransportManager {
     @Override
     protected void doExtract() {
 
-        Direction in = this.world.getBlockState(this.pos).get(BlockTransportManager.FACING_IN);
+        Direction in = this.world.getBlockState(this.pos).get(TransportBlock.FACING_IN);
         BlockPos inPos = this.pos.offset(in);
         IInventory inventory = HopperTileEntity.getInventoryAtPosition(this.world, inPos);
 

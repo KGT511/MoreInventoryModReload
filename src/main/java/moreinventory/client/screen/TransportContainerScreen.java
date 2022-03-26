@@ -1,10 +1,10 @@
-package moreinventory.client.gui;
+package moreinventory.client.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import moreinventory.container.ContainerTransportManager;
-import moreinventory.tileentity.TileEntityImporter;
+import moreinventory.container.TransportContainer;
+import moreinventory.tileentity.ImporterTileEntity;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.AbstractButton;
@@ -17,13 +17,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
 
 @OnlyIn(Dist.CLIENT)
-public class GUITransportManager extends ContainerScreen<ContainerTransportManager> {
+public class TransportContainerScreen extends ContainerScreen<TransportContainer> {
 
     private static ResourceLocation DISPENSER_GUI_TEXTURE = new ResourceLocation("textures/gui/container/dispenser.png");
     private Button isWhiteButton;
     private Button isRegisterButton;
 
-    public GUITransportManager(ContainerTransportManager TransportManagerContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public TransportContainerScreen(TransportContainer TransportManagerContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(TransportManagerContainer, inv, titleIn);
     }
 
@@ -53,17 +53,17 @@ public class GUITransportManager extends ContainerScreen<ContainerTransportManag
     @Override
     protected void func_230451_b_(MatrixStack matrixStack, int p_230451_2_, int p_230451_3_) {//draw (offsetted by texture)
         super.func_230451_b_(matrixStack, p_230451_2_, p_230451_3_);
-        if (this.container.getTile() instanceof TileEntityImporter) {
+        if (this.container.getTile() instanceof ImporterTileEntity) {
             TranslationTextComponent registerTxt;
             TranslationTextComponent moveTxt;
             //        this.container.getTile().setIsWhite(isWhiteButton.getVal());
             //        this.container.getTile().setIsRegister(isRegisterButton.getVal());
-            if (((TileEntityImporter) this.container.getTile()).getIsRegister()) {
+            if (((ImporterTileEntity) this.container.getTile()).getIsRegister()) {
                 registerTxt = new TranslationTextComponent("gui.moreinventorymod.importer.register_on");
             } else {
                 registerTxt = new TranslationTextComponent("gui.moreinventorymod.importer.register_off");
             }
-            if (((TileEntityImporter) this.container.getTile()).getIswhite()) {
+            if (((ImporterTileEntity) this.container.getTile()).getIswhite()) {
                 moveTxt = new TranslationTextComponent("gui.moreinventorymod.importer.move_white");
             } else {
                 moveTxt = new TranslationTextComponent("gui.moreinventorymod.importer.move_black");
@@ -84,11 +84,11 @@ public class GUITransportManager extends ContainerScreen<ContainerTransportManag
     @Override
     protected void func_231160_c_() {//maybe init
         super.func_231160_c_();
-        if (this.container.getTile() instanceof TileEntityImporter) {
-            isWhiteButton = this.func_230480_a_(new GUITransportManager.Button(guiLeft + xSize - 58, guiTop + 35,
+        if (this.container.getTile() instanceof ImporterTileEntity) {
+            isWhiteButton = this.func_230480_a_(new TransportContainerScreen.Button(guiLeft + xSize - 58, guiTop + 35,
                     new TranslationTextComponent("gui.moreinventorymod.importer.move_white.detail"),
                     new TranslationTextComponent("gui.moreinventorymod.importer.move_black.detail")));
-            isRegisterButton = this.func_230480_a_(new GUITransportManager.Button(guiLeft + 5, guiTop + 35,
+            isRegisterButton = this.func_230480_a_(new TransportContainerScreen.Button(guiLeft + 5, guiTop + 35,
                     new TranslationTextComponent("gui.moreinventorymod.importer.register_on.detail"),
                     new TranslationTextComponent("gui.moreinventorymod.importer.register_off.detail")));
             isWhiteButton.field_230693_o_ = true;
@@ -141,7 +141,7 @@ public class GUITransportManager extends ContainerScreen<ContainerTransportManag
         public void func_230443_a_(MatrixStack p_230443_1_, int p_230443_2_, int p_230443_3_) {
             ITextComponent txt = val ? trueTxt : falseTxt;
             int length = txt.getString().length();
-            GUITransportManager.this.func_238652_a_(p_230443_1_, txt, p_230443_2_ - length / 2 * 5, p_230443_3_);
+            TransportContainerScreen.this.func_238652_a_(p_230443_1_, txt, p_230443_2_ - length / 2 * 5, p_230443_3_);
         }
     }
 

@@ -1,6 +1,6 @@
 package moreinventory.block;
 
-import moreinventory.tileentity.TileEntityCatchall;
+import moreinventory.tileentity.CatchallTileEntity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -35,7 +35,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockCatchall extends ContainerBlock {
+public class CatchallBlock extends ContainerBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -43,7 +43,7 @@ public class BlockCatchall extends ContainerBlock {
     protected static final VoxelShape renderShape = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
     protected static final VoxelShape shape = VoxelShapes.combineAndSimplify(renderShape, insideShape, IBooleanFunction.ONLY_FIRST);
 
-    public BlockCatchall() {
+    public CatchallBlock() {
         super(Properties.create(Material.WOOD)
                 .sound(SoundType.WOOD)
                 .hardnessAndResistance(1.0F, 5.0F)
@@ -71,7 +71,7 @@ public class BlockCatchall extends ContainerBlock {
             return ActionResultType.SUCCESS;
         }
 
-        TileEntityCatchall tile = ((TileEntityCatchall) world.getTileEntity(pos));
+        CatchallTileEntity tile = ((CatchallTileEntity) world.getTileEntity(pos));
         if (tile != null) {
             if (!player.isSneaking() && tile.transferTo(player)) {
                 BlockState newState = world.getBlockState(pos);
@@ -123,7 +123,7 @@ public class BlockCatchall extends ContainerBlock {
 
     @Override
     public TileEntity createNewTileEntity(IBlockReader world) {
-        return new TileEntityCatchall();
+        return new CatchallTileEntity();
     }
 
     @Override

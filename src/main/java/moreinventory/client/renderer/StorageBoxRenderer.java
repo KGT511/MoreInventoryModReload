@@ -2,8 +2,8 @@ package moreinventory.client.renderer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import moreinventory.block.BlockStorageBox;
-import moreinventory.tileentity.BaseTileEntityStorageBox;
+import moreinventory.block.StorageBoxBlock;
+import moreinventory.tileentity.BaseStorageBoxTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -13,13 +13,13 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Vector3f;
 
-public class StorageBoxRenderer extends TileEntityRenderer<BaseTileEntityStorageBox> {
+public class StorageBoxRenderer extends TileEntityRenderer<BaseStorageBoxTileEntity> {
     public StorageBoxRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
         super(rendererDispatcherIn);
     }
 
     @Override
-    public void render(BaseTileEntityStorageBox tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(BaseStorageBoxTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         BlockState blockstate = tileEntityIn.getBlockState();
         ItemStack contents = tileEntityIn.getContents();
 
@@ -27,12 +27,14 @@ public class StorageBoxRenderer extends TileEntityRenderer<BaseTileEntityStorage
             return;
 
         matrixStackIn.push();
-        float f = blockstate.get(BlockStorageBox.FACING).getHorizontalAngle();
+        float f = blockstate.get(StorageBoxBlock.FACING).getHorizontalAngle();
         matrixStackIn.translate(0.5D, 0.5D, 0.5D);
         matrixStackIn.rotate(Vector3f.YP.rotationDegrees(-f));
         matrixStackIn.translate(0.D, 1.D / 16.D * 2.D, 0.5D);
         float scale = 0.75F;
         matrixStackIn.scale(scale, scale, scale);
+        matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180.F));
+        matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(180.F));
         Minecraft.getInstance().getItemRenderer().renderItem(contents, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
         matrixStackIn.pop();
 

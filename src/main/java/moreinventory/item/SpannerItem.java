@@ -13,8 +13,8 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemSpanner extends Item {
-    public ItemSpanner() {
+public class SpannerItem extends Item {
+    public SpannerItem() {
         super(new Properties()
                 .maxDamage(0)
                 .group(MoreInventoryMOD.itemGroup));

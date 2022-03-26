@@ -2,8 +2,8 @@ package moreinventory.client.renderer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import moreinventory.block.BlockCatchall;
-import moreinventory.tileentity.TileEntityCatchall;
+import moreinventory.block.CatchallBlock;
+import moreinventory.tileentity.CatchallTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -15,19 +15,19 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.vector.Vector3f;
 
-public class ItemCatchallRenderer extends TileEntityRenderer<TileEntityCatchall> {
+public class CatchallRenderer extends TileEntityRenderer<CatchallTileEntity> {
 
     public final int width = 9;
-    public final int height = TileEntityCatchall.inventorySize / width;
+    public final int height = CatchallTileEntity.inventorySize / width;
 
-    public ItemCatchallRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
+    public CatchallRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
         super(rendererDispatcherIn);
 
     }
 
     @Override
-    public void render(TileEntityCatchall tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        Direction direction = tileEntityIn.getBlockState().get(BlockCatchall.FACING);
+    public void render(CatchallTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+        Direction direction = tileEntityIn.getBlockState().get(CatchallBlock.FACING);
         float f = direction.getHorizontalAngle();
         matrixStackIn.push();
 

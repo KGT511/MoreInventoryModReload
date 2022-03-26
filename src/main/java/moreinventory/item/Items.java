@@ -17,8 +17,8 @@ import net.minecraftforge.fml.common.Mod;
 public class Items {
     public static List<Item> itemList = new ArrayList<Item>();
     public static Item CATCHALL = register("catchall", Blocks.CATCHALL, MoreInventoryMOD.itemGroup);
-    public static ItemTransporter TRANSPORTER = (ItemTransporter) register("transporter", new ItemTransporter());
-    public static ItemSpanner SPANNER = (ItemSpanner) register("spanner", new ItemSpanner());
+    public static TransporterItem TRANSPORTER = (TransporterItem) register("transporter", new TransporterItem());
+    public static SpannerItem SPANNER = (SpannerItem) register("spanner", new SpannerItem());
 
     public static Item STORAGE_BOX_WOOD = register("storage_box_wood", Blocks.STORAGE_BOX_WOOD, MoreInventoryMOD.itemGroup);
     public static Item STORAGE_BOX_IRON = register("storage_box_iron", Blocks.STORAGE_BOX_IRON, MoreInventoryMOD.itemGroup);

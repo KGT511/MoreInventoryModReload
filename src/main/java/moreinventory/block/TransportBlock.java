@@ -2,8 +2,8 @@ package moreinventory.block;
 
 import javax.annotation.Nullable;
 
-import moreinventory.tileentity.TileEntityExporter;
-import moreinventory.tileentity.TileEntityImporter;
+import moreinventory.tileentity.ExporterTileEntity;
+import moreinventory.tileentity.ImporterTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -34,7 +34,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockTransportManager extends ContainerBlock {
+public class TransportBlock extends ContainerBlock {
 
     public static final DirectionProperty FACING_IN = DirectionProperty.create("facing_in", Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP, Direction.DOWN);;
     public static final DirectionProperty FACING_OUT = DirectionProperty.create("facing_out", Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP, Direction.DOWN);;
@@ -79,7 +79,7 @@ public class BlockTransportManager extends ContainerBlock {
             Block.makeCuboidShape(14.0D, 7.0D, 7.0D, 16.0D, 9.0D, 9.0D), Block.makeCuboidShape(13.0D, 6.0D, 6.0D, 14.0D, 10.0D, 10.0D), Block.makeCuboidShape(12.0D, 4.0D, 4.0D, 13.0D, 12.0D, 12.0D), Block.makeCuboidShape(11.0D, 5.0D, 5.0D, 12.0D, 11.0D, 11.0D),
             Block.makeCuboidShape(10.0D, 6.0D, 6.0D, 11.0D, 10.0D, 10.0D));
 
-    protected BlockTransportManager(boolean isImporterIn) {
+    protected TransportBlock(boolean isImporterIn) {
         super(Properties.create(Material.ROCK)
                 .sound(SoundType.STONE)
                 .hardnessAndResistance(1.0f));
@@ -111,8 +111,8 @@ public class BlockTransportManager extends ContainerBlock {
                         }));
             }
         } else if (player.getHeldItemMainhand().getItem() == ItemStack.EMPTY.getItem()) {
-            if (state.getBlock() instanceof BlockTransportManager) {
-                world.setBlockState(pos, ((BlockTransportManager) state.getBlock()).rotate(world.getBlockState(pos), world, pos, Rotation.CLOCKWISE_90));
+            if (state.getBlock() instanceof TransportBlock) {
+                world.setBlockState(pos, ((TransportBlock) state.getBlock()).rotate(world.getBlockState(pos), world, pos, Rotation.CLOCKWISE_90));
             }
         }
 
@@ -187,7 +187,7 @@ public class BlockTransportManager extends ContainerBlock {
 
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return isImporter ? new TileEntityImporter() : new TileEntityExporter();
+        return isImporter ? new ImporterTileEntity() : new ExporterTileEntity();
     }
 
     @Override

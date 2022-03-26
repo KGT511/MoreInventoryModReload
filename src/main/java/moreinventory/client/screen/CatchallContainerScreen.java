@@ -1,9 +1,9 @@
-package moreinventory.client.gui;
+package moreinventory.client.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import moreinventory.container.ContainerCatchall;
+import moreinventory.container.CatchallContainer;
 import moreinventory.core.MoreInventoryMOD;
 
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -15,10 +15,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class GUICatchall extends ContainerScreen<ContainerCatchall> {
+public class CatchallContainerScreen extends ContainerScreen<CatchallContainer> {
     private static ResourceLocation CATCHALL_GUI_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/gui/catchall.png");
 
-    public GUICatchall(ContainerCatchall catchallContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public CatchallContainerScreen(CatchallContainer catchallContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(catchallContainer, inv, titleIn);
         this.xSize = 176 + 27;
         this.ySize = 190;

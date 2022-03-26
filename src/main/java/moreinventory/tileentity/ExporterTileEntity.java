@@ -2,8 +2,8 @@ package moreinventory.tileentity;
 
 import java.util.List;
 
-import moreinventory.block.BlockTransportManager;
-import moreinventory.container.ContainerTransportManager;
+import moreinventory.block.TransportBlock;
+import moreinventory.container.TransportContainer;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -16,9 +16,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class TileEntityExporter extends BaseTileEntityTransportManager {
+public class ExporterTileEntity extends BaseTransportTileEntity {
 
-    public TileEntityExporter() {
+    public ExporterTileEntity() {
         super(TileEntities.EXPORTER_TILE_TYPE);
     }
 
@@ -32,12 +32,12 @@ public class TileEntityExporter extends BaseTileEntityTransportManager {
 
     @Override
     protected Container createMenu(int id, PlayerInventory player) {
-        return new ContainerTransportManager(id, player, this);
+        return new TransportContainer(id, player, this);
     }
 
     @Override
     protected void doExtract() {
-        Direction out = this.world.getBlockState(this.pos).get(BlockTransportManager.FACING_OUT);
+        Direction out = this.world.getBlockState(this.pos).get(TransportBlock.FACING_OUT);
         BlockPos outPos = this.pos.offset(out);
         IInventory inventory = HopperTileEntity.getInventoryAtPosition(this.world, outPos);
 
@@ -51,7 +51,7 @@ public class TileEntityExporter extends BaseTileEntityTransportManager {
 
                 if (itemstack.getItem() != ItemStack.EMPTY.getItem()
                         && getBoxPos(itemstack) && !(this.pos.equals(boxPos))) {
-                    BaseTileEntityStorageBox tile = (BaseTileEntityStorageBox) this.world.getTileEntity(boxPos);
+                    BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) this.world.getTileEntity(boxPos);
 
                     for (int j = 0; j < tile.getSizeInventory(); j++) {
                         ItemStack itemstack1 = tile.getStackInSlot(j);
@@ -68,17 +68,17 @@ public class TileEntityExporter extends BaseTileEntityTransportManager {
     }
 
     private boolean getBoxPos(ItemStack itemstack) {
-        Direction in = this.world.getBlockState(this.pos).get(BlockTransportManager.FACING_IN);
+        Direction in = this.world.getBlockState(this.pos).get(TransportBlock.FACING_IN);
         BlockPos inPos = this.pos.offset(in);//pull
-        Direction out = this.world.getBlockState(this.pos).get(BlockTransportManager.FACING_OUT);
+        Direction out = this.world.getBlockState(this.pos).get(TransportBlock.FACING_OUT);
         BlockPos outPos = this.pos.offset(out);//put
 
         TileEntity tile = this.world.getTileEntity(inPos);
 
-        if (tile != null && tile instanceof BaseTileEntityStorageBox) {
-            List<BaseTileEntityStorageBox> list = ((BaseTileEntityStorageBox) tile).getStorageBoxNetworkManager().getMatchingList(itemstack, inPos);
+        if (tile != null && tile instanceof BaseStorageBoxTileEntity) {
+            List<BaseStorageBoxTileEntity> list = ((BaseStorageBoxTileEntity) tile).getStorageBoxNetworkManager().getMatchingList(itemstack, inPos);
 
-            for (BaseTileEntityStorageBox tileStorageBox : list) {
+            for (BaseStorageBoxTileEntity tileStorageBox : list) {
                 if (!tileStorageBox.getPos().equals(outPos)) {//入力と出力が同じネットワークになるのを防ぐ
                     boxPos = tileStorageBox.getPos();
                     return true;

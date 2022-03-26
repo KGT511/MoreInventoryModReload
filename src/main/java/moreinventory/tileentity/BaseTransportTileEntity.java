@@ -1,6 +1,6 @@
 package moreinventory.tileentity;
 
-import moreinventory.block.BlockTransportManager;
+import moreinventory.block.TransportBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -23,7 +23,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public abstract class BaseTileEntityTransportManager extends LockableLootTileEntity implements IInventory, ITickableTileEntity {
+public abstract class BaseTransportTileEntity extends LockableLootTileEntity implements IInventory, ITickableTileEntity {
 
     public static final int inventorySize = 9;
     protected NonNullList<ItemStack> slotItems = NonNullList.withSize(inventorySize, ItemStack.EMPTY);
@@ -35,7 +35,7 @@ public abstract class BaseTileEntityTransportManager extends LockableLootTileEnt
     private byte clientUpdateTime = 0;
     private byte level = 0;
 
-    protected BaseTileEntityTransportManager(TileEntityType<?> typeIn) {
+    protected BaseTransportTileEntity(TileEntityType<?> typeIn) {
         super(typeIn);
     }
 
@@ -106,7 +106,7 @@ public abstract class BaseTileEntityTransportManager extends LockableLootTileEnt
 
     private IItemHandlerModifiable createHandler() {
         BlockState state = this.getBlockState();
-        if (!(state.getBlock() instanceof BlockTransportManager)) {
+        if (!(state.getBlock() instanceof TransportBlock)) {
             return new InvWrapper(this);
         }
         return new InvWrapper(this);

@@ -1,6 +1,6 @@
 package moreinventory.container;
 
-import moreinventory.tileentity.BaseTileEntityTransportManager;
+import moreinventory.tileentity.BaseTransportTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
@@ -9,18 +9,18 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 
-public class ContainerTransportManager extends Container {
+public class TransportContainer extends Container {
 
-    public static ContainerTransportManager createContainerClientSide(int windowID, PlayerInventory playerInventory, PacketBuffer extraData) {
-        BaseTileEntityTransportManager tile = (BaseTileEntityTransportManager) playerInventory.player.world.getTileEntity(extraData.readBlockPos());
-        return new ContainerTransportManager(windowID, playerInventory, tile);
+    public static TransportContainer createContainerClientSide(int windowID, PlayerInventory playerInventory, PacketBuffer extraData) {
+        BaseTransportTileEntity tile = (BaseTransportTileEntity) playerInventory.player.world.getTileEntity(extraData.readBlockPos());
+        return new TransportContainer(windowID, playerInventory, tile);
     }
 
-    public final int slotSize = BaseTileEntityTransportManager.inventorySize;
+    public final int slotSize = BaseTransportTileEntity.inventorySize;
 
-    private BaseTileEntityTransportManager transportManager;
+    private BaseTransportTileEntity transportManager;
 
-    public ContainerTransportManager(int windowID, PlayerInventory playerInventory, BaseTileEntityTransportManager tile) {
+    public TransportContainer(int windowID, PlayerInventory playerInventory, BaseTransportTileEntity tile) {
         super(Containers.TRANSPORT_MANAGER_CONTAINER_TYPE, windowID);
         this.transportManager = tile;
 
@@ -70,7 +70,7 @@ public class ContainerTransportManager extends Container {
             return super.slotClick(slotId, dragType, clickTypeIn, player);
     }
 
-    public BaseTileEntityTransportManager getTile() {
+    public BaseTransportTileEntity getTile() {
         return transportManager;
     }
 }

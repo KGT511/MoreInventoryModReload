@@ -2,10 +2,9 @@ package moreinventory.block;
 
 import javax.annotation.Nullable;
 
-import moreinventory.tileentity.BaseTileEntityStorageBox;
+import moreinventory.tileentity.BaseStorageBoxTileEntity;
 import moreinventory.tileentity.storagebox.StorageBoxType;
-import moreinventory.tileentity.storagebox.TileEntityStorageBoxType;
-
+import moreinventory.tileentity.storagebox.StorageBoxTileEntityType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -34,11 +33,11 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
-public class BlockStorageBox extends ContainerBlock {
+public class StorageBoxBlock extends ContainerBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     private StorageBoxType type;
 
-    protected BlockStorageBox(StorageBoxType typeIn) {
+    protected StorageBoxBlock(StorageBoxType typeIn) {
         super(Properties.create(Material.IRON)
                 .sound(SoundType.METAL)
                 .hardnessAndResistance(2.0F, 10.0F)
@@ -65,7 +64,7 @@ public class BlockStorageBox extends ContainerBlock {
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        BaseTileEntityStorageBox tile = (BaseTileEntityStorageBox) world.getTileEntity(pos);
+        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getTileEntity(pos);
         tile.onPlaced();
         super.onBlockPlacedBy(world, pos, state, placer, stack);
     }
@@ -73,8 +72,8 @@ public class BlockStorageBox extends ContainerBlock {
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         //隣がコンテナだったときに限って呼ばれるように
-        if (blockIn instanceof BlockStorageBox) {
-            BaseTileEntityStorageBox tile = (BaseTileEntityStorageBox) world.getTileEntity(pos);
+        if (blockIn instanceof StorageBoxBlock) {
+            BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getTileEntity(pos);
             tile.onDestroyedNeighbor(fromPos);
         }
     }
@@ -85,7 +84,7 @@ public class BlockStorageBox extends ContainerBlock {
         if (world.isRemote)
             return ActionResultType.SUCCESS;
 
-        BaseTileEntityStorageBox tile = (BaseTileEntityStorageBox) world.getTileEntity(pos);
+        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getTileEntity(pos);
         ActionResultType ret = tile.rightClickEvent(world, player) ? ActionResultType.SUCCESS : ActionResultType.PASS;
         return ret;
 
@@ -97,7 +96,7 @@ public class BlockStorageBox extends ContainerBlock {
         if (world.isRemote)
             return;
 
-        BaseTileEntityStorageBox tile = (BaseTileEntityStorageBox) world.getTileEntity(pos);
+        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getTileEntity(pos);
         tile.leftClickEvent(player);
     }
 
@@ -106,14 +105,13 @@ public class BlockStorageBox extends ContainerBlock {
         return createNewTileEntity(world);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
         try {
-            return TileEntityStorageBoxType.classMap.get(type).newInstance();
+            return StorageBoxTileEntityType.classMap.get(type).newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
-            return new BaseTileEntityStorageBox(type);
+            return new BaseStorageBoxTileEntity(type);
         }
     }
 

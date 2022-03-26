@@ -21,11 +21,11 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
-import moreinventory.block.BlockCatchall;
-import moreinventory.container.ContainerCatchall;
+import moreinventory.block.CatchallBlock;
+import moreinventory.container.CatchallContainer;
 
-public class TileEntityCatchall extends LockableLootTileEntity implements IInventory {
-    public TileEntityCatchall() {
+public class CatchallTileEntity extends LockableLootTileEntity implements IInventory {
+    public CatchallTileEntity() {
         super(TileEntities.CATCHALL_TILE_TYPE);
     }
 
@@ -84,7 +84,7 @@ public class TileEntityCatchall extends LockableLootTileEntity implements IInven
 
     @Override
     public Container createMenu(int id, PlayerInventory player) {
-        return new ContainerCatchall(id, player, this);
+        return new CatchallContainer(id, player, this);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class TileEntityCatchall extends LockableLootTileEntity implements IInven
 
     private IItemHandlerModifiable createHandler() {
         BlockState state = this.getBlockState();
-        if (!(state.getBlock() instanceof BlockCatchall)) {
+        if (!(state.getBlock() instanceof CatchallBlock)) {
             return new InvWrapper(this);
         }
         return new InvWrapper(this);

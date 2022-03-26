@@ -1,9 +1,9 @@
 package moreinventory.tileentity;
 
-import moreinventory.block.BlockStorageBox;
+import moreinventory.block.StorageBoxBlock;
 import moreinventory.tileentity.storagebox.StorageBoxInventorySize;
 import moreinventory.tileentity.storagebox.StorageBoxType;
-import moreinventory.tileentity.storagebox.TileEntityStorageBoxType;
+import moreinventory.tileentity.storagebox.StorageBoxTileEntityType;
 import moreinventory.tileentity.storagebox.network.IStorageBoxNetwork;
 import moreinventory.tileentity.storagebox.network.StorageBoxNetworkManager;
 import moreinventory.util.MIMUtils;
@@ -34,7 +34,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class BaseTileEntityStorageBox extends LockableLootTileEntity implements IInventory, ITickableTileEntity, IStorageBoxNetwork {
+public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements IInventory, ITickableTileEntity, IStorageBoxNetwork {
 
     private ItemStack contents = ItemStack.EMPTY;
     protected NonNullList<ItemStack> storageItems;
@@ -49,8 +49,8 @@ public class BaseTileEntityStorageBox extends LockableLootTileEntity implements 
     public static final String tagKeyContents = "contents";
     public static final String tagKeyTypeName = "typeName";
 
-    public BaseTileEntityStorageBox(StorageBoxType typeIn) {
-        super(TileEntityStorageBoxType.map.get(typeIn));
+    public BaseStorageBoxTileEntity(StorageBoxType typeIn) {
+        super(StorageBoxTileEntityType.map.get(typeIn));
         int inventorySize = getStorageStackSize(typeIn);
         storageItems = NonNullList.withSize(inventorySize, ItemStack.EMPTY);
         this.type = typeIn;
@@ -139,7 +139,7 @@ public class BaseTileEntityStorageBox extends LockableLootTileEntity implements 
 
     private IItemHandlerModifiable createHandler() {
         BlockState state = this.getBlockState();
-        if (!(state.getBlock() instanceof BlockStorageBox)) {
+        if (!(state.getBlock() instanceof StorageBoxBlock)) {
             return new InvWrapper(this);
         }
         return new InvWrapper(this);
@@ -448,8 +448,8 @@ public class BaseTileEntityStorageBox extends LockableLootTileEntity implements 
         boolean multiple = false;
         for (Direction d : Direction.values()) {
             TileEntity tile = this.world.getTileEntity(this.pos.offset(d));
-            if (tile instanceof BaseTileEntityStorageBox) {
-                BaseTileEntityStorageBox tileStorageBox = (BaseTileEntityStorageBox) tile;
+            if (tile instanceof BaseStorageBoxTileEntity) {
+                BaseStorageBoxTileEntity tileStorageBox = (BaseStorageBoxTileEntity) tile;
                 if (!multiple) {
                     tileStorageBox.getStorageBoxNetworkManager().add(this);
                     multiple = true;
@@ -466,8 +466,8 @@ public class BaseTileEntityStorageBox extends LockableLootTileEntity implements 
         int multiple = 0;
         for (Direction d : Direction.values()) {
             TileEntity tile = this.world.getTileEntity(destroyedPos.offset(d));
-            if (tile instanceof BaseTileEntityStorageBox) {
-                BaseTileEntityStorageBox tileStorageBox = (BaseTileEntityStorageBox) tile;
+            if (tile instanceof BaseStorageBoxTileEntity) {
+                BaseStorageBoxTileEntity tileStorageBox = (BaseStorageBoxTileEntity) tile;
                 tileStorageBox.getStorageBoxNetworkManager().remove(destroyedPos);
                 multiple++;
             }
@@ -476,7 +476,7 @@ public class BaseTileEntityStorageBox extends LockableLootTileEntity implements 
         if (1 < multiple) {
             for (Direction d : Direction.values()) {
                 TileEntity tile = this.world.getTileEntity(this.pos.offset(d));
-                if (tile instanceof BaseTileEntityStorageBox) {
+                if (tile instanceof BaseStorageBoxTileEntity) {
                     this.setStorageBoxNetworkManager(new StorageBoxNetworkManager(this.world, this.pos));
                 }
             }

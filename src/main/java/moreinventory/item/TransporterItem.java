@@ -1,8 +1,8 @@
 package moreinventory.item;
 
-import moreinventory.block.BlockStorageBox;
+import moreinventory.block.StorageBoxBlock;
 import moreinventory.core.MoreInventoryMOD;
-import moreinventory.tileentity.BaseTileEntityStorageBox;
+import moreinventory.tileentity.BaseStorageBoxTileEntity;
 import moreinventory.tileentity.storagebox.StorageBoxType;
 import moreinventory.util.MIMUtils;
 
@@ -44,8 +44,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-public class ItemTransporter extends Item {
-    public ItemTransporter() {
+public class TransporterItem extends Item {
+    public TransporterItem() {
         super(new Properties()
                 .maxDamage(40)
                 .group(MoreInventoryMOD.itemGroup));
@@ -146,14 +146,14 @@ public class ItemTransporter extends Item {
             IFormattableTextComponent iformattabletextcomponent = hold.getDisplayName().func_230532_e_();
             tooltip.add(iformattabletextcomponent.func_240699_a_(TextFormatting.AQUA));
         }
-        if (hold.getItem() instanceof BlockItem && ((BlockItem) hold.getItem()).getBlock() instanceof BlockStorageBox) {
+        if (hold.getItem() instanceof BlockItem && ((BlockItem) hold.getItem()).getBlock() instanceof StorageBoxBlock) {
             CompoundNBT compoundnbt = stack.getTag();
-            if (compoundnbt.contains(BaseTileEntityStorageBox.tagKeyContents)) {
-                CompoundNBT nbt = compoundnbt.getCompound(BaseTileEntityStorageBox.tagKeyContents);
+            if (compoundnbt.contains(BaseStorageBoxTileEntity.tagKeyContents)) {
+                CompoundNBT nbt = compoundnbt.getCompound(BaseStorageBoxTileEntity.tagKeyContents);
                 ItemStack storageContents = ItemStack.read(nbt);
                 if (storageContents.getItem() != ItemStack.EMPTY.getItem()) {
-                    StorageBoxType type = StorageBoxType.valueOf(compoundnbt.getString(BaseTileEntityStorageBox.tagKeyTypeName));
-                    NonNullList<ItemStack> storageItems = NonNullList.withSize(BaseTileEntityStorageBox.getStorageStackSize(type), ItemStack.EMPTY);
+                    StorageBoxType type = StorageBoxType.valueOf(compoundnbt.getString(BaseStorageBoxTileEntity.tagKeyTypeName));
+                    NonNullList<ItemStack> storageItems = NonNullList.withSize(BaseStorageBoxTileEntity.getStorageStackSize(type), ItemStack.EMPTY);
                     MIMUtils.readNonNullListShort(compoundnbt, storageItems);
                     int count = 0;
                     for (ItemStack storageItem : storageItems) {
@@ -239,7 +239,7 @@ public class ItemTransporter extends Item {
         for (int i = 0; i < inventory.getSizeInventory(); i++) {
             itemstack = inventory.getStackInSlot(i);
 
-            if (itemstack.getItem() == ItemTransporter.this && itemstack.getTag().contains(tagKey)
+            if (itemstack.getItem() == TransporterItem.this && itemstack.getTag().contains(tagKey)
             //                    || itemstack.getItem() == MoreInventoryMod.pouch && !checkMatryoshka(new InventoryPouch(itemstack))
             ) {
                 return false;

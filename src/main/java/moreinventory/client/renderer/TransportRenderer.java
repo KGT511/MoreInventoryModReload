@@ -3,10 +3,10 @@ package moreinventory.client.renderer;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import moreinventory.block.BlockTransportManager;
+import moreinventory.block.TransportBlock;
 import moreinventory.core.MoreInventoryMOD;
-import moreinventory.tileentity.BaseTileEntityTransportManager;
-import moreinventory.tileentity.TileEntityImporter;
+import moreinventory.tileentity.BaseTransportTileEntity;
+import moreinventory.tileentity.ImporterTileEntity;
 import moreinventory.util.MIMUtils;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 
-public class TransportManagerRenderer extends TileEntityRenderer<BaseTileEntityTransportManager> {
+public class TransportRenderer extends TileEntityRenderer<BaseTransportTileEntity> {
     private static ResourceLocation IMPORTER_LIGHT_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/importer.png");
     private static ResourceLocation IMPORTER_DARK_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/importer_black.png");
     private static ResourceLocation EXPORTER_LIGHT_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/exporter.png");
@@ -27,7 +27,7 @@ public class TransportManagerRenderer extends TileEntityRenderer<BaseTileEntityT
     private final ModelRenderer center;
     private final ModelRenderer out;
 
-    public TransportManagerRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
+    public TransportRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
         super(rendererDispatcherIn);
         in1 = new ModelRenderer(64, 64, 0, 0);
         in1.rotationPointX = 8.0F;
@@ -53,10 +53,10 @@ public class TransportManagerRenderer extends TileEntityRenderer<BaseTileEntityT
     }
 
     @Override
-    public void render(BaseTileEntityTransportManager tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(BaseTransportTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         matrixStackIn.push();
         ResourceLocation lightTexture, darkTexture;
-        if (tileEntityIn instanceof TileEntityImporter) {
+        if (tileEntityIn instanceof ImporterTileEntity) {
             lightTexture = IMPORTER_LIGHT_TEXTURE;
             darkTexture = IMPORTER_DARK_TEXTURE;
         } else {
@@ -64,20 +64,20 @@ public class TransportManagerRenderer extends TileEntityRenderer<BaseTileEntityT
             darkTexture = EXPORTER_DARK_TEXTURE;
         }
 
-        Direction inD = tileEntityIn.getBlockState().get(BlockTransportManager.FACING_IN);
-        Direction outD = tileEntityIn.getBlockState().get(BlockTransportManager.FACING_OUT);
+        Direction inD = tileEntityIn.getBlockState().get(TransportBlock.FACING_IN);
+        Direction outD = tileEntityIn.getBlockState().get(TransportBlock.FACING_OUT);
         rotateModels(inD, in1);
         rotateModels(inD, in2);
         rotateModels(outD.getOpposite(), out);
 
-        byte level = tileEntityIn.getLevel();
+        byte emitLevel = (byte) (tileEntityIn.getWorld().getGameTime() % 40 / 10);
 
         ModelRenderer[] models = { in1, in2, center, out };
         IVertexBuilder lightIvertexbuilder = bufferIn.getBuffer(RenderType.getEntitySolid(lightTexture));
-        models[level].render(matrixStackIn, lightIvertexbuilder, combinedLightIn, combinedOverlayIn);
+        models[emitLevel].render(matrixStackIn, lightIvertexbuilder, combinedLightIn, combinedOverlayIn);
         IVertexBuilder darkIvertexbuilder = bufferIn.getBuffer(RenderType.getEntitySolid(darkTexture));
         for (int i = 0; i < 3; ++i)
-            models[MIMUtils.normalIndex(level + i + 1, 4)].render(matrixStackIn, darkIvertexbuilder, combinedLightIn, combinedOverlayIn);
+            models[MIMUtils.normalIndex(emitLevel + i + 1, 4)].render(matrixStackIn, darkIvertexbuilder, combinedLightIn, combinedOverlayIn);
 
         matrixStackIn.pop();
 

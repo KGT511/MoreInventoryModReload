@@ -1,13 +1,13 @@
 package moreinventory.tileentity.storagebox;
 
-import moreinventory.tileentity.BaseTileEntityStorageBox;
+import moreinventory.tileentity.BaseStorageBoxTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class TileEntityStorageBoxGlass extends BaseTileEntityStorageBox {
+public class GlassStorageBoxTileEntity extends BaseStorageBoxTileEntity {
 
-    public TileEntityStorageBoxGlass() {
+    public GlassStorageBoxTileEntity() {
         super(StorageBoxType.GLASS);
     }
 

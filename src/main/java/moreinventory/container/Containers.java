@@ -18,10 +18,10 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 public class Containers {
     public static List<ContainerType<?>> containerList = new ArrayList<>();
 
-    public static ContainerType<ContainerCatchall> CATCHALL_CONTAINER_TYPE = (ContainerType<ContainerCatchall>) register("catchall_container",
-            IForgeContainerType.create(ContainerCatchall::createContainerClientSide));
-    public static ContainerType<ContainerTransportManager> TRANSPORT_MANAGER_CONTAINER_TYPE = (ContainerType<ContainerTransportManager>) register("importer_container",
-            IForgeContainerType.create(ContainerTransportManager::createContainerClientSide));
+    public static ContainerType<CatchallContainer> CATCHALL_CONTAINER_TYPE = (ContainerType<CatchallContainer>) register("catchall_container",
+            IForgeContainerType.create(CatchallContainer::createContainerClientSide));
+    public static ContainerType<TransportContainer> TRANSPORT_MANAGER_CONTAINER_TYPE = (ContainerType<TransportContainer>) register("importer_container",
+            IForgeContainerType.create(TransportContainer::createContainerClientSide));
 
     private static <T extends Container> ForgeRegistryEntry<ContainerType<?>> register(String key, ContainerType<T> itemIn) {
         containerList.add(itemIn);

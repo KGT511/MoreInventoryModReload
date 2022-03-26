@@ -8,8 +8,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ItemGroupMoreInventoryMOD extends ItemGroup {
-    public ItemGroupMoreInventoryMOD() {
+public class MoreInventoryMODItemGroup extends ItemGroup {
+    public MoreInventoryMODItemGroup() {
         super(MoreInventoryMOD.MOD_ID);
     }
 

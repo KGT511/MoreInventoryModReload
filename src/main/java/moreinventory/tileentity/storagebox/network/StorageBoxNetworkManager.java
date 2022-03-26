@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import moreinventory.tileentity.BaseTileEntityStorageBox;
+import moreinventory.tileentity.BaseStorageBoxTileEntity;
 import moreinventory.tileentity.storagebox.StorageBoxType;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 
 public class StorageBoxNetworkManager {
 
-    private HashMap<BlockPos, BaseTileEntityStorageBox> network = new HashMap<>();
+    private HashMap<BlockPos, BaseStorageBoxTileEntity> network = new HashMap<>();
 
     public StorageBoxNetworkManager(World world, BlockPos pos) {
         this(world, pos, null);
@@ -36,8 +36,8 @@ public class StorageBoxNetworkManager {
 
         TileEntity tile = world.getTileEntity(pos);
 
-        if (tile != null && tile instanceof IStorageBoxNetwork && tile instanceof BaseTileEntityStorageBox) {
-            BaseTileEntityStorageBox tileStorageBox = (BaseTileEntityStorageBox) tile;
+        if (tile != null && tile instanceof IStorageBoxNetwork && tile instanceof BaseStorageBoxTileEntity) {
+            BaseStorageBoxTileEntity tileStorageBox = (BaseStorageBoxTileEntity) tile;
             network.put(tileStorageBox.getPos(), tileStorageBox);
             tileStorageBox.setStorageBoxNetworkManager(this);
 
@@ -50,7 +50,7 @@ public class StorageBoxNetworkManager {
         }
     }
 
-    public HashMap<BlockPos, BaseTileEntityStorageBox> getNetwork() {
+    public HashMap<BlockPos, BaseStorageBoxTileEntity> getNetwork() {
         return this.network;
     }
 
@@ -64,15 +64,15 @@ public class StorageBoxNetworkManager {
     }
 
     public boolean storeToNetwork(ItemStack stack, boolean register, BlockPos originPos) {
-        List<BaseTileEntityStorageBox> matchingList = getMatchingList(stack, originPos);
-        for (BaseTileEntityStorageBox tile : matchingList)
+        List<BaseStorageBoxTileEntity> matchingList = getMatchingList(stack, originPos);
+        for (BaseStorageBoxTileEntity tile : matchingList)
             if (tile.store(stack))
                 return true;
 
         if (register) {
             List<BlockPos> sortedKeys = getSortedKeys(originPos);
             for (BlockPos key : sortedKeys) {
-                BaseTileEntityStorageBox tile = network.get(key);
+                BaseStorageBoxTileEntity tile = network.get(key);
                 if (tile.getStorageBoxType() != StorageBoxType.GLASS && !tile.hasContents())
                     if (tile.registerItems(stack))
                         if (tile.store(stack))
@@ -82,11 +82,11 @@ public class StorageBoxNetworkManager {
         return false;
     }
 
-    public List<BaseTileEntityStorageBox> getMatchingList(ItemStack stack, BlockPos originPos) {
-        List<BaseTileEntityStorageBox> list = new ArrayList<>();
+    public List<BaseStorageBoxTileEntity> getMatchingList(ItemStack stack, BlockPos originPos) {
+        List<BaseStorageBoxTileEntity> list = new ArrayList<>();
         List<BlockPos> sortedKeys = getSortedKeys(originPos);
         for (BlockPos key : sortedKeys) {
-            BaseTileEntityStorageBox tile = network.get(key);
+            BaseStorageBoxTileEntity tile = network.get(key);
             if (tile != null && tile.getContents().getItem() == stack.getItem()) {
                 list.add(tile);
             }
@@ -108,7 +108,7 @@ public class StorageBoxNetworkManager {
     }
 
     //ネットワークにTileを一つ加える。Tileが既にネットワークを持っていてもそのネットワークは追加されない
-    public void add(BaseTileEntityStorageBox tile) {
+    public void add(BaseStorageBoxTileEntity tile) {
         network.put(tile.getPos(), tile);
         tile.setStorageBoxNetworkManager(this);
     }
@@ -116,7 +116,7 @@ public class StorageBoxNetworkManager {
     //ネットワークを結合する。
     public void add(StorageBoxNetworkManager newNetwork) {
         this.network.putAll(newNetwork.getNetwork());
-        for (BaseTileEntityStorageBox tile : newNetwork.getNetwork().values()) {
+        for (BaseStorageBoxTileEntity tile : newNetwork.getNetwork().values()) {
             tile.setStorageBoxNetworkManager(this);
         }
     }
