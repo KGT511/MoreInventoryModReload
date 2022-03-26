@@ -2,6 +2,7 @@ package moreinventory.tileentity;
 
 import java.util.List;
 
+import moreinventory.block.Blocks;
 import moreinventory.block.TransportBlock;
 import moreinventory.container.TransportContainer;
 import net.minecraft.block.BlockState;
@@ -27,7 +28,7 @@ public class ExporterTileEntity extends BaseTransportTileEntity {
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("block.moreinventorymod.exporter");
+        return new TranslationTextComponent(Blocks.EXPORTER.getTranslationKey());
     }
 
     @Override

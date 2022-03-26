@@ -1,11 +1,15 @@
 package moreinventory.item;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import moreinventory.block.StorageBoxBlock;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.tileentity.BaseStorageBoxTileEntity;
 import moreinventory.tileentity.storagebox.StorageBoxType;
 import moreinventory.util.MIMUtils;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -18,9 +22,9 @@ import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
@@ -35,14 +39,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
 
 public class TransporterItem extends Item {
     public TransporterItem() {
@@ -51,28 +49,28 @@ public class TransporterItem extends Item {
                 .group(MoreInventoryMOD.itemGroup));
     }
 
-    public static final ArrayList<String> transportableBlocks = new ArrayList<>();
+    public static final ArrayList<Block> transportableBlocks = new ArrayList<>();
     private static final String tagKey = "tileBlock";
     private static final String blockStateKey = "blockState";
 
     //チェストだけでなく以下の計6つも対応してる
     public static final void setTransportableBlocks() {
         transportableBlocks.clear();
-        transportableBlocks.add(Blocks.CHEST.getRegistryName().toString());
-        transportableBlocks.add(Blocks.TRAPPED_CHEST.getRegistryName().toString());
-        transportableBlocks.add(Blocks.FURNACE.getRegistryName().toString());
-        transportableBlocks.add(Blocks.DISPENSER.getRegistryName().toString());
-        transportableBlocks.add(Blocks.DROPPER.getRegistryName().toString());
-        transportableBlocks.add(moreinventory.block.Blocks.STORAGE_BOX_WOOD.getRegistryName().toString());
-        transportableBlocks.add(moreinventory.block.Blocks.STORAGE_BOX_IRON.getRegistryName().toString());
-        transportableBlocks.add(moreinventory.block.Blocks.STORAGE_BOX_GOLD.getRegistryName().toString());
-        transportableBlocks.add(moreinventory.block.Blocks.STORAGE_BOX_DIAMOND.getRegistryName().toString());
-        transportableBlocks.add(moreinventory.block.Blocks.STORAGE_BOX_EMERALD.getRegistryName().toString());
-        transportableBlocks.add(moreinventory.block.Blocks.STORAGE_BOX_COPPER.getRegistryName().toString());
-        transportableBlocks.add(moreinventory.block.Blocks.STORAGE_BOX_TIN.getRegistryName().toString());
-        transportableBlocks.add(moreinventory.block.Blocks.STORAGE_BOX_BRONZE.getRegistryName().toString());
-        transportableBlocks.add(moreinventory.block.Blocks.STORAGE_BOX_SILVER.getRegistryName().toString());
-        transportableBlocks.add(moreinventory.block.Blocks.STORAGE_BOX_GLASS.getRegistryName().toString());
+        transportableBlocks.add(Blocks.CHEST);
+        transportableBlocks.add(Blocks.TRAPPED_CHEST);
+        transportableBlocks.add(Blocks.FURNACE);
+        transportableBlocks.add(Blocks.DISPENSER);
+        transportableBlocks.add(Blocks.DROPPER);
+        transportableBlocks.add(moreinventory.block.Blocks.WOOD_STORAGE_BOX);
+        transportableBlocks.add(moreinventory.block.Blocks.IRON_STORAGE_BOX);
+        transportableBlocks.add(moreinventory.block.Blocks.GOLD_STORAGE_BOX);
+        transportableBlocks.add(moreinventory.block.Blocks.DIAMOND_STORAGE_BOX);
+        transportableBlocks.add(moreinventory.block.Blocks.EMERALD_STORAGE_BOX);
+        transportableBlocks.add(moreinventory.block.Blocks.COPPER_STORAGE_BOX);
+        transportableBlocks.add(moreinventory.block.Blocks.TIN_STORAGE_BOX);
+        transportableBlocks.add(moreinventory.block.Blocks.BRONZE_STORAGE_BOX);
+        transportableBlocks.add(moreinventory.block.Blocks.SILVER_STORAGE_BOX);
+        transportableBlocks.add(moreinventory.block.Blocks.GLASS_STORAGE_BOX);
     }
 
     @Override

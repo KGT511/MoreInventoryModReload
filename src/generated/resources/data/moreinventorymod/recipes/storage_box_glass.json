@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MSM",
+    "M M",
+    "MSM"
+  ],
+  "key": {
+    "M": {
+      "item": "minecraft:glass"
+    },
+    "S": {
+      "item": "minecraft:glass_pane"
+    }
+  },
+  "result": {
+    "item": "moreinventorymod:storage_box_glass",
+    "count": 32
+  }
+}

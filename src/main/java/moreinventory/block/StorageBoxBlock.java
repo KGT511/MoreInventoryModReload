@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import moreinventory.tileentity.BaseStorageBoxTileEntity;
 import moreinventory.tileentity.storagebox.StorageBoxType;
-import moreinventory.tileentity.storagebox.StorageBoxTileEntityType;
+import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -108,7 +108,7 @@ public class StorageBoxBlock extends ContainerBlock {
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
         try {
-            return StorageBoxTileEntityType.classMap.get(type).newInstance();
+            return StorageBoxTypeTileEntity.classMap.get(type).newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
             return new BaseStorageBoxTileEntity(type);

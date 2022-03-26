@@ -13,32 +13,32 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Items {
     public static List<Item> itemList = new ArrayList<Item>();
-    public static Item CATCHALL = register("catchall", Blocks.CATCHALL, MoreInventoryMOD.itemGroup);
+    public static Item CATCHALL = register("catchall", Blocks.CATCHALL);
     public static TransporterItem TRANSPORTER = (TransporterItem) register("transporter", new TransporterItem());
     public static SpannerItem SPANNER = (SpannerItem) register("spanner", new SpannerItem());
 
-    public static Item STORAGE_BOX_WOOD = register("storage_box_wood", Blocks.STORAGE_BOX_WOOD, MoreInventoryMOD.itemGroup);
-    public static Item STORAGE_BOX_IRON = register("storage_box_iron", Blocks.STORAGE_BOX_IRON, MoreInventoryMOD.itemGroup);
-    public static Item STORAGE_BOX_GOLD = register("storage_box_gold", Blocks.STORAGE_BOX_GOLD, MoreInventoryMOD.itemGroup);
-    public static Item STORAGE_BOX_DIAMOND = register("storage_box_diamond", Blocks.STORAGE_BOX_DIAMOND, MoreInventoryMOD.itemGroup);
-    public static Item STORAGE_BOX_EMERALD = register("storage_box_emerald", Blocks.STORAGE_BOX_EMERALD, MoreInventoryMOD.itemGroup);
+    public static Item WOOD_STORAGE_BOX = register("storage_box_wood", Blocks.WOOD_STORAGE_BOX);
+    public static Item IRON_STORAGE_BOX = register("storage_box_iron", Blocks.IRON_STORAGE_BOX);
+    public static Item GOLD_STORAGE_BOX = register("storage_box_gold", Blocks.GOLD_STORAGE_BOX);
+    public static Item DIAMOND_STORAGE_BOX = register("storage_box_diamond", Blocks.DIAMOND_STORAGE_BOX);
+    public static Item EMERALD_STORAGE_BOX = register("storage_box_emerald", Blocks.EMERALD_STORAGE_BOX);
 
-    public static Item STORAGE_BOX_COPPER = register("storage_box_copper", Blocks.STORAGE_BOX_COPPER, MoreInventoryMOD.itemGroup);
-    public static Item STORAGE_BOX_TIN = register("storage_box_tin", Blocks.STORAGE_BOX_TIN, MoreInventoryMOD.itemGroup);
-    public static Item STORAGE_BOX_BRONZE = register("storage_box_bronze", Blocks.STORAGE_BOX_BRONZE, MoreInventoryMOD.itemGroup);
-    public static Item STORAGE_BOX_SILVER = register("storage_box_silver", Blocks.STORAGE_BOX_SILVER, MoreInventoryMOD.itemGroup);
+    public static Item COPPER_STORAGE_BOX = register("storage_box_copper", Blocks.COPPER_STORAGE_BOX);
+    public static Item TIN_STORAGE_BOX = register("storage_box_tin", Blocks.TIN_STORAGE_BOX);
+    public static Item BRONZE_STORAGE_BOX = register("storage_box_bronze", Blocks.BRONZE_STORAGE_BOX);
+    public static Item SILVER_STORAGE_BOX = register("storage_box_silver", Blocks.SILVER_STORAGE_BOX);
 
-    public static Item STORAGE_BOX_GLASS = register("storage_box_glass", Blocks.STORAGE_BOX_GLASS, MoreInventoryMOD.itemGroup);
+    public static Item GLASS_STORAGE_BOX = register("storage_box_glass", Blocks.GLASS_STORAGE_BOX);
 
     public static Item IMPORTER = register("importer", Blocks.IMPORTER);
     public static Item EXPORTER = register("exporter", Blocks.EXPORTER);
 
     private static Item register(String key, Item itemIn) {
         itemList.add(itemIn);
-        return itemIn.setRegistryName(MoreInventoryMOD.MOD_ID, key);
+        return itemIn.setRegistryName(MoreInventoryMOD.MODID, key);
     }
 
     private static Item register(String key, Block blockIn) {

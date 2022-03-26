@@ -13,7 +13,7 @@ import moreinventory.container.Containers;
 import moreinventory.item.TransporterItem;
 import moreinventory.tileentity.TileEntities;
 import moreinventory.tileentity.storagebox.StorageBoxInventorySize;
-import moreinventory.tileentity.storagebox.StorageBoxTileEntityType;
+import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -32,15 +32,15 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
-@Mod(MoreInventoryMOD.MOD_ID)
+@Mod(MoreInventoryMOD.MODID)
 public class MoreInventoryMOD {
-    public static final String MOD_ID = "moreinventorymod";
+    public static final String MODID = "moreinventorymod";
     private static final Logger LOGGER = LogManager.getLogger();
     public static final ItemGroup itemGroup = new MoreInventoryMODItemGroup();
     //    public static final SimpleNetworkWrapper network = new SimpleNetworkWrapper(MOD_ID);
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel network = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(MOD_ID, "main"),
+            new ResourceLocation(MODID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals);
@@ -57,21 +57,26 @@ public class MoreInventoryMOD {
     private void setup(final FMLCommonSetupEvent event) {
         LOGGER.info("SETUP START");
 
-        TransporterItem.setTransportableBlocks();
-        StorageBoxInventorySize.init();
-        StorageBoxTileEntityType.init();
+        init();
 
         LOGGER.info("SETUP END");
+    }
+
+    public static void init() {
+        TransporterItem.setTransportableBlocks();
+        StorageBoxInventorySize.init();
+        StorageBoxTypeTileEntity.init();
+
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
         //bind renderers and gui factories
         ClientRegistry.bindTileEntityRenderer(TileEntities.CATCHALL_TILE_TYPE, CatchallRenderer::new);
-        StorageBoxTileEntityType.map.forEach((key, val) -> {
+        StorageBoxTypeTileEntity.map.forEach((key, val) -> {
             ClientRegistry.bindTileEntityRenderer(val, StorageBoxRenderer::new);
         });
-        RenderTypeLookup.setRenderLayer(Blocks.STORAGE_BOX_GLASS, RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(Blocks.GLASS_STORAGE_BOX, RenderType.getTranslucent());
         ClientRegistry.bindTileEntityRenderer(TileEntities.IMPORTER_TILE_TYPE, TransportRenderer::new);
         ClientRegistry.bindTileEntityRenderer(TileEntities.EXPORTER_TILE_TYPE, TransportRenderer::new);
 

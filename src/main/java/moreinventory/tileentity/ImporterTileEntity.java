@@ -1,5 +1,6 @@
 package moreinventory.tileentity;
 
+import moreinventory.block.Blocks;
 import moreinventory.block.TransportBlock;
 import moreinventory.container.TransportContainer;
 import moreinventory.tileentity.storagebox.network.IStorageBoxNetwork;
@@ -50,7 +51,7 @@ public class ImporterTileEntity extends BaseTransportTileEntity {
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("block.moreinventorymod.importer");
+        return new TranslationTextComponent(Blocks.IMPORTER.getTranslationKey());
     }
 
     @Override

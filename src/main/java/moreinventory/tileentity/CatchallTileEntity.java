@@ -1,5 +1,8 @@
 package moreinventory.tileentity;
 
+import moreinventory.block.Blocks;
+import moreinventory.block.CatchallBlock;
+import moreinventory.container.CatchallContainer;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -15,14 +18,11 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-
-import moreinventory.block.CatchallBlock;
-import moreinventory.container.CatchallContainer;
 
 public class CatchallTileEntity extends LockableLootTileEntity implements IInventory {
     public CatchallTileEntity() {
@@ -45,7 +45,7 @@ public class CatchallTileEntity extends LockableLootTileEntity implements IInven
 
     @Override
     public ITextComponent getDefaultName() {
-        return new TranslationTextComponent("block.moreinventorymod.catchall");
+        return new TranslationTextComponent(Blocks.CATCHALL.getTranslationKey());
     }
 
     @Override

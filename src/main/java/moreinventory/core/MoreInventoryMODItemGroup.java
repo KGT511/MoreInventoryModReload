@@ -10,12 +10,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class MoreInventoryMODItemGroup extends ItemGroup {
     public MoreInventoryMODItemGroup() {
-        super(MoreInventoryMOD.MOD_ID);
+        super(MoreInventoryMOD.MODID);
     }
 
     @Override
     public ItemStack createIcon() {
-        return new ItemStack(Items.STORAGE_BOX_WOOD);
+        return new ItemStack(Items.WOOD_STORAGE_BOX);
     }
 
     @Override

@@ -3,7 +3,7 @@ package moreinventory.tileentity;
 import moreinventory.block.StorageBoxBlock;
 import moreinventory.tileentity.storagebox.StorageBoxInventorySize;
 import moreinventory.tileentity.storagebox.StorageBoxType;
-import moreinventory.tileentity.storagebox.StorageBoxTileEntityType;
+import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
 import moreinventory.tileentity.storagebox.network.IStorageBoxNetwork;
 import moreinventory.tileentity.storagebox.network.StorageBoxNetworkManager;
 import moreinventory.util.MIMUtils;
@@ -50,7 +50,7 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
     public static final String tagKeyTypeName = "typeName";
 
     public BaseStorageBoxTileEntity(StorageBoxType typeIn) {
-        super(StorageBoxTileEntityType.map.get(typeIn));
+        super(StorageBoxTypeTileEntity.map.get(typeIn));
         int inventorySize = getStorageStackSize(typeIn);
         storageItems = NonNullList.withSize(inventorySize, ItemStack.EMPTY);
         this.type = typeIn;
