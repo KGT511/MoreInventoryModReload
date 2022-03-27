@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ISI",
+    "IWI",
+    "ISI"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "S": {
+      "item": "minecraft:cobblestone_slab"
+    },
+    "W": {
+      "item": "moreinventorymod:storage_box_wood"
+    }
+  },
+  "result": {
+    "item": "moreinventorymod:storage_box_iron",
+    "count": 3
+  }
+}

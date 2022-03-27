@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "particle": "block/glass",
+    "all": "moreinventorymod:block/storagebox_glass_0"
+  }
+}

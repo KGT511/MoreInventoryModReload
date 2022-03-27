@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "moreinventorymod:block/storage_box_glass_0"
-  }
-}

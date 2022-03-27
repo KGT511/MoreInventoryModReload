@@ -82,9 +82,9 @@ public class TransporterItem extends Item {
 
         BlockPos blockPos = context.getPos();
         BlockState blockState = world.getBlockState(blockPos);
-        String blockName = blockState.getBlock().getRegistryName().toString();
+        Block block = blockState.getBlock();
 
-        if (!transportableBlocks.contains(blockName)) {
+        if (!transportableBlocks.contains(block)) {
             return ActionResultType.PASS;
         }
 
@@ -305,8 +305,7 @@ public class TransporterItem extends Item {
     private void setIcon(ItemUseContext context) {
         BlockState blockState = context.getWorld().getBlockState(context.getPos());
         Block block = blockState.getBlock();
-        String blockName = block.getRegistryName().toString();
-        int num = transportableBlocks.contains(blockName) ? transportableBlocks.indexOf(blockName) + 1 : 0;
+        int num = transportableBlocks.contains(block) ? transportableBlocks.indexOf(block) + 1 : 0;
         if (block == Blocks.FURNACE && blockState.get(FurnaceBlock.LIT)) {
             num = 99;
         }

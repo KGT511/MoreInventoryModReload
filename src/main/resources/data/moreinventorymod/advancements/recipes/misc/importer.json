@@ -1,0 +1,43 @@
+{
+    "parent": "minecraft:recipes/root",
+    "rewards": {
+        "recipes": [
+            "moreinventorymod:importer"
+        ]
+    },
+    "criteria": {
+        "has_chest": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "minecraft:chest"
+                    }
+                ]
+            }
+        },
+        "has_storage_box": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "moreinventorymod:storage_box_wood"
+                    }
+                ]
+            }
+        },
+        "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {
+                "recipe": "moreinventorymod:importer"
+            }
+        }
+    },
+    "requirements": [
+        [
+            "has_chest",
+            "has_storage_box",
+            "has_the_recipe"
+        ]
+    ]
+}

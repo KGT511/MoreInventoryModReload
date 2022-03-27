@@ -1,0 +1,8 @@
+{
+  "parent": "moreinventorymod:block/importer/importer_down_north",
+  "textures": {
+    "particle": "moreinventorymod:block/exporter_black",
+    "blue": "moreinventorymod:block/exporter",
+    "black": "minecraft:block/anvil"
+  }
+}
