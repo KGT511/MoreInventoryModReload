@@ -46,7 +46,7 @@ public class StorageBoxRenderer extends TileEntityRenderer<BaseStorageBoxTileEnt
         int amount = tileEntityIn.getAmount();
         int stackSize = amount / contents.getMaxStackSize();
         int surplus = amount % contents.getMaxStackSize();
-        //        MIMLog.warning("amount->" + amount);
+
         String text = "";
         if (0 < stackSize)
             text += "[" + stackSize + "]";

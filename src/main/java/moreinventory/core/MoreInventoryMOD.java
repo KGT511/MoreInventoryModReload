@@ -11,6 +11,7 @@ import moreinventory.client.screen.CatchallContainerScreen;
 import moreinventory.client.screen.TransportContainerScreen;
 import moreinventory.container.Containers;
 import moreinventory.item.TransporterItem;
+import moreinventory.network.ServerboundImporterUpdatePacket;
 import moreinventory.tileentity.TileEntities;
 import moreinventory.tileentity.storagebox.StorageBoxInventorySize;
 import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
@@ -39,13 +40,15 @@ public class MoreInventoryMOD {
     public static final ItemGroup itemGroup = new MoreInventoryMODItemGroup();
     //    public static final SimpleNetworkWrapper network = new SimpleNetworkWrapper(MOD_ID);
     private static final String PROTOCOL_VERSION = "1";
-    public static final SimpleChannel network = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(MODID, "main"),
-            () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals);
+    public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
+            .named(new ResourceLocation(MODID, "main"))
+            .networkProtocolVersion(() -> PROTOCOL_VERSION)
+            .clientAcceptedVersions(PROTOCOL_VERSION::equals)
+            .serverAcceptedVersions(PROTOCOL_VERSION::equals)
+            .simpleChannel();
 
     public MoreInventoryMOD() {
+        initNetwork();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
@@ -67,6 +70,14 @@ public class MoreInventoryMOD {
         StorageBoxInventorySize.init();
         StorageBoxTypeTileEntity.init();
 
+    }
+
+    public static void initNetwork() {
+        int id = 0;
+        CHANNEL.messageBuilder(ServerboundImporterUpdatePacket.class, id++)
+                .encoder(ServerboundImporterUpdatePacket::encode).decoder(ServerboundImporterUpdatePacket::decode)
+                .consumer(ServerboundImporterUpdatePacket::handle)
+                .add();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

@@ -4,17 +4,21 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import moreinventory.container.TransportContainer;
+import moreinventory.core.MoreInventoryMOD;
+import moreinventory.data.lang.Text;
+import moreinventory.network.ServerboundImporterUpdatePacket;
 import moreinventory.tileentity.ImporterTileEntity;
+import moreinventory.util.MIMUtils;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 
 @OnlyIn(Dist.CLIENT)
 public class TransportContainerScreen extends ContainerScreen<TransportContainer> {
@@ -28,21 +32,51 @@ public class TransportContainerScreen extends ContainerScreen<TransportContainer
     }
 
     @Override
+    protected void func_231160_c_() {//init
+        super.func_231160_c_();
+        if (this.container.getTile() instanceof ImporterTileEntity) {
+            ImporterTileEntity tileEntity = (ImporterTileEntity) this.container.getTile();
+            this.isWhiteButton = this.func_230480_a_(
+                    new TransportContainerScreen.Button(guiLeft + xSize - 55, guiTop + 35,
+                            new TranslationTextComponent(Text.importerMoveWhiteDetail), new TranslationTextComponent(Text.importerMoveBlackDetail),
+                            tileEntity.getPos(), ImporterTileEntity.Val.WHITE.ordinal()));
+            this.isRegisterButton = this.func_230480_a_(
+                    new TransportContainerScreen.Button(guiLeft + 5, guiTop + 35,
+                            new TranslationTextComponent(Text.importerRegisterOnDetail), new TranslationTextComponent(Text.importerRegisterOffDetail),
+                            tileEntity.getPos(), ImporterTileEntity.Val.REGISTER.ordinal()));
+            this.isWhiteButton.field_230693_o_ = true;
+            this.isRegisterButton.field_230693_o_ = true;
+        }
+    }
+
+    @Override
     public void func_230430_a_(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {//render
         this.func_230446_a_(matrixStack);
         super.func_230430_a_(matrixStack, mouseX, mouseY, partialTicks);
         this.func_230459_a_(matrixStack, mouseX, mouseY);
+        if (this.container.getTile() instanceof ImporterTileEntity) {
+            int i = (this.field_230708_k_ - this.xSize) / 2;
+            int j = (this.field_230709_l_ - this.ySize) / 2;
+            int xOffset = i, yOffset = j;
+            ImporterTileEntity tileEntity = ((ImporterTileEntity) this.container.getTile());
 
-        //        if (this.container.getTile().getIswhite()) {
-        //            func_146283_a(fontRendererObj.listFormattedStringToWidth(I18n.format("transportmanager.gui.include.tooltip"), this.xSize / 2), mouseX, mouseY);
-        //        } else {
-        //            func_146283_a(fontRendererObj.listFormattedStringToWidth(I18n.format("transportmanager.gui.exclude.tooltip"), this.xSize / 2), mouseX, mouseY);
-        //        }
+            boolean isRegister = tileEntity.getIsRegister();
+            boolean isWhite = tileEntity.getIswhite();
+            TranslationTextComponent registerTxt = new TranslationTextComponent(isRegister ? Text.importerRegisterOn : Text.importerRegisterOff);
+            TranslationTextComponent moveTxt = new TranslationTextComponent(isWhite ? Text.importerMoveWhite : Text.importerMoveBlack);
+            func_238472_a_(matrixStack, this.field_230712_o_, registerTxt, 30 + xOffset, 40 + yOffset, 14737632);
+            func_238472_a_(matrixStack, this.field_230712_o_, moveTxt, xSize - 30 + xOffset, 40 + yOffset, 14737632);
+            this.drawCenteredStringWithoutShadow(matrixStack, new TranslationTextComponent(Text.importerMove), xSize - 30 + xOffset, 20 + yOffset, 328965);
+            this.drawCenteredStringWithoutShadow(matrixStack, new TranslationTextComponent(Text.importerRegister), 30 + xOffset, 20 + yOffset, 328965);
+            isWhiteButton.onValueUpdate(tileEntity);
+            isRegisterButton.onValueUpdate(tileEntity);
+
+        }
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    protected void func_230450_a_(MatrixStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {//drawGuiContainerBackgroundLayer
+    protected void func_230450_a_(MatrixStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {//renderBg
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.field_230706_i_.getTextureManager().bindTexture(DISPENSER_GUI_TEXTURE);
         int i = (this.field_230708_k_ - this.xSize) / 2;
@@ -51,74 +85,31 @@ public class TransportContainerScreen extends ContainerScreen<TransportContainer
     }
 
     @Override
-    protected void func_230451_b_(MatrixStack matrixStack, int p_230451_2_, int p_230451_3_) {//draw (offsetted by texture)
-        super.func_230451_b_(matrixStack, p_230451_2_, p_230451_3_);
+    protected void func_230451_b_(MatrixStack matrixStack, int mouseX, int mouseY) {//renderLabels
+        super.func_230451_b_(matrixStack, mouseX, mouseY);
         if (this.container.getTile() instanceof ImporterTileEntity) {
-            TranslationTextComponent registerTxt;
-            TranslationTextComponent moveTxt;
-            //        this.container.getTile().setIsWhite(isWhiteButton.getVal());
-            //        this.container.getTile().setIsRegister(isRegisterButton.getVal());
-            if (((ImporterTileEntity) this.container.getTile()).getIsRegister()) {
-                registerTxt = new TranslationTextComponent("gui.moreinventorymod.importer.register_on");
-            } else {
-                registerTxt = new TranslationTextComponent("gui.moreinventorymod.importer.register_off");
-            }
-            if (((ImporterTileEntity) this.container.getTile()).getIswhite()) {
-                moveTxt = new TranslationTextComponent("gui.moreinventorymod.importer.move_white");
-            } else {
-                moveTxt = new TranslationTextComponent("gui.moreinventorymod.importer.move_black");
-            }
-            func_238472_a_(matrixStack, this.field_230712_o_, registerTxt, 30, 40, 14737632);
-            func_238472_a_(matrixStack, this.field_230712_o_, moveTxt, xSize - 30, 40, 14737632);
-            func_238472_a_(matrixStack, this.field_230712_o_, new TranslationTextComponent("gui.moreinventorymod.importer.register"), 30, 20, 14737632);
-            func_238472_a_(matrixStack, this.field_230712_o_, new TranslationTextComponent("gui.moreinventorymod.importer.move"), xSize - 30, 20, 14737632);
-            for (Widget widget : this.field_230710_m_) {
-                if (widget.func_230449_g_()) {
-                    widget.func_230443_a_(matrixStack, p_230451_2_ - this.guiLeft, p_230451_3_ - this.guiTop);
-                    break;
-                }
-            }
+            this.isRegisterButton.func_230443_a_(matrixStack, mouseX, mouseY);
+            this.isWhiteButton.func_230443_a_(matrixStack, mouseX, mouseY);
         }
     }
 
-    @Override
-    protected void func_231160_c_() {//maybe init
-        super.func_231160_c_();
-        if (this.container.getTile() instanceof ImporterTileEntity) {
-            isWhiteButton = this.func_230480_a_(new TransportContainerScreen.Button(guiLeft + xSize - 58, guiTop + 35,
-                    new TranslationTextComponent("gui.moreinventorymod.importer.move_white.detail"),
-                    new TranslationTextComponent("gui.moreinventorymod.importer.move_black.detail")));
-            isRegisterButton = this.func_230480_a_(new TransportContainerScreen.Button(guiLeft + 5, guiTop + 35,
-                    new TranslationTextComponent("gui.moreinventorymod.importer.register_on.detail"),
-                    new TranslationTextComponent("gui.moreinventorymod.importer.register_off.detail")));
-            isWhiteButton.field_230693_o_ = true;
-            isRegisterButton.field_230693_o_ = true;
-
-            //        isWhiteButton.setVal(this.container.getTile().getIswhite());
-            //        isRegisterButton.setVal(this.container.getTile().getIsRegister());
-        }
-    }
-
-    @Override
-    public void func_231023_e_() {//callback
-        super.func_231023_e_();
-        //        MIMLog.warning("" + this.container.getTile());
-        //        CompoundNBT tag = this.container.getTile().getUpdateTag();
-        //        tag.putBoolean(TileEntityImporter.isWhiteKey, isWhiteButton.getVal());
-        //        tag.putBoolean(TileEntityImporter.registerKey, isRegisterButton.getVal());
-        //        this.container.getTile().handleUpdateTag(this.container.getTile().getBlockState(), tag);
-        //        MIMLog.warning("" + this.container.getTile().getBlockState());//.getTileEntity(new BlockPos(-177, 54, -25)));
+    private void drawCenteredStringWithoutShadow(MatrixStack poseStack, ITextComponent string, float x, float y, int color) {
+        this.field_230712_o_.func_243248_b(poseStack, string, x - this.field_230712_o_.func_238414_a_(string) / 2, y, color);
     }
 
     @OnlyIn(Dist.CLIENT)
-    class Button extends AbstractButton {
+    class Button extends ExtendedButton {
         private boolean val = false;
         private ITextComponent trueTxt, falseTxt;
+        private int id;
 
-        protected Button(int p_i50825_1_, int p_i50825_2_, ITextComponent trueDisplayTxt, ITextComponent falseDisplayTxt) {
-            super(p_i50825_1_, p_i50825_2_, 53, 20, StringTextComponent.field_240750_d_);
-            trueTxt = trueDisplayTxt;
-            falseTxt = falseDisplayTxt;
+        protected Button(int x, int y, ITextComponent trueDisplayTxt, ITextComponent falseDisplayTxt, BlockPos blockPos, int id) {
+            super(x, y, 53, 20, StringTextComponent.field_240750_d_, (p) -> {
+                MoreInventoryMOD.CHANNEL.sendToServer(new ServerboundImporterUpdatePacket(blockPos, id));
+            });
+            this.trueTxt = trueDisplayTxt;
+            this.falseTxt = falseDisplayTxt;
+            this.id = id;
         }
 
         public boolean getVal() {
@@ -130,18 +121,22 @@ public class TransportContainerScreen extends ContainerScreen<TransportContainer
         }
 
         @Override
-        public void func_230982_a_(double p_230982_1_, double p_230982_3_) {//called by click
-            //            val = !val;
+        public void func_230982_a_(double mouseX, double mouseY) {
+            super.func_230982_a_(mouseX, mouseY);
         }
 
         @Override
-        public void func_230930_b_() {//called by click when want to close
+        public void func_230443_a_(MatrixStack stack, int x, int y) {
+            super.func_230443_a_(stack, x, y);
+            if (this.func_230449_g_()) {
+                ITextComponent txt = val ? trueTxt : falseTxt;
+                TransportContainerScreen.this.func_238652_a_(stack, txt, x - this.field_230690_l_, y / 2);
+            }
         }
 
-        public void func_230443_a_(MatrixStack p_230443_1_, int p_230443_2_, int p_230443_3_) {
-            ITextComponent txt = val ? trueTxt : falseTxt;
-            int length = txt.getString().length();
-            TransportContainerScreen.this.func_238652_a_(p_230443_1_, txt, p_230443_2_ - length / 2 * 5, p_230443_3_);
+        public void onValueUpdate(ImporterTileEntity blockEntity) {
+            int val = blockEntity.getValByID(this.id);
+            this.setVal(MIMUtils.intToBool(val));
         }
     }
 

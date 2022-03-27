@@ -26,5 +26,5 @@
     "gui.moreinventorymod.importer.move_white": "する",
     "gui.moreinventorymod.importer.move_black": "しない",
     "gui.moreinventorymod.importer.move_white.detail": "リストのアイテムのみ輸送します",
-    "gui.moreinventorymod.importer.move_black.detail": "リスト以外のアイテムを輸送します",
+    "gui.moreinventorymod.importer.move_black.detail": "リスト以外のアイテムを輸送します"
 }

@@ -4,14 +4,13 @@ import moreinventory.block.Blocks;
 import moreinventory.block.TransportBlock;
 import moreinventory.container.TransportContainer;
 import moreinventory.tileentity.storagebox.network.IStorageBoxNetwork;
+import moreinventory.util.MIMUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.HopperTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -22,6 +21,10 @@ import net.minecraft.util.text.TranslationTextComponent;
 public class ImporterTileEntity extends BaseTransportTileEntity {
     private boolean register = false;
     private boolean isWhite = false;//falseの時はブラックリストになる
+
+    public enum Val {
+        REGISTER, WHITE
+    };
 
     public static final String registerKey = "register";
     public static final String isWhiteKey = "is_white";
@@ -135,24 +138,32 @@ public class ImporterTileEntity extends BaseTransportTileEntity {
         register = val;
     }
 
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(getPos(), 0, this.write(new CompoundNBT()));
+    public void setValByID(int id, int val) {
+        if (Val.values().length <= id) {
+            return;
+        }
+        switch (Val.values()[id]) {
+        case REGISTER:
+            setIsRegister(MIMUtils.intToBool(val));
+            break;
+        case WHITE:
+            setIsWhite(MIMUtils.intToBool(val));
+            break;
+        }
+
     }
 
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        this.read(this.world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
-    }
+    public int getValByID(int id) {
+        if (Val.values().length <= id) {
+            return 0;
+        }
+        switch (Val.values()[id]) {
+        case REGISTER:
+            return this.getIsRegister() ? 1 : 0;
+        case WHITE:
+            return this.getIswhite() ? 1 : 0;
+        }
 
-    @Override
-    public CompoundNBT getUpdateTag() {
-        return this.write(super.getUpdateTag());
+        return 0;
     }
-
-    @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-        this.read(this.world.getBlockState(pos), tag);
-    }
-
 }

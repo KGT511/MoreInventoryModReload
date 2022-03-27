@@ -1,6 +1,9 @@
 package moreinventory.container;
 
+import moreinventory.block.Blocks;
 import moreinventory.tileentity.BaseTransportTileEntity;
+import moreinventory.tileentity.ImporterTileEntity;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
@@ -8,6 +11,8 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.util.IntReferenceHolder;
 
 public class TransportContainer extends Container {
 
@@ -31,6 +36,9 @@ public class TransportContainer extends Container {
         }
 
         this.bindPlayerInventory(playerInventory);
+        if (tile instanceof ImporterTileEntity) {
+            this.trackAllIntFields((ImporterTileEntity) tile, ImporterTileEntity.Val.values().length);
+        }
     }
 
     protected void bindPlayerInventory(PlayerInventory player) {
@@ -47,7 +55,8 @@ public class TransportContainer extends Container {
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return transportManager != null && transportManager.isUsableByPlayer(playerIn);
+        Block block = (transportManager instanceof ImporterTileEntity ? Blocks.IMPORTER : Blocks.EXPORTER);
+        return isWithinUsableDistance(IWorldPosCallable.of(transportManager.getWorld(), transportManager.getPos()), playerIn, block);
     }
 
     @Override
@@ -72,5 +81,26 @@ public class TransportContainer extends Container {
 
     public BaseTransportTileEntity getTile() {
         return transportManager;
+    }
+
+    protected void trackAllIntFields(ImporterTileEntity blockEntity, int valCount) {
+        for (int f = 0; f < valCount; f++) {
+            trackIntField(blockEntity, f);
+        }
+    }
+
+    protected void trackIntField(ImporterTileEntity blockEntity, int id) {
+        trackInt(new IntReferenceHolder() {
+
+            @Override
+            public int get() {
+                return blockEntity.getValByID(id);
+            }
+
+            @Override
+            public void set(int value) {
+                blockEntity.setValByID(id, value);
+            }
+        });
     }
 }

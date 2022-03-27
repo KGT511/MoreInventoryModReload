@@ -53,4 +53,8 @@ public final class MIMUtils {
         tag.putByte(key, (byte) num);
         s.setTag(tag);
     }
+
+    public static boolean intToBool(int val) {
+        return val == 0 ? false : true;
+    }
 }
