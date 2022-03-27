@@ -5,7 +5,6 @@
     "item.moreinventorymod.transporter": "transporter",
     "item.moreinventorymod.spanner": "spanner",
     "block.moreinventorymod.catchall": "catchall",
-    "block.moreinventorymod.multi_ender_chest": "ender chest for multi player",
     "block.moreinventorymod.storage_box": "Container Box",
     "block.moreinventorymod.storage_box_wood": "Wood Container Box",
     "block.moreinventorymod.storage_box_iron": "Iron Container Box",
@@ -29,5 +28,4 @@
     "gui.moreinventorymod.importer.move_black": "black",
     "gui.moreinventorymod.importer.move_white.detail": "List is White List",
     "gui.moreinventorymod.importer.move_black.detail": "List is Black List",
-    "item.moreinventorymod.mob_ball": "MobBall"
 }

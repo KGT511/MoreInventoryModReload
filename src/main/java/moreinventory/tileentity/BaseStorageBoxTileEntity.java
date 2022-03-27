@@ -7,7 +7,6 @@ import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
 import moreinventory.tileentity.storagebox.network.IStorageBoxNetwork;
 import moreinventory.tileentity.storagebox.network.StorageBoxNetworkManager;
 import moreinventory.util.MIMUtils;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -27,7 +26,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -472,14 +470,9 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
                 multiple++;
             }
         }
-
         if (1 < multiple) {
-            for (Direction d : Direction.values()) {
-                TileEntity tile = this.world.getTileEntity(this.pos.offset(d));
-                if (tile instanceof BaseStorageBoxTileEntity) {
-                    this.setStorageBoxNetworkManager(new StorageBoxNetworkManager(this.world, this.pos));
-                }
-            }
+            this.setStorageBoxNetworkManager(new StorageBoxNetworkManager(this.world, this.pos));
         }
     }
+
 }

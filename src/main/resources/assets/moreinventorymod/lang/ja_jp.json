@@ -4,7 +4,6 @@
     "item.moreinventorymod.transporter": "トランスポーター",
     "item.moreinventorymod.spanner": "スパナ",
     "block.moreinventorymod.catchall": "ガラクタ入れ",
-    "block.moreinventorymod.multi_ender_chest": "共用エンダーチェスト",
     "block.moreinventorymod.storage_box": "コンテナ",
     "block.moreinventorymod.storage_box_wood": "木のコンテナ",
     "block.moreinventorymod.storage_box_iron": "鉄のコンテナ",
@@ -28,5 +27,4 @@
     "gui.moreinventorymod.importer.move_black": "しない",
     "gui.moreinventorymod.importer.move_white.detail": "リストのアイテムのみ輸送します",
     "gui.moreinventorymod.importer.move_black.detail": "リスト以外のアイテムを輸送します",
-    "item.moreinventorymod.mob_ball": "モブスターボール"
 }
