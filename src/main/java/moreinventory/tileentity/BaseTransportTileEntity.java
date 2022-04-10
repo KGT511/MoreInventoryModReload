@@ -32,35 +32,29 @@ public abstract class BaseTransportTileEntity extends LockableLootTileEntity imp
     public int currentSlot = 0;
 
     private byte updateTime = 0;
-    private byte clientUpdateTime = 0;
-    private byte level = 0;
 
     protected BaseTransportTileEntity(TileEntityType<?> typeIn) {
         super(typeIn);
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return slotItems.size();
     }
 
     @Override
-    public void func_230337_a_(BlockState state, CompoundNBT nbt) {
-        super.func_230337_a_(state, nbt);
-        this.slotItems = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
-        if (!this.checkLootAndRead(nbt)) {
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
+        this.slotItems = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        if (!this.tryLoadLootTable(nbt)) {
             ItemStackHelper.loadAllItems(nbt, this.slotItems);
         }
     }
 
-    public void read(BlockState state, CompoundNBT nbt) {
-        this.func_230337_a_(state, nbt);
-    }
-
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
-        if (!this.checkLootAndWrite(compound)) {
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
+        if (!this.trySaveLootTable(compound)) {
             ItemStackHelper.saveAllItems(compound, this.slotItems);
         }
 
@@ -86,8 +80,8 @@ public abstract class BaseTransportTileEntity extends LockableLootTileEntity imp
     }
 
     @Override
-    public void updateContainingBlockInfo() {
-        super.updateContainingBlockInfo();
+    public void clearCache() {
+        super.clearCache();
         if (this.storageHandler != null) {
             this.storageHandler.invalidate();
             this.storageHandler = null;
@@ -96,7 +90,7 @@ public abstract class BaseTransportTileEntity extends LockableLootTileEntity imp
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (!this.remove && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (this.storageHandler == null)
                 this.storageHandler = LazyOptional.of(this::createHandler);
             return this.storageHandler.cast();
@@ -114,50 +108,50 @@ public abstract class BaseTransportTileEntity extends LockableLootTileEntity imp
 
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(getPos(), 0, this.write(new CompoundNBT()));
+        return new SUpdateTileEntityPacket(this.getBlockPos(), 0, this.save(new CompoundNBT()));
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        this.read(this.world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+        this.load(this.level.getBlockState(pkt.getPos()), pkt.getTag());
     }
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return this.write(super.getUpdateTag());
+        return this.save(super.getUpdateTag());
     }
 
     @Override
     public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-        this.read(this.world.getBlockState(pos), tag);
+        this.load(this.level.getBlockState(this.worldPosition), tag);
     }
 
     @Override
-    public void remove() {
-        super.remove();
+    public void setRemoved() {
+        super.setRemoved();
         if (storageHandler != null)
             storageHandler.invalidate();
     }
 
     @Override
     public boolean isEmpty() {
-        for (int i = 0; i < getSizeInventory(); ++i)
-            if (getStackInSlot(i) != ItemStack.EMPTY)
+        for (int i = 0; i < getContainerSize(); ++i)
+            if (getItem(i) != ItemStack.EMPTY)
                 return false;
 
         return true;
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
         return slotItems.get(index);
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
-        if (!getStackInSlot(index).isEmpty()) {
-            ItemStack itemstack = getStackInSlot(index);
-            setInventorySlotContents(index, ItemStack.EMPTY);
+    public ItemStack removeItemNoUpdate(int index) {
+        if (!getItem(index).isEmpty()) {
+            ItemStack itemstack = getItem(index);
+            setItem(index, ItemStack.EMPTY);
             return itemstack;
         } else {
             return ItemStack.EMPTY;
@@ -165,28 +159,21 @@ public abstract class BaseTransportTileEntity extends LockableLootTileEntity imp
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
         slotItems.set(index, stack);
-        markDirty();
+        setChanged();
     }
 
     protected abstract void doExtract();
 
     @Override
     public void tick() {
-        if (!this.world.isBlockPowered(this.pos)) {
-            if (!this.world.isRemote()) {
+        if (!this.level.hasNeighborSignal(this.worldPosition)) {
+            if (!this.level.isClientSide()) {
                 ++updateTime;
                 if (updateTime % 20 == 0) {
                     updateTime = 0;
                     doExtract();
-                }
-            } else {
-                ++clientUpdateTime;
-                if (clientUpdateTime % 10 == 0) {
-                    clientUpdateTime = 0;
-                    ++level;
-                    level %= 4;
                 }
             }
         }
@@ -205,15 +192,11 @@ public abstract class BaseTransportTileEntity extends LockableLootTileEntity imp
     }
 
     public static boolean canExtractFromSide(IInventory inventory, ItemStack itemstack, int slot, Direction side) {
-        return !(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canExtractItem(slot, itemstack, side);
+        return !(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canTakeItemThroughFace(slot, itemstack, side);
     }
 
     public static boolean canInsertFromSide(IInventory inventory, ItemStack itemstack, int slot, Direction side) {
-        return inventory.isItemValidForSlot(slot, itemstack) && (!(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canInsertItem(slot, itemstack, side));
-    }
-
-    public byte getLevel() {
-        return level;
+        return inventory.canPlaceItem(slot, itemstack) && (!(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canPlaceItemThroughFace(slot, itemstack, side));
     }
 
 }

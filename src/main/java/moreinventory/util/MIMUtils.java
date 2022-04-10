@@ -23,7 +23,7 @@ public final class MIMUtils {
             if (!itemstack.isEmpty()) {
                 CompoundNBT compoundnbt = new CompoundNBT();
                 compoundnbt.putShort("Slot", (short) i);
-                itemstack.write(compoundnbt);
+                itemstack.save(compoundnbt);
                 listnbt.add(compoundnbt);
             }
         }
@@ -42,7 +42,7 @@ public final class MIMUtils {
             CompoundNBT compoundnbt = listnbt.getCompound(i);
             int j = compoundnbt.getShort("Slot");
             if (j >= 0 && j < list.size()) {
-                list.set(j, ItemStack.read(compoundnbt));
+                list.set(j, ItemStack.of(compoundnbt));
             }
         }
     }

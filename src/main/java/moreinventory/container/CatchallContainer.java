@@ -1,7 +1,6 @@
 package moreinventory.container;
 
 import moreinventory.tileentity.CatchallTileEntity;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -11,7 +10,7 @@ import net.minecraft.network.PacketBuffer;
 
 public class CatchallContainer extends Container {
     public static CatchallContainer createContainerClientSide(int windowID, PlayerInventory playerInventory, PacketBuffer extraData) {
-        CatchallTileEntity tile = (CatchallTileEntity) playerInventory.player.world.getTileEntity(extraData.readBlockPos());
+        CatchallTileEntity tile = (CatchallTileEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos());
         return new CatchallContainer(windowID, playerInventory, tile);
     }
 
@@ -50,26 +49,26 @@ public class CatchallContainer extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(PlayerEntity player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
 
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
             if (index < slotSize) {
-                if (!this.mergeItemStack(itemstack1, slotSize, this.inventorySlots.size(), true)) {
+                if (!this.moveItemStackTo(itemstack1, slotSize, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, slotSize, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 0, slotSize, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
 
@@ -77,7 +76,7 @@ public class CatchallContainer extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return catchall != null && catchall.isUsableByPlayer(playerIn);
+    public boolean stillValid(PlayerEntity playerIn) {
+        return catchall != null && catchall.stillValid(playerIn);
     }
 }

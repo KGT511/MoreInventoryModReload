@@ -16,26 +16,26 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
     }
 
     @Override
-    protected void registerLootTable(Block block, LootTable.Builder builder) {
-        super.registerLootTable(block, builder);
+    protected void add(Block block, LootTable.Builder builder) {
+        super.add(block, builder);
         knownBlocks.add(block);
     }
 
     @Override
     protected void addTables() {
-        registerDropSelfLootTable(Blocks.CATCHALL);
-        registerDropSelfLootTable(Blocks.WOOD_STORAGE_BOX);
-        registerDropSelfLootTable(Blocks.IRON_STORAGE_BOX);
-        registerDropSelfLootTable(Blocks.GOLD_STORAGE_BOX);
-        registerDropSelfLootTable(Blocks.DIAMOND_STORAGE_BOX);
-        registerDropSelfLootTable(Blocks.EMERALD_STORAGE_BOX);
-        registerDropSelfLootTable(Blocks.COPPER_STORAGE_BOX);
-        registerDropSelfLootTable(Blocks.TIN_STORAGE_BOX);
-        registerDropSelfLootTable(Blocks.BRONZE_STORAGE_BOX);
-        registerDropSelfLootTable(Blocks.SILVER_STORAGE_BOX);
-        registerDropSelfLootTable(Blocks.GLASS_STORAGE_BOX);
-        registerDropSelfLootTable(Blocks.IMPORTER);
-        registerDropSelfLootTable(Blocks.EXPORTER);
+        dropSelf(Blocks.CATCHALL);
+        dropSelf(Blocks.WOOD_STORAGE_BOX);
+        dropSelf(Blocks.IRON_STORAGE_BOX);
+        dropSelf(Blocks.GOLD_STORAGE_BOX);
+        dropSelf(Blocks.DIAMOND_STORAGE_BOX);
+        dropSelf(Blocks.EMERALD_STORAGE_BOX);
+        dropSelf(Blocks.COPPER_STORAGE_BOX);
+        dropSelf(Blocks.TIN_STORAGE_BOX);
+        dropSelf(Blocks.BRONZE_STORAGE_BOX);
+        dropSelf(Blocks.SILVER_STORAGE_BOX);
+        dropSelf(Blocks.GLASS_STORAGE_BOX);
+        dropSelf(Blocks.IMPORTER);
+        dropSelf(Blocks.EXPORTER);
 
     }
 

@@ -34,15 +34,15 @@ public class StorageBoxNetworkManager {
             return;
         }
 
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
 
         if (tile != null && tile instanceof IStorageBoxNetwork && tile instanceof BaseStorageBoxTileEntity) {
             BaseStorageBoxTileEntity tileStorageBox = (BaseStorageBoxTileEntity) tile;
-            network.put(tileStorageBox.getPos(), tileStorageBox);
+            network.put(tileStorageBox.getBlockPos(), tileStorageBox);
             tileStorageBox.setStorageBoxNetworkManager(this);
 
             for (Direction d : Direction.values()) {
-                BlockPos neighborPos = pos.offset(d);
+                BlockPos neighborPos = pos.relative(d);
                 if (!network.containsKey(neighborPos)) {
                     createNewNetwork(world, neighborPos, ignorePos);
                 }
@@ -55,8 +55,8 @@ public class StorageBoxNetworkManager {
     }
 
     public void storeInventoryToNetwork(IInventory inventory, BlockPos originPos) {
-        for (int i = 0; i < inventory.getSizeInventory(); ++i) {
-            ItemStack stack = inventory.getStackInSlot(i);
+        for (int i = 0; i < inventory.getContainerSize(); ++i) {
+            ItemStack stack = inventory.getItem(i);
             if (stack.getItem() != ItemStack.EMPTY.getItem()) {
                 storeToNetwork(stack, false, originPos);
             }
@@ -98,7 +98,7 @@ public class StorageBoxNetworkManager {
     private List<BlockPos> getSortedKeys(BlockPos originPos) {
         List<BlockPos> keys = new ArrayList<>(network.keySet());
         Collections.sort(keys, (p1, p2) -> {
-            return p1.manhattanDistance(originPos) - p2.manhattanDistance(originPos);
+            return p1.distManhattan(originPos) - p2.distManhattan(originPos);
         });
         return keys;
     }
@@ -109,7 +109,7 @@ public class StorageBoxNetworkManager {
 
     //ネットワークにTileを一つ加える。Tileが既にネットワークを持っていてもそのネットワークは追加されない
     public void add(BaseStorageBoxTileEntity tile) {
-        network.put(tile.getPos(), tile);
+        network.put(tile.getBlockPos(), tile);
         tile.setStorageBoxNetworkManager(this);
     }
 

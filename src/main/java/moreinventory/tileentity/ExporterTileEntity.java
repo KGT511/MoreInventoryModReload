@@ -28,7 +28,7 @@ public class ExporterTileEntity extends BaseTransportTileEntity {
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent(Blocks.EXPORTER.getTranslationKey());
+        return new TranslationTextComponent(Blocks.EXPORTER.getDescriptionId());
     }
 
     @Override
@@ -38,9 +38,9 @@ public class ExporterTileEntity extends BaseTransportTileEntity {
 
     @Override
     protected void doExtract() {
-        Direction out = this.world.getBlockState(this.pos).get(TransportBlock.FACING_OUT);
-        BlockPos outPos = this.pos.offset(out);
-        IInventory inventory = HopperTileEntity.getInventoryAtPosition(this.world, outPos);
+        Direction out = this.level.getBlockState(this.worldPosition).getValue(TransportBlock.FACING_OUT);
+        BlockPos outPos = this.worldPosition.relative(out);
+        IInventory inventory = HopperTileEntity.getContainerAt(this.level, outPos);
 
         if (inventory != null) {
             extract: for (int i = 0; i < 9; i++) {
@@ -51,11 +51,11 @@ public class ExporterTileEntity extends BaseTransportTileEntity {
                 }
 
                 if (itemstack.getItem() != ItemStack.EMPTY.getItem()
-                        && getBoxPos(itemstack) && !(this.pos.equals(boxPos))) {
-                    BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) this.world.getTileEntity(boxPos);
+                        && getBoxPos(itemstack) && !(this.worldPosition.equals(boxPos))) {
+                    BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) this.level.getBlockEntity(boxPos);
 
-                    for (int j = 0; j < tile.getSizeInventory(); j++) {
-                        ItemStack itemstack1 = tile.getStackInSlot(j);
+                    for (int j = 0; j < tile.getContainerSize(); j++) {
+                        ItemStack itemstack1 = tile.getItem(j);
 
                         if (mergeItemStack(itemstack1, inventory, out.getOpposite())) {
                             break extract;
@@ -64,24 +64,24 @@ public class ExporterTileEntity extends BaseTransportTileEntity {
                 }
             }
         }
-        BlockState newState = this.world.getBlockState(boxPos);
-        this.world.notifyBlockUpdate(boxPos, this.getBlockState(), newState, 0);
+        BlockState newState = this.level.getBlockState(boxPos);
+        this.level.sendBlockUpdated(boxPos, this.getBlockState(), newState, 0);
     }
 
     private boolean getBoxPos(ItemStack itemstack) {
-        Direction in = this.world.getBlockState(this.pos).get(TransportBlock.FACING_IN);
-        BlockPos inPos = this.pos.offset(in);//pull
-        Direction out = this.world.getBlockState(this.pos).get(TransportBlock.FACING_OUT);
-        BlockPos outPos = this.pos.offset(out);//put
+        Direction in = this.level.getBlockState(this.worldPosition).getValue(TransportBlock.FACING_IN);
+        BlockPos inPos = this.worldPosition.relative(in);//pull
+        Direction out = this.level.getBlockState(this.worldPosition).getValue(TransportBlock.FACING_OUT);
+        BlockPos outPos = this.worldPosition.relative(out);//put
 
-        TileEntity tile = this.world.getTileEntity(inPos);
+        TileEntity tile = this.level.getBlockEntity(inPos);
 
         if (tile != null && tile instanceof BaseStorageBoxTileEntity) {
             List<BaseStorageBoxTileEntity> list = ((BaseStorageBoxTileEntity) tile).getStorageBoxNetworkManager().getMatchingList(itemstack, inPos);
 
             for (BaseStorageBoxTileEntity tileStorageBox : list) {
-                if (!tileStorageBox.getPos().equals(outPos)) {//入力と出力が同じネットワークになるのを防ぐ
-                    boxPos = tileStorageBox.getPos();
+                if (!tileStorageBox.getBlockPos().equals(outPos)) {//入力と出力が同じネットワークになるのを防ぐ
+                    boxPos = tileStorageBox.getBlockPos();
                     return true;
                 }
             }
@@ -96,25 +96,25 @@ public class ExporterTileEntity extends BaseTransportTileEntity {
         }
 
         boolean success = false;
-        int size = inventory.getSizeInventory();
+        int size = inventory.getContainerSize();
 
         if (itemstack.isStackable()) {
             for (int i = 0; i < size; ++i) {
-                ItemStack item = inventory.getStackInSlot(i);
+                ItemStack item = inventory.getItem(i);
 
-                if (item != null && item.getItem() == itemstack.getItem() && itemstack.getDamage() == item.getDamage() && ItemStack.areItemStackTagsEqual(itemstack, item)) {
+                if (item != null && item.getItem() == itemstack.getItem() && itemstack.getDamageValue() == item.getDamageValue() && ItemStack.tagMatches(itemstack, item)) {
                     if (canAccessFromSide(inventory, i, side) && canInsertFromSide(inventory, itemstack, i, side)) {
                         int sum = item.getCount() + itemstack.getCount();
 
                         if (sum <= itemstack.getMaxStackSize()) {
                             itemstack.setCount(0);
                             item.setCount(sum);
-                            inventory.setInventorySlotContents(i, item.copy());
+                            inventory.setItem(i, item.copy());
                             success = true;
                         } else if (item.getCount() < itemstack.getMaxStackSize()) {
                             itemstack.shrink(itemstack.getMaxStackSize() - item.getCount());
                             item.setCount(itemstack.getMaxStackSize());
-                            inventory.setInventorySlotContents(i, item.copy());
+                            inventory.setItem(i, item.copy());
                             success = true;
                         }
                     }
@@ -128,10 +128,10 @@ public class ExporterTileEntity extends BaseTransportTileEntity {
 
         if (itemstack.getCount() > 0) {
             for (int i = 0; i < size; ++i) {
-                ItemStack item = inventory.getStackInSlot(i);
+                ItemStack item = inventory.getItem(i);
 
                 if (item.getItem() == ItemStack.EMPTY.getItem() && canAccessFromSide(inventory, i, side) && canInsertFromSide(inventory, itemstack, i, side)) {
-                    inventory.setInventorySlotContents(i, itemstack.copy());
+                    inventory.setItem(i, itemstack.copy());
                     itemstack.setCount(0);
                     success = true;
                     break;

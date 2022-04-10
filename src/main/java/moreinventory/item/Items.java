@@ -46,7 +46,7 @@ public class Items {
     }
 
     private static Item register(String key, Block blockIn, ItemGroup itemGroupIn) {
-        return register(key, new BlockItem(blockIn, (new Item.Properties()).group(itemGroupIn)));
+        return register(key, new BlockItem(blockIn, (new Item.Properties()).tab(itemGroupIn)));
     }
 
     @SubscribeEvent

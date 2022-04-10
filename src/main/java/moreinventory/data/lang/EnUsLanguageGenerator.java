@@ -18,7 +18,7 @@ public class EnUsLanguageGenerator extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        add(MoreInventoryMOD.itemGroup.getBackgroundImageName(), "MoreInventoryMOD");
+        add(MoreInventoryMOD.itemGroup.getDisplayName().getString(), "MoreInventoryMOD");
 
         add(Blocks.CATCHALL, "catchall");
         add(Items.TRANSPORTER, "transporter");

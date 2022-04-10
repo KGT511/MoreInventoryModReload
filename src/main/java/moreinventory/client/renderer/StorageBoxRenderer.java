@@ -26,22 +26,22 @@ public class StorageBoxRenderer extends TileEntityRenderer<BaseStorageBoxTileEnt
         if (contents.getItem() == ItemStack.EMPTY.getItem())
             return;
 
-        matrixStackIn.push();
-        float f = blockstate.get(StorageBoxBlock.FACING).getHorizontalAngle();
+        matrixStackIn.pushPose();
+        float f = blockstate.getValue(StorageBoxBlock.FACING).toYRot();
         matrixStackIn.translate(0.5D, 0.5D, 0.5D);
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(-f));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(-f));
         matrixStackIn.translate(0.D, 1.D / 16.D * 2.D, 0.5D);
         float scale = 0.75F;
         matrixStackIn.scale(scale, scale, scale);
-        matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180.F));
-        matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(180.F));
-        Minecraft.getInstance().getItemRenderer().renderItem(contents, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
-        matrixStackIn.pop();
+        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180.F));
+        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180.F));
+        Minecraft.getInstance().getItemRenderer().renderStatic(contents, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
+        matrixStackIn.popPose();
 
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.translate(0.5D, 0.5D, 0.5D);
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(-f + 180));
-        matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(180));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(-f + 180));
+        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180));
 
         int amount = tileEntityIn.getAmount();
         int stackSize = amount / contents.getMaxStackSize();
@@ -58,7 +58,7 @@ public class StorageBoxRenderer extends TileEntityRenderer<BaseStorageBoxTileEnt
 
         matrixStackIn.translate(-text.length() / 2.D * 2. * (5. + (text.length() % 2 == 0 ? 0.5 : 0)) / 7. / 16., 0.5 - 1.D / 16.D * 3.5D, -0.5001D);
         matrixStackIn.scale(textScale, textScale, textScale);
-        this.renderDispatcher.fontRenderer.renderString(text, 0.F, 0.F, 0xF0F0F0, false, matrixStackIn.getLast().getMatrix(), bufferIn, false, 0, combinedLightIn);
-        matrixStackIn.pop();
+        this.renderer.font.drawInBatch(text, 0.F, 0.F, 0xF0F0F0, false, matrixStackIn.last().pose(), bufferIn, false, 0, combinedLightIn);
+        matrixStackIn.popPose();
     }
 }

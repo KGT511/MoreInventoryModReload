@@ -24,7 +24,7 @@ public class GlassStorageBoxTileEntity extends BaseStorageBoxTileEntity {
         case 3:
             clickCount = 0;
 
-            getStorageBoxNetworkManager().storeInventoryToNetwork(player.inventory, this.pos);
+            getStorageBoxNetworkManager().storeInventoryToNetwork(player.inventory, this.worldPosition);
             player.tick();
             break;
         default:

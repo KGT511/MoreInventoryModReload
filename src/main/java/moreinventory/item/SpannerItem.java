@@ -16,24 +16,24 @@ import net.minecraft.world.World;
 public class SpannerItem extends Item {
     public SpannerItem() {
         super(new Properties()
-                .maxDamage(0)
-                .group(MoreInventoryMOD.itemGroup));
+                .durability(0)
+                .tab(MoreInventoryMOD.itemGroup));
     }
 
     @Override
     public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-        World world = context.getWorld();
-        if (world.isRemote) {
+        World world = context.getLevel();
+        if (world.isClientSide) {
             return ActionResultType.PASS;
         }
 
         PlayerEntity player = context.getPlayer();
-        BlockPos pos = context.getPos();
-        if (!player.isSneaking()) {
+        BlockPos pos = context.getClickedPos();
+        if (!player.isShiftKeyDown()) {
             BlockState state = world.getBlockState(pos);
             Block block = state.getBlock();
             if (Blocks.blockList.contains(block)) {
-                world.setBlockState(pos, block.rotate(world.getBlockState(pos), world, pos, Rotation.CLOCKWISE_90));
+                world.setBlockAndUpdate(pos, block.rotate(world.getBlockState(pos), world, pos, Rotation.CLOCKWISE_90));
                 return ActionResultType.SUCCESS;
             }
         }

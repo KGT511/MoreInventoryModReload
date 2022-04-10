@@ -40,69 +40,99 @@ public class TransportBlock extends ContainerBlock {
     public static final DirectionProperty FACING_OUT = DirectionProperty.create("facing_out", Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP, Direction.DOWN);;
     private boolean isImporter;
 
-    private static final VoxelShape SHAPE_CENTER = Block.makeCuboidShape(7.0D, 7.0D, 7.0D, 9.0D, 9.0D, 9.0D);
+    private static final VoxelShape SHAPE_CENTER = Block.box(7.0D, 7.0D, 7.0D, 9.0D, 9.0D, 9.0D);
     private static final VoxelShape SHAPE_IN_DOWN = VoxelShapes.or(
-            Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 1.0D, 14.0D), Block.makeCuboidShape(4.0D, 1.0D, 4.0D, 12.0D, 2.0D, 12.0D), Block.makeCuboidShape(5.0D, 3.0D, 5.0D, 11.0D, 4.0D, 11.0D),
-            Block.makeCuboidShape(6.0D, 5.0D, 6.0D, 10.0D, 6.0D, 10.0D));
+            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 1.0D, 14.0D),
+            Block.box(4.0D, 1.0D, 4.0D, 12.0D, 2.0D, 12.0D),
+            Block.box(5.0D, 3.0D, 5.0D, 11.0D, 4.0D, 11.0D),
+            Block.box(6.0D, 5.0D, 6.0D, 10.0D, 6.0D, 10.0D));
     private static final VoxelShape SHAPE_IN_UP = VoxelShapes.or(
-            Block.makeCuboidShape(2.0D, 15.0D, 2.0D, 14.0D, 16.0D, 14.0D), Block.makeCuboidShape(4.0D, 14.0D, 4.0D, 12.0D, 15.0D, 12.0D), Block.makeCuboidShape(5.0D, 12.0D, 5.0D, 11.0D, 13.0D, 11.0D),
-            Block.makeCuboidShape(6.0D, 10.0D, 6.0D, 10.0D, 11.0D, 10.0D));
+            Block.box(2.0D, 15.0D, 2.0D, 14.0D, 16.0D, 14.0D),
+            Block.box(4.0D, 14.0D, 4.0D, 12.0D, 15.0D, 12.0D),
+            Block.box(5.0D, 12.0D, 5.0D, 11.0D, 13.0D, 11.0D),
+            Block.box(6.0D, 10.0D, 6.0D, 10.0D, 11.0D, 10.0D));
     private static final VoxelShape SHAPE_IN_NORTH = VoxelShapes.or(
-            Block.makeCuboidShape(2.0D, 2.0D, 0.0D, 14.0D, 14.0D, 1.0D), Block.makeCuboidShape(4.0D, 4.0D, 1.0D, 12.0D, 12.0D, 2.0D), Block.makeCuboidShape(5.0D, 5.0D, 3.0D, 11.0D, 11.0D, 4.0D),
-            Block.makeCuboidShape(6.0D, 6.0D, 5.0D, 10.0D, 10.0D, 6.0D));
+            Block.box(2.0D, 2.0D, 0.0D, 14.0D, 14.0D, 1.0D),
+            Block.box(4.0D, 4.0D, 1.0D, 12.0D, 12.0D, 2.0D),
+            Block.box(5.0D, 5.0D, 3.0D, 11.0D, 11.0D, 4.0D),
+            Block.box(6.0D, 6.0D, 5.0D, 10.0D, 10.0D, 6.0D));
     private static final VoxelShape SHAPE_IN_SOUTH = VoxelShapes.or(
-            Block.makeCuboidShape(2.0D, 2.0D, 15.0D, 14.0D, 14.0D, 16.0D), Block.makeCuboidShape(4.0D, 4.0D, 14.0D, 12.0D, 12.0D, 15.0D), Block.makeCuboidShape(5.0D, 5.0D, 12.0D, 11.0D, 11.0D, 13.0D),
-            Block.makeCuboidShape(6.0D, 6.0D, 16.0D, 10.0D, 10.0D, 11.0D));
+            Block.box(2.0D, 2.0D, 15.0D, 14.0D, 14.0D, 16.0D),
+            Block.box(4.0D, 4.0D, 14.0D, 12.0D, 12.0D, 15.0D),
+            Block.box(5.0D, 5.0D, 12.0D, 11.0D, 11.0D, 13.0D),
+            Block.box(6.0D, 6.0D, 11.0D, 10.0D, 10.0D, 16.0D));
     private static final VoxelShape SHAPE_IN_WEST = VoxelShapes.or(
-            Block.makeCuboidShape(0.0D, 2.0D, 2.0D, 1.0D, 14.0D, 14.0D), Block.makeCuboidShape(1.0D, 4.0D, 4.0D, 2.0D, 12.0D, 12.0D), Block.makeCuboidShape(3.0D, 5.0D, 5.0D, 4.0D, 11.0D, 11.0D),
-            Block.makeCuboidShape(5.0D, 6.0D, 6.0D, 6.0D, 10.0D, 10.0D));
+            Block.box(0.0D, 2.0D, 2.0D, 1.0D, 14.0D, 14.0D),
+            Block.box(1.0D, 4.0D, 4.0D, 2.0D, 12.0D, 12.0D),
+            Block.box(3.0D, 5.0D, 5.0D, 4.0D, 11.0D, 11.0D),
+            Block.box(5.0D, 6.0D, 6.0D, 6.0D, 10.0D, 10.0D));
     private static final VoxelShape SHAPE_IN_EAST = VoxelShapes.or(
-            Block.makeCuboidShape(15.0D, 2.0D, 2.0D, 16.0D, 14.0D, 14.0D), Block.makeCuboidShape(14.0D, 4.0D, 4.0D, 15.0D, 12.0D, 12.0D), Block.makeCuboidShape(12.0D, 5.0D, 5.0D, 13.0D, 11.0D, 11.0D),
-            Block.makeCuboidShape(12.0D, 6.0D, 6.0D, 13.0D, 10.0D, 10.0D));
+            Block.box(15.0D, 2.0D, 2.0D, 16.0D, 14.0D, 14.0D),
+            Block.box(14.0D, 4.0D, 4.0D, 15.0D, 12.0D, 12.0D),
+            Block.box(12.0D, 5.0D, 5.0D, 13.0D, 11.0D, 11.0D),
+            Block.box(12.0D, 6.0D, 6.0D, 13.0D, 10.0D, 10.0D));
 
     private static final VoxelShape SHAPE_OUT_DOWN = VoxelShapes.or(
-            Block.makeCuboidShape(7.0D, 0.0D, 7.0D, 9.0D, 2.0D, 9.0D), Block.makeCuboidShape(6.0D, 2.0D, 6.0D, 10.0D, 3.0D, 10.0D), Block.makeCuboidShape(4.0D, 3.0D, 4.0D, 12.0D, 4.0D, 12.0D), Block.makeCuboidShape(5.0D, 4.0D, 5.0D, 11.0D, 5.0D, 11.0D),
-            Block.makeCuboidShape(6.0D, 5.0D, 6.0D, 10.0D, 6.0D, 10.0D));
+            Block.box(7.0D, 0.0D, 7.0D, 9.0D, 2.0D, 9.0D),
+            Block.box(6.0D, 2.0D, 6.0D, 10.0D, 3.0D, 10.0D),
+            Block.box(4.0D, 3.0D, 4.0D, 12.0D, 4.0D, 12.0D),
+            Block.box(5.0D, 4.0D, 5.0D, 11.0D, 5.0D, 11.0D),
+            Block.box(6.0D, 5.0D, 6.0D, 10.0D, 6.0D, 10.0D));
     private static final VoxelShape SHAPE_OUT_UP = VoxelShapes.or(
-            Block.makeCuboidShape(7.0D, 16.0D, 7.0D, 9.0D, 14.0D, 9.0D), Block.makeCuboidShape(6.0D, 14.0D, 6.0D, 10.0D, 13.0D, 10.0D), Block.makeCuboidShape(4.0D, 13.0D, 4.0D, 12.0D, 12.0D, 12.0D), Block.makeCuboidShape(5.0D, 12.0D, 5.0D, 11.0D, 11.0D, 11.0D),
-            Block.makeCuboidShape(6.0D, 11.0D, 6.0D, 10.0D, 10.0D, 10.0D));
+            Block.box(7.0D, 14.0D, 7.0D, 9.0D, 16.0D, 9.0D),
+            Block.box(6.0D, 13.0D, 6.0D, 10.0D, 14.0D, 10.0D),
+            Block.box(4.0D, 12.0D, 4.0D, 12.0D, 13.0D, 12.0D),
+            Block.box(5.0D, 11.0D, 5.0D, 11.0D, 12.0D, 11.0D),
+            Block.box(6.0D, 10.0D, 6.0D, 10.0D, 11.0D, 10.0D));
     private static final VoxelShape SHAPE_OUT_NORTH = VoxelShapes.or(
-            Block.makeCuboidShape(7.0D, 7.0D, 0.0D, 9.0D, 9.0D, 2.0D), Block.makeCuboidShape(6.0D, 6.0D, 2.0D, 10.0D, 10.0D, 3.0D), Block.makeCuboidShape(4.0D, 4.0D, 3.0D, 12.0D, 12.0D, 4.0D), Block.makeCuboidShape(5.0D, 5.0D, 4.0D, 11.0D, 11.0D, 5.0D),
-            Block.makeCuboidShape(6.0D, 6.0D, 5.0D, 10.0D, 10.0D, 6.0D));
+            Block.box(7.0D, 7.0D, 0.0D, 9.0D, 9.0D, 2.0D),
+            Block.box(6.0D, 6.0D, 2.0D, 10.0D, 10.0D, 3.0D),
+            Block.box(4.0D, 4.0D, 3.0D, 12.0D, 12.0D, 4.0D),
+            Block.box(5.0D, 5.0D, 4.0D, 11.0D, 11.0D, 5.0D),
+            Block.box(6.0D, 6.0D, 5.0D, 10.0D, 10.0D, 6.0D));
     private static final VoxelShape SHAPE_OUT_SOUTH = VoxelShapes.or(
-            Block.makeCuboidShape(7.0D, 7.0D, 14.0D, 9.0D, 9.0D, 16.0D), Block.makeCuboidShape(6.0D, 6.0D, 13.0D, 10.0D, 10.0D, 14.0D), Block.makeCuboidShape(4.0D, 4.0D, 12.0D, 12.0D, 12.0D, 13.0D), Block.makeCuboidShape(5.0D, 5.0D, 11.0D, 11.0D, 11.0D, 12.0D),
-            Block.makeCuboidShape(6.0D, 6.0D, 10.0D, 10.0D, 10.0D, 11.0D));
+            Block.box(7.0D, 7.0D, 14.0D, 9.0D, 9.0D, 16.0D),
+            Block.box(6.0D, 6.0D, 13.0D, 10.0D, 10.0D, 14.0D),
+            Block.box(4.0D, 4.0D, 12.0D, 12.0D, 12.0D, 13.0D),
+            Block.box(5.0D, 5.0D, 11.0D, 11.0D, 11.0D, 12.0D),
+            Block.box(6.0D, 6.0D, 10.0D, 10.0D, 10.0D, 11.0D));
     private static final VoxelShape SHAPE_OUT_WEST = VoxelShapes.or(
-            Block.makeCuboidShape(0.0D, 7.0D, 7.0D, 2.0D, 9.0D, 9.0D), Block.makeCuboidShape(2.0D, 6.0D, 6.0D, 3.0D, 10.0D, 10.0D), Block.makeCuboidShape(3.0D, 4.0D, 4.0D, 4.0D, 12.0D, 12.0D), Block.makeCuboidShape(4.0D, 5.0D, 5.0D, 5.0D, 11.0D, 11.0D),
-            Block.makeCuboidShape(5.0D, 6.0D, 6.0D, 6.0D, 10.0D, 10.0D));
+            Block.box(0.0D, 7.0D, 7.0D, 2.0D, 9.0D, 9.0D),
+            Block.box(2.0D, 6.0D, 6.0D, 3.0D, 10.0D, 10.0D),
+            Block.box(3.0D, 4.0D, 4.0D, 4.0D, 12.0D, 12.0D),
+            Block.box(4.0D, 5.0D, 5.0D, 5.0D, 11.0D, 11.0D),
+            Block.box(5.0D, 6.0D, 6.0D, 6.0D, 10.0D, 10.0D));
     private static final VoxelShape SHAPE_OUT_EAST = VoxelShapes.or(
-            Block.makeCuboidShape(14.0D, 7.0D, 7.0D, 16.0D, 9.0D, 9.0D), Block.makeCuboidShape(13.0D, 6.0D, 6.0D, 14.0D, 10.0D, 10.0D), Block.makeCuboidShape(12.0D, 4.0D, 4.0D, 13.0D, 12.0D, 12.0D), Block.makeCuboidShape(11.0D, 5.0D, 5.0D, 12.0D, 11.0D, 11.0D),
-            Block.makeCuboidShape(10.0D, 6.0D, 6.0D, 11.0D, 10.0D, 10.0D));
+            Block.box(14.0D, 7.0D, 7.0D, 16.0D, 9.0D, 9.0D),
+            Block.box(13.0D, 6.0D, 6.0D, 14.0D, 10.0D, 10.0D),
+            Block.box(12.0D, 4.0D, 4.0D, 13.0D, 12.0D, 12.0D),
+            Block.box(11.0D, 5.0D, 5.0D, 12.0D, 11.0D, 11.0D),
+            Block.box(10.0D, 6.0D, 6.0D, 11.0D, 10.0D, 10.0D));
 
     protected TransportBlock(boolean isImporterIn) {
-        super(Properties.create(Material.ROCK)
+        super(Properties.of(Material.STONE)
                 .sound(SoundType.STONE)
-                .hardnessAndResistance(1.0f));
-        this.setDefaultState(this.stateContainer.getBaseState().with(FACING_IN, Direction.DOWN).with(FACING_OUT, Direction.UP));
+                .strength(1.0f));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING_IN, Direction.DOWN).setValue(FACING_OUT, Direction.UP));
         isImporter = isImporterIn;
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        super.onBlockPlacedBy(world, pos, state, placer, stack);
-        if (!world.isRemote) {
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(world, pos, state, placer, stack);
+        if (!world.isClientSide) {
             BlockState newState = rotate(state, world, pos, null);
-            world.setBlockState(pos, newState);
+            world.setBlockAndUpdate(pos, newState);
         }
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (world.isRemote) {
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if (world.isClientSide) {
             return ActionResultType.SUCCESS;
         }
-        if (!player.isSneaking()) {
-            INamedContainerProvider namedContainerProvider = this.getContainer(state, world, pos);
+        if (!player.isShiftKeyDown()) {
+            INamedContainerProvider namedContainerProvider = this.getMenuProvider(state, world, pos);
             if (namedContainerProvider != null) {
                 ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
                 NetworkHooks.openGui(serverPlayerEntity, namedContainerProvider,
@@ -110,9 +140,9 @@ public class TransportBlock extends ContainerBlock {
                             packetBuffer.writeBlockPos(pos);
                         }));
             }
-        } else if (player.getHeldItemMainhand().getItem() == ItemStack.EMPTY.getItem()) {
+        } else if (player.getMainHandItem().getItem() == ItemStack.EMPTY.getItem()) {
             if (state.getBlock() instanceof TransportBlock) {
-                world.setBlockState(pos, ((TransportBlock) state.getBlock()).rotate(world.getBlockState(pos), world, pos, Rotation.CLOCKWISE_90));
+                world.setBlockAndUpdate(pos, ((TransportBlock) state.getBlock()).rotate(world.getBlockState(pos), world, pos, Rotation.CLOCKWISE_90));
             }
         }
 
@@ -121,15 +151,15 @@ public class TransportBlock extends ContainerBlock {
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return Block.makeCuboidShape(1.0D, 1.0D, 1.0D, 15.0D, 15.0D, 15.0D);
+        return Block.box(1.0D, 1.0D, 1.0D, 15.0D, 15.0D, 15.0D);
     }
 
     @Override
-    public VoxelShape getRenderShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    public VoxelShape getOcclusionShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
         VoxelShape shapeIn = SHAPE_IN_DOWN;
         VoxelShape shapeOut = SHAPE_OUT_UP;
-        Direction in = state.get(FACING_IN);
-        Direction out = state.get(FACING_OUT);
+        Direction in = state.getValue(FACING_IN);
+        Direction out = state.getValue(FACING_OUT);
 
         switch (in) {
         case DOWN:
@@ -176,28 +206,28 @@ public class TransportBlock extends ContainerBlock {
     }
 
     @Override
-    public VoxelShape getRaytraceShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return getRenderShape(state, worldIn, pos);
+    public VoxelShape getInteractionShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
+        return getOcclusionShape(state, worldIn, pos);
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
     @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    public TileEntity newBlockEntity(IBlockReader worldIn) {
         return isImporter ? new ImporterTileEntity() : new ExporterTileEntity();
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING_IN, FACING_OUT);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FACING_IN, Direction.DOWN).with(FACING_OUT, Direction.UP);
+        return this.defaultBlockState().setValue(FACING_IN, Direction.DOWN).setValue(FACING_OUT, Direction.UP);
     }
 
     public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction) {
@@ -206,8 +236,8 @@ public class TransportBlock extends ContainerBlock {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
                 state = rotateTop(state);
-                Direction in = state.get(FACING_IN);
-                Direction out = state.get(FACING_OUT);
+                Direction in = state.getValue(FACING_IN);
+                Direction out = state.getValue(FACING_OUT);
                 if (haveIInventory(in, world, pos) && haveIInventory(out, world, pos)) {
                     flag = true;
                     break;
@@ -218,22 +248,22 @@ public class TransportBlock extends ContainerBlock {
             }
         }
         if (!flag) {
-            state = state.with(FACING_IN, Direction.DOWN).with(FACING_OUT, Direction.UP);
+            state = state.setValue(FACING_IN, Direction.DOWN).setValue(FACING_OUT, Direction.UP);
         }
 
         return state;
     }
 
     private BlockState rotateTop(BlockState state) {
-        Direction in = state.get(FACING_IN);
-        Direction out = state.get(FACING_OUT);
-        int out_idx = out.getIndex();
-        out = Direction.byIndex(out_idx + 1);
+        Direction in = state.getValue(FACING_IN);
+        Direction out = state.getValue(FACING_OUT);
+        int out_idx = out.get3DDataValue();
+        out = Direction.from3DDataValue(out_idx + 1);
         if (out_idx + 1 > Direction.values().length - 1) {
-            int in_idx = in.getIndex();
-            in = Direction.byIndex(in_idx + 1);
+            int in_idx = in.get3DDataValue();
+            in = Direction.from3DDataValue(in_idx + 1);
         }
-        state = state.with(FACING_IN, in).with(FACING_OUT, out);
+        state = state.setValue(FACING_IN, in).setValue(FACING_OUT, out);
         if (in == out) {
             state = rotateTop(state);
         }
@@ -241,7 +271,7 @@ public class TransportBlock extends ContainerBlock {
     }
 
     public boolean haveIInventory(Direction side, IWorld world, BlockPos pos) {
-        TileEntity tile = world.getTileEntity(pos.offset(side));
+        TileEntity tile = world.getBlockEntity(pos.relative(side));
         return tile != null && tile instanceof IInventory;
     }
 

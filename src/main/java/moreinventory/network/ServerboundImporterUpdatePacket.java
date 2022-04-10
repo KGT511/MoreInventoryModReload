@@ -42,7 +42,7 @@ public class ServerboundImporterUpdatePacket {
 
     public static void handle(ServerboundImporterUpdatePacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            TileEntity tileEntity = ctx.get().getSender().getEntityWorld().getTileEntity(msg.blockPos);
+            TileEntity tileEntity = ctx.get().getSender().getCommandSenderWorld().getBlockEntity(msg.blockPos);
             if (tileEntity instanceof ImporterTileEntity) {
                 ImporterTileEntity importerTileEntity = (ImporterTileEntity) tileEntity;
                 int val = (importerTileEntity.getValByID(msg.id) + 1) % 2;

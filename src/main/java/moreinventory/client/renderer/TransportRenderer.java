@@ -30,21 +30,21 @@ public class TransportRenderer extends TileEntityRenderer<BaseTransportTileEntit
     public TransportRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
         super(rendererDispatcherIn);
         in1 = new ModelRenderer(64, 64, 0, 0);
-        in1.rotationPointX = 8.0F;
-        in1.rotationPointY = 8.0F;
-        in1.rotationPointZ = 8.0F;
+        in1.x = 8.0F;
+        in1.y = 8.0F;
+        in1.z = 8.0F;
         in1.addBox(-3.0F, -5.0F, -3.0F, 6.0F, 1.0F, 6.F, 0.F);
         in2 = new ModelRenderer(64, 64, 0, 0);
-        in2.rotationPointX = 8.0F;
-        in2.rotationPointY = 8.0F;
-        in2.rotationPointZ = 8.0F;
+        in2.x = 8.0F;
+        in2.y = 8.0F;
+        in2.z = 8.0F;
         in2.addBox(-2.0F, -3.0F, -2.0F, 4.0F, 1.0F, 4.F, 0.F);
         center = new ModelRenderer(64, 64, 0, 0);
         center.addBox(7.0F, 7.0F, 7.0F, 2.0F, 2.0F, 2.0F, 0.F);
         out = new ModelRenderer(64, 64, 0, 0);
-        out.rotationPointX = 8.0F;
-        out.rotationPointY = 8.0F;
-        out.rotationPointZ = 8.0F;
+        out.x = 8.0F;
+        out.y = 8.0F;
+        out.z = 8.0F;
         out.addBox(-2.0F, 2.0F, -2.0F, 4.0F, 1.0F, 4.F, 0.F);
     }
 
@@ -54,7 +54,7 @@ public class TransportRenderer extends TileEntityRenderer<BaseTransportTileEntit
 
     @Override
     public void render(BaseTransportTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         ResourceLocation lightTexture, darkTexture;
         if (tileEntityIn instanceof ImporterTileEntity) {
             lightTexture = IMPORTER_LIGHT_TEXTURE;
@@ -64,52 +64,52 @@ public class TransportRenderer extends TileEntityRenderer<BaseTransportTileEntit
             darkTexture = EXPORTER_DARK_TEXTURE;
         }
 
-        Direction inD = tileEntityIn.getBlockState().get(TransportBlock.FACING_IN);
-        Direction outD = tileEntityIn.getBlockState().get(TransportBlock.FACING_OUT);
+        Direction inD = tileEntityIn.getBlockState().getValue(TransportBlock.FACING_IN);
+        Direction outD = tileEntityIn.getBlockState().getValue(TransportBlock.FACING_OUT);
         rotateModels(inD, in1);
         rotateModels(inD, in2);
         rotateModels(outD.getOpposite(), out);
 
-        byte emitLevel = (byte) (tileEntityIn.getWorld().getGameTime() % 40 / 10);
+        byte emitLevel = (byte) (tileEntityIn.getLevel().getGameTime() % 40 / 10);
 
         ModelRenderer[] models = { in1, in2, center, out };
-        IVertexBuilder lightIvertexbuilder = bufferIn.getBuffer(RenderType.getEntitySolid(lightTexture));
+        IVertexBuilder lightIvertexbuilder = bufferIn.getBuffer(RenderType.entitySolid(lightTexture));
         models[emitLevel].render(matrixStackIn, lightIvertexbuilder, combinedLightIn, combinedOverlayIn);
-        IVertexBuilder darkIvertexbuilder = bufferIn.getBuffer(RenderType.getEntitySolid(darkTexture));
+        IVertexBuilder darkIvertexbuilder = bufferIn.getBuffer(RenderType.entitySolid(darkTexture));
         for (int i = 0; i < 3; ++i)
             models[MIMUtils.normalIndex(emitLevel + i + 1, 4)].render(matrixStackIn, darkIvertexbuilder, combinedLightIn, combinedOverlayIn);
 
-        matrixStackIn.pop();
+        matrixStackIn.popPose();
 
     }
 
     private void rotateModels(Direction side, ModelRenderer model) {
         switch (side) {
         case DOWN:
-            model.rotateAngleX = degToRad(0);
-            model.rotateAngleZ = degToRad(0);
+            model.xRot = degToRad(0);
+            model.zRot = degToRad(0);
             break;
         case UP:
-            model.rotateAngleX = degToRad(180);
-            model.rotateAngleZ = degToRad(0);
+            model.xRot = degToRad(180);
+            model.zRot = degToRad(0);
 
             break;
         case NORTH:
-            model.rotateAngleX = degToRad(90);
-            model.rotateAngleZ = degToRad(0);
+            model.xRot = degToRad(90);
+            model.zRot = degToRad(0);
 
             break;
         case SOUTH:
-            model.rotateAngleX = degToRad(270);
+            model.xRot = degToRad(270);
             break;
         case WEST:
-            model.rotateAngleZ = degToRad(270);
-            model.rotateAngleX = degToRad(0);
+            model.zRot = degToRad(270);
+            model.xRot = degToRad(0);
 
             break;
         case EAST:
-            model.rotateAngleZ = degToRad(90);
-            model.rotateAngleX = degToRad(0);
+            model.zRot = degToRad(90);
+            model.xRot = degToRad(0);
 
             break;
         }

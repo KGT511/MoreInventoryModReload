@@ -72,14 +72,14 @@ public class BlockStateGenerator extends BlockStateProvider {
         };
 
         getVariantBuilder(block).forAllStates(state -> {
-            if (state.get(CatchallBlock.FACING) == Direction.NORTH) {
+            if (state.getValue(CatchallBlock.FACING) == Direction.NORTH) {
                 return ConfiguredModel.builder()
                         .modelFile(modelBuilder.get())
                         .build();
             }
             return ConfiguredModel.builder()
                     .modelFile(models().cubeAll(name(block), texture))
-                    .rotationY(((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle() + 180) % 360)
+                    .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360)
                     .build();
         });
     }
@@ -96,14 +96,14 @@ public class BlockStateGenerator extends BlockStateProvider {
             BlockModelBuilder builder = models().orientable(name, side_texture, front_texture, top_texture);
             getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder()
                     .modelFile(builder)
-                    .rotationY(((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle() + 180) % 360)
+                    .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360)
                     .build());
         }
         Block glassBlock = Blocks.GLASS_STORAGE_BOX;
         BlockModelBuilder builder = models().cubeAll(name(glassBlock), texture(name(glassBlock) + "_0"));
         getVariantBuilder(glassBlock).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(builder)
-                .rotationY(((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle() + 180) % 360)
+                .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360)
                 .build());
 
     }
@@ -163,8 +163,8 @@ public class BlockStateGenerator extends BlockStateProvider {
         }
 
         Function<BlockState, Integer> getBuilderIndexFromState = (Function<BlockState, Integer>) (state) -> {
-            Direction in = state.get(TransportBlock.FACING_IN);
-            Direction out = state.get(TransportBlock.FACING_OUT);
+            Direction in = state.getValue(TransportBlock.FACING_IN);
+            Direction out = state.getValue(TransportBlock.FACING_OUT);
 
             boolean inNS = in == Direction.NORTH || in == Direction.SOUTH;
             boolean inEW = in == Direction.EAST || in == Direction.WEST;
@@ -180,8 +180,8 @@ public class BlockStateGenerator extends BlockStateProvider {
             }
         };
         Function<BlockState, Integer> getRotationX = (Function<BlockState, Integer>) (state) -> {
-            Direction in = state.get(TransportBlock.FACING_IN);
-            Direction out = state.get(TransportBlock.FACING_OUT);
+            Direction in = state.getValue(TransportBlock.FACING_IN);
+            Direction out = state.getValue(TransportBlock.FACING_OUT);
 
             if (in == out) {
                 return 0;
@@ -200,8 +200,8 @@ public class BlockStateGenerator extends BlockStateProvider {
 
         };
         Function<BlockState, Integer> getRotationY = (Function<BlockState, Integer>) (state) -> {
-            Direction in = state.get(TransportBlock.FACING_IN);
-            Direction out = state.get(TransportBlock.FACING_OUT);
+            Direction in = state.getValue(TransportBlock.FACING_IN);
+            Direction out = state.getValue(TransportBlock.FACING_OUT);
 
             if ((in == Direction.WEST && (out == Direction.EAST || out == Direction.DOWN || out == Direction.SOUTH))
                     || (in == Direction.DOWN && (out == Direction.EAST))

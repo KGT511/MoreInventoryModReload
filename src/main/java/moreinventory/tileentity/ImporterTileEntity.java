@@ -34,19 +34,15 @@ public class ImporterTileEntity extends BaseTransportTileEntity {
     }
 
     @Override
-    public void func_230337_a_(BlockState state, CompoundNBT nbt) {
-        super.func_230337_a_(state, nbt);
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
         register = nbt.getBoolean(registerKey);
         isWhite = nbt.getBoolean(isWhiteKey);
     }
 
-    public void read(BlockState state, CompoundNBT nbt) {
-        func_230337_a_(state, nbt);
-    }
-
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         compound.putBoolean(registerKey, register);
         compound.putBoolean(isWhiteKey, isWhite);
         return compound;
@@ -54,7 +50,7 @@ public class ImporterTileEntity extends BaseTransportTileEntity {
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent(Blocks.IMPORTER.getTranslationKey());
+        return new TranslationTextComponent(Blocks.IMPORTER.getDescriptionId());
     }
 
     @Override
@@ -63,14 +59,14 @@ public class ImporterTileEntity extends BaseTransportTileEntity {
     }
 
     public void putInBox(IInventory inventory) {
-        Direction out = this.world.getBlockState(this.pos).get(TransportBlock.FACING_OUT);
-        BlockPos outPos = this.pos.offset(out);
-        Direction in = this.world.getBlockState(this.pos).get(TransportBlock.FACING_IN);
+        Direction out = this.level.getBlockState(this.worldPosition).getValue(TransportBlock.FACING_OUT);
+        BlockPos outPos = this.worldPosition.relative(out);
+        Direction in = this.level.getBlockState(this.worldPosition).getValue(TransportBlock.FACING_IN);
 
-        TileEntity tile = this.world.getTileEntity(outPos);
+        TileEntity tile = this.level.getBlockEntity(outPos);
 
         if (tile != null && tile instanceof IStorageBoxNetwork) {
-            int size = inventory.getSizeInventory();
+            int size = inventory.getContainerSize();
 
             if (currentSlot >= size) {
                 currentSlot = 0;
@@ -83,7 +79,7 @@ public class ImporterTileEntity extends BaseTransportTileEntity {
                     currentSlot = 0;
                 }
 
-                ItemStack itemstack = inventory.getStackInSlot(slot);
+                ItemStack itemstack = inventory.getItem(slot);
                 if (itemstack != null && canExtract(itemstack)) {
                     if (canAccessFromSide(inventory, slot, in.getOpposite()) && canExtractFromSide(inventory, itemstack, slot, in.getOpposite())) {
                         if (tile instanceof BaseStorageBoxTileEntity && ((BaseStorageBoxTileEntity) tile).getStorageBoxNetworkManager().storeToNetwork(itemstack, register, outPos)) {
@@ -100,7 +96,7 @@ public class ImporterTileEntity extends BaseTransportTileEntity {
         boolean result = !isWhite;
 
         for (ItemStack itemstack1 : this.slotItems) {
-            if (ItemStack.areItemsEqual(itemstack1, itemstack)) {
+            if (ItemStack.isSame(itemstack1, itemstack)) {
                 result = isWhite;
             }
         }
@@ -111,14 +107,14 @@ public class ImporterTileEntity extends BaseTransportTileEntity {
     @Override
     protected void doExtract() {
 
-        Direction in = this.world.getBlockState(this.pos).get(TransportBlock.FACING_IN);
-        BlockPos inPos = this.pos.offset(in);
-        IInventory inventory = HopperTileEntity.getInventoryAtPosition(this.world, inPos);
+        Direction in = this.level.getBlockState(this.worldPosition).getValue(TransportBlock.FACING_IN);
+        BlockPos inPos = this.worldPosition.relative(in);
+        IInventory inventory = HopperTileEntity.getContainerAt(this.level, inPos);
 
         if (inventory != null) {
             putInBox(inventory);
-            BlockState newState = this.world.getBlockState(inPos);
-            this.world.notifyBlockUpdate(inPos, this.getBlockState(), newState, 0);
+            BlockState newState = this.level.getBlockState(inPos);
+            this.level.sendBlockUpdated(inPos, this.getBlockState(), newState, 0);
         }
     }
 

@@ -87,12 +87,12 @@ public class MoreInventoryMOD {
         StorageBoxTypeTileEntity.map.forEach((key, val) -> {
             ClientRegistry.bindTileEntityRenderer(val, StorageBoxRenderer::new);
         });
-        RenderTypeLookup.setRenderLayer(Blocks.GLASS_STORAGE_BOX, RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(Blocks.GLASS_STORAGE_BOX, RenderType.translucent());
         ClientRegistry.bindTileEntityRenderer(TileEntities.IMPORTER_TILE_TYPE, TransportRenderer::new);
         ClientRegistry.bindTileEntityRenderer(TileEntities.EXPORTER_TILE_TYPE, TransportRenderer::new);
 
-        ScreenManager.registerFactory(Containers.CATCHALL_CONTAINER_TYPE, CatchallContainerScreen::new);
-        ScreenManager.registerFactory(Containers.TRANSPORT_MANAGER_CONTAINER_TYPE, TransportContainerScreen::new);
+        ScreenManager.register(Containers.CATCHALL_CONTAINER_TYPE, CatchallContainerScreen::new);
+        ScreenManager.register(Containers.TRANSPORT_MANAGER_CONTAINER_TYPE, TransportContainerScreen::new);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

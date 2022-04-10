@@ -38,53 +38,53 @@ public class StorageBoxBlock extends ContainerBlock {
     private StorageBoxType type;
 
     protected StorageBoxBlock(StorageBoxType typeIn) {
-        super(Properties.create(Material.IRON)
+        super(Properties.of(Material.METAL)
                 .sound(SoundType.METAL)
-                .hardnessAndResistance(2.0F, 10.0F)
-                .func_235861_h_()//素手で壊すときに遅くなる？
+                .strength(2.0F, 10.0F)
+                .requiresCorrectToolForDrops()//素手で壊すときに遅くなる？
                 .harvestLevel(0)
                 .harvestTool(ToolType.PICKAXE)
-                .notSolid());
-        this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
+                .noOcclusion());
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
         this.type = typeIn;
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.isIn(newState.getBlock())) {
-            TileEntity tileentity = world.getTileEntity(pos);
+    public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock())) {
+            TileEntity tileentity = world.getBlockEntity(pos);
             if (tileentity instanceof IInventory) {
-                InventoryHelper.dropInventoryItems(world, pos, (IInventory) tileentity);
-                world.updateComparatorOutputLevel(pos, this);
+                InventoryHelper.dropContents(world, pos, (IInventory) tileentity);
+                world.updateNeighbourForOutputSignal(pos, this);
             }
-            super.onReplaced(state, world, pos, newState, isMoving);
+            super.onRemove(state, world, pos, newState, isMoving);
         }
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getTileEntity(pos);
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getBlockEntity(pos);
         tile.onPlaced();
-        super.onBlockPlacedBy(world, pos, state, placer, stack);
+        super.setPlacedBy(world, pos, state, placer, stack);
     }
 
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         //隣がコンテナだったときに限って呼ばれるように
         if (blockIn instanceof StorageBoxBlock) {
-            BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getTileEntity(pos);
+            BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getBlockEntity(pos);
             tile.onDestroyedNeighbor(fromPos);
         }
     }
 
     @Override
     //right click
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (world.isRemote)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if (world.isClientSide)
             return ActionResultType.SUCCESS;
 
-        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getTileEntity(pos);
+        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getBlockEntity(pos);
         ActionResultType ret = tile.rightClickEvent(world, player) ? ActionResultType.SUCCESS : ActionResultType.PASS;
         return ret;
 
@@ -92,21 +92,21 @@ public class StorageBoxBlock extends ContainerBlock {
 
     @Override
     //left click
-    public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        if (world.isRemote)
+    public void attack(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+        if (world.isClientSide)
             return;
 
-        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getTileEntity(pos);
+        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getBlockEntity(pos);
         tile.leftClickEvent(player);
     }
 
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return createNewTileEntity(world);
+        return newBlockEntity(world);
     }
 
     @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    public TileEntity newBlockEntity(IBlockReader worldIn) {
         try {
             return StorageBoxTypeTileEntity.classMap.get(type).newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
@@ -116,28 +116,28 @@ public class StorageBoxBlock extends ContainerBlock {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
     public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction) {
-        return state.with(FACING, direction.rotate(state.get(FACING)));
+        return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public BlockState mirror(BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.toRotation(state.get(FACING)));
+        return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 

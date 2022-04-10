@@ -17,7 +17,7 @@ import net.minecraft.util.IntReferenceHolder;
 public class TransportContainer extends Container {
 
     public static TransportContainer createContainerClientSide(int windowID, PlayerInventory playerInventory, PacketBuffer extraData) {
-        BaseTransportTileEntity tile = (BaseTransportTileEntity) playerInventory.player.world.getTileEntity(extraData.readBlockPos());
+        BaseTransportTileEntity tile = (BaseTransportTileEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos());
         return new TransportContainer(windowID, playerInventory, tile);
     }
 
@@ -54,29 +54,29 @@ public class TransportContainer extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
         Block block = (transportManager instanceof ImporterTileEntity ? Blocks.IMPORTER : Blocks.EXPORTER);
-        return isWithinUsableDistance(IWorldPosCallable.of(transportManager.getWorld(), transportManager.getPos()), playerIn, block);
+        return stillValid(IWorldPosCallable.create(transportManager.getLevel(), transportManager.getBlockPos()), playerIn, block);
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int slot) {
+    public ItemStack quickMoveStack(PlayerEntity player, int slot) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
         if (0 <= slotId && slotId < 9) {
             if (dragType == 0) {
-                ItemStack setItem = player.inventory.getItemStack().copy();
+                ItemStack setItem = player.inventory.getCarried().copy();
                 setItem.setCount(1);
-                transportManager.setInventorySlotContents(slotId, setItem);
+                transportManager.setItem(slotId, setItem);
             } else {
-                transportManager.removeStackFromSlot(slotId);
+                transportManager.removeItemNoUpdate(slotId);
             }
-            return player.inventory.getItemStack();
+            return player.inventory.getCarried();
         } else
-            return super.slotClick(slotId, dragType, clickTypeIn, player);
+            return super.clicked(slotId, dragType, clickTypeIn, player);
     }
 
     public BaseTransportTileEntity getTile() {
@@ -90,7 +90,7 @@ public class TransportContainer extends Container {
     }
 
     protected void trackIntField(ImporterTileEntity blockEntity, int id) {
-        trackInt(new IntReferenceHolder() {
+        addDataSlot(new IntReferenceHolder() {
 
             @Override
             public int get() {

@@ -45,8 +45,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class TransporterItem extends Item {
     public TransporterItem() {
         super(new Properties()
-                .maxDamage(40)
-                .group(MoreInventoryMOD.itemGroup));
+                .durability(40)
+                .tab(MoreInventoryMOD.itemGroup));
     }
 
     public static final ArrayList<Block> transportableBlocks = new ArrayList<>();
@@ -75,12 +75,12 @@ public class TransporterItem extends Item {
 
     @Override
     public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-        World world = context.getWorld();
-        if (world.isRemote) {
+        World world = context.getLevel();
+        if (world.isClientSide) {
             return ActionResultType.SUCCESS;
         }
 
-        BlockPos blockPos = context.getPos();
+        BlockPos blockPos = context.getClickedPos();
         BlockState blockState = world.getBlockState(blockPos);
         Block block = blockState.getBlock();
 
@@ -90,7 +90,7 @@ public class TransporterItem extends Item {
 
         if (holdBlock(context)) {
             setIcon(context);
-            world.setBlockState(blockPos, Blocks.AIR.getDefaultState());
+            world.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.PASS;
@@ -98,32 +98,32 @@ public class TransporterItem extends Item {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        World world = context.getWorld();
-        if (world.isRemote) {
+    public ActionResultType useOn(ItemUseContext context) {
+        World world = context.getLevel();
+        if (world.isClientSide) {
             return ActionResultType.SUCCESS;
         }
 
-        ItemStack itemStack = context.getItem();
+        ItemStack itemStack = context.getItemInHand();
         if (itemStack.getTag().contains(tagKey)) {
             CompoundNBT nbt = itemStack.getTag();
 
             if (nbt == null) {
                 return ActionResultType.PASS;
             }
-            ItemStack tileBlock = ItemStack.read(nbt.getCompound(tagKey));
+            ItemStack tileBlock = ItemStack.of(nbt.getCompound(tagKey));
 
             if (tileBlock == ItemStack.EMPTY) {
                 return ActionResultType.PASS;
             }
 
-            int damage = itemStack.getDamage() + 1;
+            int damage = itemStack.getDamageValue() + 1;
             if (placeBlock(context, tileBlock)) {
                 PlayerEntity player = context.getPlayer();
 
-                itemStack.damageItem(damage, player, (tmp) -> {
-                    tmp.sendBreakAnimation(EquipmentSlotType.MAINHAND);
-                    world.playSound(tmp, context.getPos(), SoundEvents.BLOCK_WOOD_BREAK, SoundCategory.PLAYERS, 1.5F, 0.85F);
+                itemStack.hurtAndBreak(damage, player, (tmp) -> {
+                    tmp.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+                    world.playSound(tmp, context.getClickedPos(), SoundEvents.WOOD_BREAK, SoundCategory.PLAYERS, 1.5F, 0.85F);
                 });
             }
         }
@@ -133,22 +133,22 @@ public class TransporterItem extends Item {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (stack.getTag() == null) {
             return;
         }
         CompoundNBT contents = stack.getTag().getCompound(tagKey);
 
-        ItemStack hold = ItemStack.read(contents);
+        ItemStack hold = ItemStack.of(contents);
         if (hold.getItem() != Items.AIR) {
-            IFormattableTextComponent iformattabletextcomponent = hold.getDisplayName().func_230532_e_();
-            tooltip.add(iformattabletextcomponent.func_240699_a_(TextFormatting.AQUA));
+            IFormattableTextComponent iformattabletextcomponent = hold.getDisplayName().copy();
+            tooltip.add(iformattabletextcomponent.withStyle(TextFormatting.AQUA));
         }
         if (hold.getItem() instanceof BlockItem && ((BlockItem) hold.getItem()).getBlock() instanceof StorageBoxBlock) {
             CompoundNBT compoundnbt = stack.getTag();
             if (compoundnbt.contains(BaseStorageBoxTileEntity.tagKeyContents)) {
                 CompoundNBT nbt = compoundnbt.getCompound(BaseStorageBoxTileEntity.tagKeyContents);
-                ItemStack storageContents = ItemStack.read(nbt);
+                ItemStack storageContents = ItemStack.of(nbt);
                 if (storageContents.getItem() != ItemStack.EMPTY.getItem()) {
                     StorageBoxType type = StorageBoxType.valueOf(compoundnbt.getString(BaseStorageBoxTileEntity.tagKeyTypeName));
                     NonNullList<ItemStack> storageItems = NonNullList.withSize(BaseStorageBoxTileEntity.getStorageStackSize(type), ItemStack.EMPTY);
@@ -159,9 +159,9 @@ public class TransporterItem extends Item {
                             count += storageItem.getCount();
                         }
                     }
-                    IFormattableTextComponent iformattabletextcomponent = storageContents.getDisplayName().func_230532_e_();
-                    iformattabletextcomponent.func_240702_b_(" x").func_240702_b_(String.valueOf(count));
-                    tooltip.add(iformattabletextcomponent.func_240699_a_(TextFormatting.WHITE));
+                    IFormattableTextComponent iformattabletextcomponent = storageContents.getDisplayName().copy();
+                    iformattabletextcomponent.append(" x").append(String.valueOf(count));
+                    tooltip.add(iformattabletextcomponent.withStyle(TextFormatting.WHITE));
                 }
             }
         } else {
@@ -177,15 +177,15 @@ public class TransporterItem extends Item {
                         ++j;
                         if (i <= 4) {
                             ++i;
-                            IFormattableTextComponent iformattabletextcomponent = itemstack.getDisplayName().func_230532_e_();
-                            iformattabletextcomponent.func_240702_b_(" x").func_240702_b_(String.valueOf(itemstack.getCount()));
+                            IFormattableTextComponent iformattabletextcomponent = itemstack.getDisplayName().copy();
+                            iformattabletextcomponent.append(" x").append(String.valueOf(itemstack.getCount()));
                             tooltip.add(iformattabletextcomponent);
                         }
                     }
                 }
 
                 if (j - i > 0) {
-                    tooltip.add((new TranslationTextComponent("container.shulkerBox.more", j - i)).func_240699_a_(TextFormatting.ITALIC));
+                    tooltip.add((new TranslationTextComponent("container.shulkerBox.more", j - i)).withStyle(TextFormatting.ITALIC));
                 }
             }
         }
@@ -193,23 +193,23 @@ public class TransporterItem extends Item {
     }
 
     private boolean holdBlock(ItemUseContext context) {
-        ItemStack itemStack = context.getItem();
-        World world = context.getWorld();
-        BlockPos blockPos = context.getPos();
+        ItemStack itemStack = context.getItemInHand();
+        World world = context.getLevel();
+        BlockPos blockPos = context.getClickedPos();
         BlockState blockState = world.getBlockState(blockPos);
 
-        TileEntity tile = world.getTileEntity(blockPos);
+        TileEntity tile = world.getBlockEntity(blockPos);
         if (tile == null || !(tile instanceof IInventory) || itemStack.getTag().contains(tagKey)) {
             return false;
         }
         if (tile != null && checkMatryoshka((IInventory) tile)) {
             CompoundNBT nbt = itemStack.getOrCreateTag();
-            tile.write(nbt);
+            tile.save(nbt);
 
             ItemStack tileBlock = new ItemStack(blockState.getBlock(), 1);
 
             IInventory inventory = (IInventory) tile;
-            inventory.clear();
+            inventory.clearContent();
 
             if (nbt.contains("RecipesUsed")) {
                 nbt.remove("RecipesUsed");
@@ -217,7 +217,7 @@ public class TransporterItem extends Item {
 
             CompoundNBT tag = new CompoundNBT();
             if (tileBlock != ItemStack.EMPTY) {
-                tileBlock.write(tag);
+                tileBlock.save(tag);
             }
             itemStack.setTag(tag);
 
@@ -234,8 +234,8 @@ public class TransporterItem extends Item {
     private boolean checkMatryoshka(IInventory inventory) {
         ItemStack itemstack;
 
-        for (int i = 0; i < inventory.getSizeInventory(); i++) {
-            itemstack = inventory.getStackInSlot(i);
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            itemstack = inventory.getItem(i);
 
             if (itemstack.getItem() == TransporterItem.this && itemstack.getTag().contains(tagKey)
             //                    || itemstack.getItem() == MoreInventoryMod.pouch && !checkMatryoshka(new InventoryPouch(itemstack))
@@ -248,39 +248,39 @@ public class TransporterItem extends Item {
 
     private boolean placeBlock(ItemUseContext context, ItemStack tileBlock) {
 
-        World world = context.getWorld();
-        Block block = Block.getBlockFromItem(tileBlock.getItem());
-        ItemStack itemStack = context.getItem();
-        BlockPos blockPos = context.getPos();
-        BlockRayTraceResult blockRayTraceResult = new BlockRayTraceResult(context.getHitVec(), context.getFace(), blockPos, context.isInside());
+        World world = context.getLevel();
+        Block block = Block.byItem(tileBlock.getItem());
+        ItemStack itemStack = context.getItemInHand();
+        BlockPos blockPos = context.getClickedPos();
+        BlockRayTraceResult blockRayTraceResult = new BlockRayTraceResult(context.getClickLocation(), context.getClickedFace(), blockPos, context.isInside());
         BlockItemUseContext blockItemUseContext = new BlockItemUseContext(context.getPlayer(), context.getHand(), tileBlock, blockRayTraceResult);
 
         if (blockItemUseContext.canPlace()) {
-            boolean isReplaceable = world.getBlockState(blockPos).isReplaceable(new BlockItemUseContext(context));
+            boolean isReplaceable = world.getBlockState(blockPos).canBeReplaced(new BlockItemUseContext(context));
 
             TileEntity tile;
             BlockPos setBlockPos = blockPos;
             if (!isReplaceable) {
-                setBlockPos = blockPos.offset(context.getFace());
+                setBlockPos = blockPos.relative(context.getClickedFace());
             }
             BlockState state = readBlockState(context, tileBlock);
 
-            world.setBlockState(setBlockPos, state);
-            tile = world.getTileEntity(setBlockPos);
+            world.setBlockAndUpdate(setBlockPos, state);
+            tile = world.getBlockEntity(setBlockPos);
             if (tile == null) {
-                world.setBlockState(setBlockPos, Blocks.AIR.getDefaultState());
+                world.setBlockAndUpdate(setBlockPos, Blocks.AIR.defaultBlockState());
                 return false;
             }
 
             CompoundNBT nbt = itemStack.getOrCreateTag();
 
-            nbt.putInt("x", tile.getPos().getX());
-            nbt.putInt("y", tile.getPos().getY());
-            nbt.putInt("z", tile.getPos().getZ());
-            tile.func_230337_a_(tile.getBlockState(), nbt);
+            nbt.putInt("x", tile.getBlockPos().getX());
+            nbt.putInt("y", tile.getBlockPos().getY());
+            nbt.putInt("z", tile.getBlockPos().getZ());
+            tile.load(tile.getBlockState(), nbt);
 
-            block.onBlockPlacedBy(world, tile.getPos(), tile.getBlockState(), context.getPlayer(), tileBlock);
-            tile.markDirty();
+            block.setPlacedBy(world, tile.getBlockPos(), tile.getBlockState(), context.getPlayer(), tileBlock);
+            tile.setChanged();
             itemStack.setTag(null);
             return true;
         }
@@ -289,27 +289,27 @@ public class TransporterItem extends Item {
     }
 
     private BlockState readBlockState(ItemUseContext context, ItemStack tileBlock) {
-        ItemStack stack = context.getItem();
+        ItemStack stack = context.getItemInHand();
         CompoundNBT blockStateTag = stack.getTag().getCompound(blockStateKey);
 
-        Block block = Block.getBlockFromItem(tileBlock.getItem());
+        Block block = Block.byItem(tileBlock.getItem());
         BlockState state = block.getStateForPlacement(new BlockItemUseContext(context));
 
         if (block instanceof FurnaceBlock) {
             BlockState furnaceState = NBTUtil.readBlockState(blockStateTag);
-            state = state.with(FurnaceBlock.LIT, furnaceState.get(FurnaceBlock.LIT));
+            state = state.setValue(FurnaceBlock.LIT, furnaceState.getValue(FurnaceBlock.LIT));
         }
         return state;
     }
 
     private void setIcon(ItemUseContext context) {
-        BlockState blockState = context.getWorld().getBlockState(context.getPos());
+        BlockState blockState = context.getLevel().getBlockState(context.getClickedPos());
         Block block = blockState.getBlock();
         int num = transportableBlocks.contains(block) ? transportableBlocks.indexOf(block) + 1 : 0;
-        if (block == Blocks.FURNACE && blockState.get(FurnaceBlock.LIT)) {
+        if (block == Blocks.FURNACE && blockState.getValue(FurnaceBlock.LIT)) {
             num = 99;
         }
-        MIMUtils.setIcon(context.getItem(), (byte) num);
+        MIMUtils.setIcon(context.getItemInHand(), (byte) num);
     }
 
 }

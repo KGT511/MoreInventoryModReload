@@ -39,33 +39,29 @@ public class CatchallTileEntity extends LockableLootTileEntity implements IInven
     private LazyOptional<IItemHandlerModifiable> storageHandler;
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return storage.size();
     }
 
     @Override
     public ITextComponent getDefaultName() {
-        return new TranslationTextComponent(Blocks.CATCHALL.getTranslationKey());
+        return new TranslationTextComponent(Blocks.CATCHALL.getDescriptionId());
     }
 
     @Override
-    public void func_230337_a_(BlockState state, CompoundNBT nbt) {
-        super.func_230337_a_(state, nbt);
-        this.storage = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
-        if (!this.checkLootAndRead(nbt)) {
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
+        this.storage = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        if (!this.tryLoadLootTable(nbt)) {
             ItemStackHelper.loadAllItems(nbt, this.storage);
         }
 
     }
 
-    public void read(BlockState state, CompoundNBT nbt) {
-        this.func_230337_a_(state, nbt);
-    }
-
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
-        if (!this.checkLootAndWrite(compound)) {
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
+        if (!this.trySaveLootTable(compound)) {
             ItemStackHelper.saveAllItems(compound, this.storage);
         }
 
@@ -88,8 +84,8 @@ public class CatchallTileEntity extends LockableLootTileEntity implements IInven
     }
 
     @Override
-    public void updateContainingBlockInfo() {
-        super.updateContainingBlockInfo();
+    public void clearCache() {
+        super.clearCache();
         if (this.storageHandler != null) {
             this.storageHandler.invalidate();
             this.storageHandler = null;
@@ -98,7 +94,7 @@ public class CatchallTileEntity extends LockableLootTileEntity implements IInven
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (!this.remove && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (this.storageHandler == null)
                 this.storageHandler = LazyOptional.of(this::createHandler);
             return this.storageHandler.cast();
@@ -116,51 +112,51 @@ public class CatchallTileEntity extends LockableLootTileEntity implements IInven
 
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(getPos(), 0, this.write(new CompoundNBT()));
+        return new SUpdateTileEntityPacket(this.getBlockPos(), 0, this.save(new CompoundNBT()));
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        this.read(this.world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+        this.load(this.level.getBlockState(pkt.getPos()), pkt.getTag());
     }
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return this.write(super.getUpdateTag());
+        return this.save(super.getUpdateTag());
     }
 
     @Override
     public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-        this.read(this.world.getBlockState(pos), tag);
+        this.load(this.level.getBlockState(this.worldPosition), tag);
     }
 
     @Override
-    public void remove() {
-        super.remove();
+    public void setRemoved() {
+        super.setRemoved();
         if (storageHandler != null)
             storageHandler.invalidate();
     }
 
     @Override
     public boolean isEmpty() {
-        for (int i = 0; i < getSizeInventory(); ++i)
-            if (getStackInSlot(i) != ItemStack.EMPTY)
+        for (int i = 0; i < getContainerSize(); ++i)
+            if (getItem(i) != ItemStack.EMPTY)
                 return false;
 
         return true;
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
         return storage.get(index);
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
+    public ItemStack removeItemNoUpdate(int index) {
 
-        if (!getStackInSlot(index).isEmpty()) {
-            ItemStack itemstack = getStackInSlot(index);
-            setInventorySlotContents(index, ItemStack.EMPTY);
+        if (!getItem(index).isEmpty()) {
+            ItemStack itemstack = getItem(index);
+            setItem(index, ItemStack.EMPTY);
             return itemstack;
         } else {
             return ItemStack.EMPTY;
@@ -168,16 +164,16 @@ public class CatchallTileEntity extends LockableLootTileEntity implements IInven
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
         storage.set(index, stack);
 
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
-        return world.getTileEntity(pos) == this
-                && player.getDistanceSq(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) < 64;
+    public boolean stillValid(PlayerEntity player) {
+        return this.level.getBlockEntity(this.worldPosition) == this
+                && player.distanceToSqr(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.5, this.worldPosition.getZ() + 0.5) < 64;
     }
 
     public boolean transferTo(PlayerEntity player) {
@@ -196,10 +192,10 @@ public class CatchallTileEntity extends LockableLootTileEntity implements IInven
 
     private void transferToBlock(PlayerEntity player) {
 
-        for (int i = 0; i < getSizeInventory(); ++i) {
-            if (getStackInSlot(i) == ItemStack.EMPTY
-                    && player.inventory.getStackInSlot(convertIdx(i)).getItem() != net.minecraft.item.Items.AIR) {
-                setInventorySlotContents(i, player.inventory.removeStackFromSlot(convertIdx(i)));
+        for (int i = 0; i < getContainerSize(); ++i) {
+            if (getItem(i) == ItemStack.EMPTY
+                    && player.inventory.getItem(convertIdx(i)).getItem() != net.minecraft.item.Items.AIR) {
+                setItem(i, player.inventory.removeItemNoUpdate(convertIdx(i)));
             }
         }
 
@@ -207,9 +203,9 @@ public class CatchallTileEntity extends LockableLootTileEntity implements IInven
     }
 
     public boolean canTransferToPlayer(PlayerEntity player) {
-        for (int i = 0; i < getSizeInventory(); ++i) {
-            if (getStackInSlot(i) != ItemStack.EMPTY
-                    && player.inventory.getStackInSlot(convertIdx(i)).getItem() != net.minecraft.item.Items.AIR) {
+        for (int i = 0; i < getContainerSize(); ++i) {
+            if (getItem(i) != ItemStack.EMPTY
+                    && player.inventory.getItem(convertIdx(i)).getItem() != net.minecraft.item.Items.AIR) {
                 return false;
             }
         }
@@ -219,10 +215,10 @@ public class CatchallTileEntity extends LockableLootTileEntity implements IInven
 
     public void transferToPlayer(PlayerEntity player) {
 
-        for (int i = 0; i < getSizeInventory(); ++i) {
-            if (player.inventory.getStackInSlot(convertIdx(i)).getItem() == net.minecraft.item.Items.AIR
-                    && getStackInSlot(i) != ItemStack.EMPTY) {
-                player.inventory.setInventorySlotContents(convertIdx(i), removeStackFromSlot(i));
+        for (int i = 0; i < getContainerSize(); ++i) {
+            if (player.inventory.getItem(convertIdx(i)).getItem() == net.minecraft.item.Items.AIR
+                    && getItem(i) != ItemStack.EMPTY) {
+                player.inventory.setItem(convertIdx(i), removeItemNoUpdate(i));
             }
         }
 

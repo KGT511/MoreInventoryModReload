@@ -55,7 +55,7 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return storageItems.size();
     }
 
@@ -65,15 +65,15 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
     }
 
     @Override
-    public void func_230337_a_(BlockState state, CompoundNBT nbt) {
-        super.func_230337_a_(state, nbt);
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
 
-        if (!this.checkLootAndRead(nbt)) {
+        if (!this.tryLoadLootTable(nbt)) {
             this.type = StorageBoxType.valueOf(nbt.getString(tagKeyTypeName));
             this.storageItems = NonNullList.withSize(getStorageStackSize(type), ItemStack.EMPTY);
             MIMUtils.readNonNullListShort(nbt, this.storageItems);
             CompoundNBT contentsNBT = nbt.getCompound(tagKeyContents);
-            ItemStack tmp = ItemStack.read(contentsNBT);
+            ItemStack tmp = ItemStack.of(contentsNBT);
             if (tmp.getItem() == ItemStack.EMPTY.getItem() && tmp.getCount() == ItemStack.EMPTY.getCount()) {
                 this.contents = ItemStack.EMPTY;
             } else {
@@ -82,19 +82,15 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
         }
     }
 
-    public void read(BlockState state, CompoundNBT nbt) {
-        this.func_230337_a_(state, nbt);
-    }
-
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
 
-        if (!this.checkLootAndWrite(compound)) {
+        if (!this.trySaveLootTable(compound)) {
             compound.putString(tagKeyTypeName, this.type.name());
             MIMUtils.writeNonNullListShort(compound, this.storageItems, true);
             CompoundNBT nbt = new CompoundNBT();
-            contents.write(nbt);
+            contents.save(nbt);
             compound.put(tagKeyContents, nbt);
         }
 
@@ -113,12 +109,12 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
 
     @Override
     protected Container createMenu(int id, PlayerInventory player) {
-        return ChestContainer.createGeneric9X6(id, player, this);
+        return ChestContainer.sixRows(id, player, this);
     }
 
     @Override
-    public void updateContainingBlockInfo() {
-        super.updateContainingBlockInfo();
+    public void clearCache() {
+        super.clearCache();
         if (this.storageHandler != null) {
             this.storageHandler.invalidate();
             this.storageHandler = null;
@@ -127,7 +123,7 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (!this.removed && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (!this.remove && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (this.storageHandler == null)
                 this.storageHandler = LazyOptional.of(this::createHandler);
             return this.storageHandler.cast();
@@ -145,50 +141,50 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
 
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(getPos(), 0, this.write(new CompoundNBT()));
+        return new SUpdateTileEntityPacket(this.getBlockPos(), 0, this.save(new CompoundNBT()));
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        this.read(this.world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+        this.load(this.level.getBlockState(pkt.getPos()), pkt.getTag());
     }
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return this.write(super.getUpdateTag());
+        return this.save(super.getUpdateTag());
     }
 
     @Override
     public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-        this.read(this.world.getBlockState(pos), tag);
+        this.load(this.level.getBlockState(this.worldPosition), tag);
     }
 
     @Override
-    public void remove() {
-        super.remove();
+    public void setRemoved() {
+        super.setRemoved();
         if (storageHandler != null)
             storageHandler.invalidate();
     }
 
     @Override
     public boolean isEmpty() {
-        for (int i = 0; i < getSizeInventory(); ++i)
-            if (getStackInSlot(i).getItem() != ItemStack.EMPTY.getItem()) {
+        for (int i = 0; i < getContainerSize(); ++i)
+            if (getItem(i).getItem() != ItemStack.EMPTY.getItem()) {
                 return false;
             }
         return true;
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
         return storageItems.get(index);
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
-        if (!getStackInSlot(index).isEmpty()) {
-            ItemStack itemstack = getStackInSlot(index);
-            setInventorySlotContents(index, ItemStack.EMPTY);
+    public ItemStack removeItemNoUpdate(int index) {
+        if (!getItem(index).isEmpty()) {
+            ItemStack itemstack = getItem(index);
+            setItem(index, ItemStack.EMPTY);
             return itemstack;
         } else {
             return ItemStack.EMPTY;
@@ -196,16 +192,16 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
         storageItems.set(index, stack);
 
-        markDirty();
+        setChanged();
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
-        return world.getTileEntity(pos) == this
-                && player.getDistanceSq(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) < 64;
+    public boolean stillValid(PlayerEntity player) {
+        return this.level.getBlockEntity(this.worldPosition) == this
+                && player.distanceToSqr(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5) < 64;
     }
 
     public static int getStorageStackSize(StorageBoxType typeIn) {
@@ -243,9 +239,9 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
             return false;
         }
 
-        for (int i = 0; i < this.getSizeInventory(); ++i) {
-            ItemStack slotItem = this.getStackInSlot(i);
-            if (ItemStack.areItemStackTagsEqual(stack, slotItem) && ItemStack.areItemsEqual(stack, slotItem)) {
+        for (int i = 0; i < this.getContainerSize(); ++i) {
+            ItemStack slotItem = this.getItem(i);
+            if (ItemStack.tagMatches(stack, slotItem) && ItemStack.isSame(stack, slotItem)) {
                 //airじゃないスタックに追加
                 if (slotItem.getCount() == slotItem.getMaxStackSize()) {
                     continue;
@@ -261,10 +257,10 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
                     stack.shrink(slotItem.getMaxStackSize() - slotItem.getCount());
                     slotItem.setCount(slotItem.getMaxStackSize());
                 }
-                this.setInventorySlotContents(i, slotItem.copy());
+                this.setItem(i, slotItem.copy());
             } else if (slotItem.getItem() == ItemStack.EMPTY.getItem()) {
                 //airのスタックに新しく追加
-                this.setInventorySlotContents(i, stack.copy());
+                this.setItem(i, stack.copy());
                 stack.setCount(0);
             }
 
@@ -277,13 +273,13 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
     }
 
     public boolean store(ItemStack stack) {
-        if (this.world.getTileEntity(this.pos) == null)
+        if (this.level.getBlockEntity(this.worldPosition) == null)
             return false;
 
-        boolean result = ItemStack.areItemsEqual(this.getContents(), stack)
-                && ItemStack.areItemStackTagsEqual(stack, getContents()) && mergeItemStack(stack);
-        BlockState newState = this.world.getBlockState(pos);
-        this.world.notifyBlockUpdate(pos, this.getBlockState(), newState, 0);
+        boolean result = ItemStack.isSame(this.getContents(), stack)
+                && ItemStack.tagMatches(stack, getContents()) && mergeItemStack(stack);
+        BlockState newState = this.level.getBlockState(this.worldPosition);
+        this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), newState, 0);
         return result;
     }
 
@@ -291,8 +287,8 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
         if (!hasContents())
             return;
 
-        for (int i = 0; i < inventory.getSizeInventory(); ++i) {
-            ItemStack stack = inventory.getStackInSlot(i);
+        for (int i = 0; i < inventory.getContainerSize(); ++i) {
+            ItemStack stack = inventory.getItem(i);
             if (stack.getItem() != ItemStack.EMPTY.getItem()) {
                 store(stack);
             }
@@ -304,12 +300,12 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
         switch (++clickCount) {
         case 1:
             clickTime = 16;
-            ItemStack itemstack = player.getHeldItemMainhand();
+            ItemStack itemstack = player.getMainHandItem();
             if (!hasContents()) {
                 registerItems(itemstack);
             }
 
-            if (player.isSneaking()) {
+            if (player.isShiftKeyDown()) {
                 clearRegister();
             }
 
@@ -323,7 +319,7 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
         case 3:
             clickCount = 0;
 
-            getStorageBoxNetworkManager().storeInventoryToNetwork(player.inventory, this.pos);
+            getStorageBoxNetworkManager().storeInventoryToNetwork(player.inventory, this.worldPosition);
             player.tick();
             break;
         default:
@@ -343,21 +339,21 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
 
     public void leftClickEvent(PlayerEntity player) {
         if (getContents() != null) {
-            if (player.inventory.getFirstEmptyStack() != -1) {
-                if (player.isSneaking()) {
-                    player.inventory.addItemStackToInventory(loadItemStack(1));
+            if (player.inventory.getFreeSlot() != -1) {
+                if (player.isShiftKeyDown()) {
+                    player.inventory.add(loadItemStack(1));
                 } else {
-                    player.inventory.addItemStackToInventory(loadItemStack(0));
+                    player.inventory.add(loadItemStack(0));
                 }
             } else {
                 //インベントリに空きスロットがなくても、同じアイテムを持っていたらぎりぎりまで持てるように
                 int count = getContents().getMaxStackSize() -
-                        player.inventory.count(getContents().getItem()) % getContents().getMaxStackSize();
+                        player.inventory.countItem(getContents().getItem()) % getContents().getMaxStackSize();
                 if (0 < count && count % getContents().getMaxStackSize() != 0) {
-                    if (player.isSneaking()) {
-                        player.inventory.addItemStackToInventory(loadItemStack(1));
+                    if (player.isShiftKeyDown()) {
+                        player.inventory.add(loadItemStack(1));
                     } else {
-                        player.inventory.addItemStackToInventory(loadItemStack(count));
+                        player.inventory.add(loadItemStack(count));
                     }
                 }
             }
@@ -373,7 +369,7 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
 
         for (int i = storageItems.size() - 1; 0 <= i; i--) {
             ItemStack storedStack = storageItems.get(i);
-            if (!ItemStack.areItemsEqual(storedStack, contents)) {
+            if (!ItemStack.isSame(storedStack, contents)) {
                 continue;
             }
 
@@ -394,8 +390,8 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
         ItemStack ret = contents.copy();
         ret.setCount(retCount);
 
-        BlockState newState = this.world.getBlockState(pos);
-        this.world.notifyBlockUpdate(pos, this.getBlockState(), newState, 0);
+        BlockState newState = this.level.getBlockState(this.worldPosition);
+        this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), newState, 0);
         return ret;
     }
 
@@ -410,7 +406,7 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
     public int getAmount() {
         int count = 0;
         for (int i = 0; i < storageItems.size(); ++i) {
-            ItemStack slot = getStackInSlot(i);
+            ItemStack slot = getItem(i);
             if (slot.getItem() == getContents().getItem()) {
                 count += slot.getCount();
             }
@@ -433,7 +429,7 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
     }
 
     private void makeNewNetwork() {
-        networkManager = new StorageBoxNetworkManager(this.world, this.pos);
+        networkManager = new StorageBoxNetworkManager(this.level, this.worldPosition);
 
     }
 
@@ -445,7 +441,7 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
     public void onPlaced() {
         boolean multiple = false;
         for (Direction d : Direction.values()) {
-            TileEntity tile = this.world.getTileEntity(this.pos.offset(d));
+            TileEntity tile = this.level.getBlockEntity(this.worldPosition.relative(d));
             if (tile instanceof BaseStorageBoxTileEntity) {
                 BaseStorageBoxTileEntity tileStorageBox = (BaseStorageBoxTileEntity) tile;
                 if (!multiple) {
@@ -463,7 +459,7 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
     public void onDestroyedNeighbor(BlockPos destroyedPos) {
         int multiple = 0;
         for (Direction d : Direction.values()) {
-            TileEntity tile = this.world.getTileEntity(destroyedPos.offset(d));
+            TileEntity tile = this.level.getBlockEntity(destroyedPos.relative(d));
             if (tile instanceof BaseStorageBoxTileEntity) {
                 BaseStorageBoxTileEntity tileStorageBox = (BaseStorageBoxTileEntity) tile;
                 tileStorageBox.getStorageBoxNetworkManager().remove(destroyedPos);
@@ -471,7 +467,7 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
             }
         }
         if (1 < multiple) {
-            this.setStorageBoxNetworkManager(new StorageBoxNetworkManager(this.world, this.pos));
+            this.setStorageBoxNetworkManager(new StorageBoxNetworkManager(this.level, this.worldPosition));
         }
     }
 

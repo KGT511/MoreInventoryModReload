@@ -14,15 +14,15 @@ public class MoreInventoryMODItemGroup extends ItemGroup {
     }
 
     @Override
-    public ItemStack createIcon() {
+    public ItemStack makeIcon() {
         return new ItemStack(Items.WOOD_STORAGE_BOX);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void fill(NonNullList<ItemStack> items) {
+    public void fillItemList(NonNullList<ItemStack> items) {
         for (Item item : Items.itemList) {
-            item.fillItemGroup(this, items);
+            item.fillItemCategory(this, items);
         }
     }
 }

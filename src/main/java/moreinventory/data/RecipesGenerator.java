@@ -21,32 +21,32 @@ public class RecipesGenerator extends RecipeProvider {
     }
 
     @Override
-    protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
-        ShapedRecipeBuilder.shapedRecipe(Blocks.CATCHALL)
-                .patternLine("P P")
-                .patternLine("PCP")
-                .patternLine("SSS")
-                .key('P', ItemTags.PLANKS)
-                .key('C', Items.CHEST)
-                .key('S', ItemTags.WOODEN_SLABS)
-                .addCriterion("has_chest", hasItem(Items.CHEST))
-                .build(consumer);
-        ShapedRecipeBuilder.shapedRecipe(moreinventory.item.Items.TRANSPORTER)
-                .patternLine("P P")
-                .patternLine("PSP")
-                .patternLine("SSS")
-                .key('P', ItemTags.PLANKS)
-                .key('S', ItemTags.WOODEN_SLABS)
-                .addCriterion("has_planks", hasItem(ItemTags.PLANKS))
-                .build(consumer);
-        ShapedRecipeBuilder.shapedRecipe(Blocks.WOOD_STORAGE_BOX)
-                .patternLine("MSM")
-                .patternLine("M M")
-                .patternLine("MSM")
-                .key('M', ItemTags.LOGS)
-                .key('S', ItemTags.WOODEN_SLABS)
-                .addCriterion("has_logs", hasItem(ItemTags.LOGS))
-                .build(consumer);
+    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+        ShapedRecipeBuilder.shaped(Blocks.CATCHALL)
+                .pattern("P P")
+                .pattern("PCP")
+                .pattern("SSS")
+                .define('P', ItemTags.PLANKS)
+                .define('C', Items.CHEST)
+                .define('S', ItemTags.WOODEN_SLABS)
+                .unlockedBy("has_chest", has(Items.CHEST))
+                .save(consumer);
+        ShapedRecipeBuilder.shaped(moreinventory.item.Items.TRANSPORTER)
+                .pattern("P P")
+                .pattern("PSP")
+                .pattern("SSS")
+                .define('P', ItemTags.PLANKS)
+                .define('S', ItemTags.WOODEN_SLABS)
+                .unlockedBy("has_planks", has(ItemTags.PLANKS))
+                .save(consumer);
+        ShapedRecipeBuilder.shaped(Blocks.WOOD_STORAGE_BOX)
+                .pattern("MSM")
+                .pattern("M M")
+                .pattern("MSM")
+                .define('M', ItemTags.LOGS)
+                .define('S', ItemTags.WOODEN_SLABS)
+                .unlockedBy("has_logs", has(ItemTags.LOGS))
+                .save(consumer);
 
         registerStorageBoxRecipe(consumer, Blocks.IRON_STORAGE_BOX, Tags.Items.INGOTS_IRON);
         registerStorageBoxRecipe(consumer, Blocks.GOLD_STORAGE_BOX, Tags.Items.INGOTS_GOLD);
@@ -58,61 +58,61 @@ public class RecipesGenerator extends RecipeProvider {
         //        registerStorageBoxRecipe(consumer, Blocks.BRONZE_STORAGE_BOX, Items.IRON_INGOT);
         //        registerStorageBoxRecipe(consumer, Blocks.SILVER_STORAGE_BOX, Items.IRON_INGOT);
 
-        ShapedRecipeBuilder.shapedRecipe(Blocks.GLASS_STORAGE_BOX, 32)
-                .patternLine("MSM")
-                .patternLine("M M")
-                .patternLine("MSM")
-                .key('M', Items.GLASS)
-                .key('S', Items.GLASS_PANE)
-                .addCriterion("has_glass", hasItem(Items.GLASS))
-                .addCriterion("has_glass_pane", hasItem(Items.GLASS_PANE))
-                .build(consumer);
+        ShapedRecipeBuilder.shaped(Blocks.GLASS_STORAGE_BOX, 32)
+                .pattern("MSM")
+                .pattern("M M")
+                .pattern("MSM")
+                .define('M', Items.GLASS)
+                .define('S', Items.GLASS_PANE)
+                .unlockedBy("has_glass", has(Items.GLASS))
+                .unlockedBy("has_glass_pane", has(Items.GLASS_PANE))
+                .save(consumer);
 
-        ShapedRecipeBuilder.shapedRecipe(Blocks.IMPORTER)
-                .patternLine("SSS")
-                .patternLine("SHS")
-                .patternLine("SRS")
-                .key('S', Items.COBBLESTONE)
-                .key('R', Items.REDSTONE)
-                .key('H', Items.HOPPER)
-                .addCriterion("has_chest", hasItem(Items.CHEST))
-                .addCriterion("has_storage_box", hasItem(moreinventory.item.Items.WOOD_STORAGE_BOX))
-                .build(consumer);
-        ShapedRecipeBuilder.shapedRecipe(Blocks.EXPORTER)
-                .patternLine("SRS")
-                .patternLine("SHS")
-                .patternLine("SSS")
-                .key('S', Items.COBBLESTONE)
-                .key('R', Items.REDSTONE)
-                .key('H', Items.HOPPER)
-                .addCriterion("has_chest", hasItem(Items.CHEST))
-                .addCriterion("has_storage_box", hasItem(moreinventory.item.Items.WOOD_STORAGE_BOX))
-                .build(consumer);
+        ShapedRecipeBuilder.shaped(Blocks.IMPORTER)
+                .pattern("SSS")
+                .pattern("SHS")
+                .pattern("SRS")
+                .define('S', Items.COBBLESTONE)
+                .define('R', Items.REDSTONE)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_chest", has(Items.CHEST))
+                .unlockedBy("has_storage_box", has(moreinventory.item.Items.WOOD_STORAGE_BOX))
+                .save(consumer);
+        ShapedRecipeBuilder.shaped(Blocks.EXPORTER)
+                .pattern("SRS")
+                .pattern("SHS")
+                .pattern("SSS")
+                .define('S', Items.COBBLESTONE)
+                .define('R', Items.REDSTONE)
+                .define('H', Items.HOPPER)
+                .unlockedBy("has_chest", has(Items.CHEST))
+                .unlockedBy("has_storage_box", has(moreinventory.item.Items.WOOD_STORAGE_BOX))
+                .save(consumer);
 
-        ShapedRecipeBuilder.shapedRecipe(moreinventory.item.Items.SPANNER)
-                .patternLine("SSS")
-                .patternLine(" I ")
-                .patternLine("SSS")
-                .key('S', Items.STONE)
-                .key('I', Items.IRON_INGOT)
-                .addCriterion("has_stone", hasItem(Items.STONE))
-                .addCriterion("has_iron_ingot", hasItem(Items.IRON_INGOT))
-                .build(consumer);
+        ShapedRecipeBuilder.shaped(moreinventory.item.Items.SPANNER)
+                .pattern("SSS")
+                .pattern(" I ")
+                .pattern("SSS")
+                .define('S', Items.STONE)
+                .define('I', Items.IRON_INGOT)
+                .unlockedBy("has_stone", has(Items.STONE))
+                .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
+                .save(consumer);
     }
 
     private void registerStorageBoxRecipe(Consumer<IFinishedRecipe> consumer, Block block, IOptionalNamedTag<Item> ingotsIron) {
-        registerStorageBoxRecipe(consumer, block, Ingredient.fromTag(ingotsIron));
+        registerStorageBoxRecipe(consumer, block, Ingredient.of(ingotsIron));
     }
 
     private void registerStorageBoxRecipe(Consumer<IFinishedRecipe> consumer, Block block, Ingredient material) {
-        ShapedRecipeBuilder.shapedRecipe(block, 3)
-                .patternLine("MSM")
-                .patternLine("MWM")
-                .patternLine("MSM")
-                .key('M', material)
-                .key('S', ItemTags.WOODEN_SLABS)
-                .key('W', moreinventory.item.Items.WOOD_STORAGE_BOX)
-                .addCriterion("has_storage_box", hasItem(moreinventory.item.Items.WOOD_STORAGE_BOX))
-                .build(consumer);
+        ShapedRecipeBuilder.shaped(block, 3)
+                .pattern("MSM")
+                .pattern("MWM")
+                .pattern("MSM")
+                .define('M', material)
+                .define('S', ItemTags.WOODEN_SLABS)
+                .define('W', moreinventory.item.Items.WOOD_STORAGE_BOX)
+                .unlockedBy("has_storage_box", has(moreinventory.item.Items.WOOD_STORAGE_BOX))
+                .save(consumer);
     }
 }
