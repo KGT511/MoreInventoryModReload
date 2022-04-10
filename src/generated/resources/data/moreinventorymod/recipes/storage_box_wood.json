@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MSM",
+    "M M",
+    "MSM"
+  ],
+  "key": {
+    "M": {
+      "tag": "minecraft:logs"
+    },
+    "S": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
+  "result": {
+    "item": "moreinventorymod:storage_box_wood"
+  }
+}

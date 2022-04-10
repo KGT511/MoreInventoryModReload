@@ -1,6 +1,7 @@
 import os
 import pathlib
 import json
+import shutil
 
 
 def main():
@@ -9,14 +10,18 @@ def main():
     texture_list.remove("transporter")
     texture_list.remove("makeJSON")
     print(texture_list)
-    json_dir = os.path.join(
-        pathlib.Path(this_file_dir).parent.parent, "models", "item")
     for texture in texture_list:
-        text = {"parent": "item/generated",
-                "textures": {"layer0": "moreinventorymod:item/"+texture}}
-        print(text)
-        with open(os.path.join(json_dir, texture+".json"), "w")as f:
-            print(json.dump(text, f, indent=2))
+        if "storagebox" in texture:
+            print(texture)
+            new_name = texture.replace("storagebox", "storage_box")
+            print(new_name)
+            shutil.copy(os.path.join(this_file_dir, texture + ".png"), os.path.join(this_file_dir, new_name + ".png"))
+            os.remove(os.path.join(this_file_dir, texture + ".png"))
+        # text = {"parent": "item/generated",
+        #         "textures": {"layer0": "moreinventorymod:item/" + texture}}
+        # print(text)
+        # with open(os.path.join(json_dir, texture + ".json"), "w")as f:
+        #     print(json.dump(text, f, indent=2))
 
 
 if __name__ == "__main__":

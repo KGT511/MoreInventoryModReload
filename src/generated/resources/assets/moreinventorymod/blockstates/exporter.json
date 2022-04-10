@@ -1,0 +1,157 @@
+{
+  "variants": {
+    "facing_in=down,facing_out=down": {
+      "model": "moreinventorymod:block/exporter/exporter"
+    },
+    "facing_in=up,facing_out=down": {
+      "model": "moreinventorymod:block/exporter/exporter",
+      "x": 180
+    },
+    "facing_in=north,facing_out=down": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "x": 90,
+      "y": 180
+    },
+    "facing_in=south,facing_out=down": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "x": 90
+    },
+    "facing_in=west,facing_out=down": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "x": 90,
+      "y": 90
+    },
+    "facing_in=east,facing_out=down": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "x": 90,
+      "y": 270
+    },
+    "facing_in=down,facing_out=up": {
+      "model": "moreinventorymod:block/exporter/exporter"
+    },
+    "facing_in=up,facing_out=up": {
+      "model": "moreinventorymod:block/exporter/exporter"
+    },
+    "facing_in=north,facing_out=up": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "x": 270
+    },
+    "facing_in=south,facing_out=up": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "x": 270,
+      "y": 180
+    },
+    "facing_in=west,facing_out=up": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "x": 270,
+      "y": 270
+    },
+    "facing_in=east,facing_out=up": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "x": 270,
+      "y": 90
+    },
+    "facing_in=down,facing_out=north": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north"
+    },
+    "facing_in=up,facing_out=north": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "x": 180,
+      "y": 180
+    },
+    "facing_in=north,facing_out=north": {
+      "model": "moreinventorymod:block/exporter/exporter"
+    },
+    "facing_in=south,facing_out=north": {
+      "model": "moreinventorymod:block/exporter/exporter",
+      "x": 90
+    },
+    "facing_in=west,facing_out=north": {
+      "model": "moreinventorymod:block/exporter/exporter_down_east",
+      "x": 270,
+      "y": 270
+    },
+    "facing_in=east,facing_out=north": {
+      "model": "moreinventorymod:block/exporter/exporter_down_east",
+      "x": 90,
+      "y": 270
+    },
+    "facing_in=down,facing_out=south": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "y": 180
+    },
+    "facing_in=up,facing_out=south": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "x": 180
+    },
+    "facing_in=north,facing_out=south": {
+      "model": "moreinventorymod:block/exporter/exporter",
+      "x": 270
+    },
+    "facing_in=south,facing_out=south": {
+      "model": "moreinventorymod:block/exporter/exporter"
+    },
+    "facing_in=west,facing_out=south": {
+      "model": "moreinventorymod:block/exporter/exporter_down_east",
+      "x": 90,
+      "y": 90
+    },
+    "facing_in=east,facing_out=south": {
+      "model": "moreinventorymod:block/exporter/exporter_down_east",
+      "x": 270,
+      "y": 90
+    },
+    "facing_in=down,facing_out=west": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "y": 270
+    },
+    "facing_in=up,facing_out=west": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "x": 180,
+      "y": 90
+    },
+    "facing_in=north,facing_out=west": {
+      "model": "moreinventorymod:block/exporter/exporter_down_east",
+      "x": 90,
+      "y": 180
+    },
+    "facing_in=south,facing_out=west": {
+      "model": "moreinventorymod:block/exporter/exporter_down_east",
+      "x": 270,
+      "y": 180
+    },
+    "facing_in=west,facing_out=west": {
+      "model": "moreinventorymod:block/exporter/exporter"
+    },
+    "facing_in=east,facing_out=west": {
+      "model": "moreinventorymod:block/exporter/exporter",
+      "x": 90,
+      "y": 270
+    },
+    "facing_in=down,facing_out=east": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "y": 90
+    },
+    "facing_in=up,facing_out=east": {
+      "model": "moreinventorymod:block/exporter/exporter_down_north",
+      "x": 180,
+      "y": 270
+    },
+    "facing_in=north,facing_out=east": {
+      "model": "moreinventorymod:block/exporter/exporter_down_east",
+      "x": 270
+    },
+    "facing_in=south,facing_out=east": {
+      "model": "moreinventorymod:block/exporter/exporter_down_east",
+      "x": 90
+    },
+    "facing_in=west,facing_out=east": {
+      "model": "moreinventorymod:block/exporter/exporter",
+      "x": 90,
+      "y": 90
+    },
+    "facing_in=east,facing_out=east": {
+      "model": "moreinventorymod:block/exporter/exporter"
+    }
+  }
+}
