@@ -1,7 +1,7 @@
-# MoreInventoryModReload
+# MoreInventoryModReloaded
 MoreInventoryModを1.16でも使えるように新しく作成しました。  
 <big><big><font color=ff7777>※製作者であるくりぃむそぉだ氏およびkegare氏には許諾はいただいております。  
-くりぃむそぉだ氏及びkegare氏はMoreInventoryModReloadとは無関係です。      
+くりぃむそぉだ氏及びkegare氏はMoreInventoryModReloadedとは無関係です。      
 </font></big></big>
 # About
 アイテムを大量に保管できるコンテナを追加します。    
@@ -17,10 +17,17 @@ MoreInventoryModを1.16でも使えるように新しく作成しました。
 
 # Changelog
 ## v0.1.0
-MoreInventoryModReloadをリリース    
+MoreInventoryModReloadedをリリース    
 以下を追加
 * ガラクタ入れ
 * コンテナ10種(木材、ガラス、鉱石系)
 * インポーター、エクスポーター
 * トランスポーター
 * スパナ
+
+# Scheduled to be updated
+未実装の内、更新予定のもの一覧
+* はけ、めっき
+* エンダーコンテナ
+* テレポーター
+* ポーチ
