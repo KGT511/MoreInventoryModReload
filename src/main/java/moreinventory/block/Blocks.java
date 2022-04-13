@@ -3,14 +3,14 @@ package moreinventory.block;
 import java.util.ArrayList;
 import java.util.List;
 
+import moreinventory.blockentity.storagebox.StorageBoxType;
 import moreinventory.core.MoreInventoryMOD;
-import moreinventory.tileentity.storagebox.StorageBoxType;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Blocks {
     public static List<Block> blockList = new ArrayList<Block>();
 
@@ -34,7 +34,7 @@ public class Blocks {
 
     private static Block register(String key, Block blockIn) {
         blockList.add(blockIn);
-        return blockIn.setRegistryName(MoreInventoryMOD.MODID, key);
+        return blockIn.setRegistryName(MoreInventoryMOD.MOD_ID, key);
     }
 
     @SubscribeEvent

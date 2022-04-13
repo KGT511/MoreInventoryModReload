@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "moreinventorymod:storage_box_wood",
+    "moreinventorymod:storage_box_iron",
+    "moreinventorymod:storage_box_gold",
+    "moreinventorymod:storage_box_diamond",
+    "moreinventorymod:storage_box_emerald",
+    "moreinventorymod:storage_box_glass",
+    "moreinventorymod:storage_box_copper",
+    "moreinventorymod:storage_box_tin",
+    "moreinventorymod:storage_box_bronze",
+    "moreinventorymod:storage_box_silver",
+    "moreinventorymod:importer",
+    "moreinventorymod:exporter"
+  ]
+}

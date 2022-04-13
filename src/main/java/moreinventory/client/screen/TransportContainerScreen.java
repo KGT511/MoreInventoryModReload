@@ -1,110 +1,113 @@
 package moreinventory.client.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
+import moreinventory.blockentity.ImporterBlockEntity;
 import moreinventory.container.TransportContainer;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.data.lang.Text;
 import moreinventory.network.ServerboundImporterUpdatePacket;
-import moreinventory.tileentity.ImporterTileEntity;
 import moreinventory.util.MIMUtils;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraftforge.fmlclient.gui.widget.ExtendedButton;
 
 @OnlyIn(Dist.CLIENT)
-public class TransportContainerScreen extends ContainerScreen<TransportContainer> {
+public class TransportContainerScreen extends AbstractContainerScreen<TransportContainer> {
 
     private static ResourceLocation DISPENSER_GUI_TEXTURE = new ResourceLocation("textures/gui/container/dispenser.png");
     private Button isWhiteButton;
     private Button isRegisterButton;
 
-    public TransportContainerScreen(TransportContainer TransportManagerContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public TransportContainerScreen(TransportContainer TransportManagerContainer, Inventory inv, Component titleIn) {
         super(TransportManagerContainer, inv, titleIn);
     }
 
     @Override
     protected void init() {
         super.init();
-        if (this.menu.getTile() instanceof ImporterTileEntity) {
-            ImporterTileEntity tileEntity = (ImporterTileEntity) this.menu.getTile();
-            this.isWhiteButton = this.addButton(
+        if (this.menu.getBlockEntity() instanceof ImporterBlockEntity) {
+            var importerBlockEntity = ((ImporterBlockEntity) this.menu.getBlockEntity());
+            this.isWhiteButton = this.addRenderableWidget(
                     new TransportContainerScreen.Button(leftPos + imageWidth - 55, topPos + 35,
-                            new TranslationTextComponent(Text.importerMoveWhiteDetail), new TranslationTextComponent(Text.importerMoveBlackDetail),
-                            tileEntity.getBlockPos(), ImporterTileEntity.Val.WHITE.ordinal()));
-            this.isRegisterButton = this.addButton(
+                            new TranslatableComponent(Text.importerMoveWhiteDetail), new TranslatableComponent(Text.importerMoveBlackDetail),
+                            importerBlockEntity.getBlockPos(), ImporterBlockEntity.Val.WHITE.ordinal()));
+            this.isRegisterButton = this.addRenderableWidget(
                     new TransportContainerScreen.Button(leftPos + 5, topPos + 35,
-                            new TranslationTextComponent(Text.importerRegisterOnDetail), new TranslationTextComponent(Text.importerRegisterOffDetail),
-                            tileEntity.getBlockPos(), ImporterTileEntity.Val.REGISTER.ordinal()));
+                            new TranslatableComponent(Text.importerRegisterOnDetail), new TranslatableComponent(Text.importerRegisterOffDetail),
+                            importerBlockEntity.getBlockPos(), ImporterBlockEntity.Val.REGISTER.ordinal()));
             this.isWhiteButton.active = true;
             this.isRegisterButton.active = true;
         }
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {//render
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
-        if (this.menu.getTile() instanceof ImporterTileEntity) {
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(poseStack);
+        super.render(poseStack, mouseX, mouseY, partialTicks);
+        this.renderTooltip(poseStack, mouseX, mouseY);
+
+        if (this.menu.getBlockEntity() instanceof ImporterBlockEntity) {
             int i = (this.width - this.imageWidth) / 2;
             int j = (this.height - this.imageHeight) / 2;
             int xOffset = i, yOffset = j;
-            ImporterTileEntity tileEntity = ((ImporterTileEntity) this.menu.getTile());
+            var importerBlockEntity = ((ImporterBlockEntity) this.menu.getBlockEntity());
 
-            boolean isRegister = tileEntity.getIsRegister();
-            boolean isWhite = tileEntity.getIswhite();
-            TranslationTextComponent registerTxt = new TranslationTextComponent(isRegister ? Text.importerRegisterOn : Text.importerRegisterOff);
-            TranslationTextComponent moveTxt = new TranslationTextComponent(isWhite ? Text.importerMoveWhite : Text.importerMoveBlack);
-            drawCenteredString(matrixStack, this.font, registerTxt, 30 + xOffset, 40 + yOffset, 14737632);
-            drawCenteredString(matrixStack, this.font, moveTxt, imageWidth - 30 + xOffset, 40 + yOffset, 14737632);
-            this.drawCenteredStringWithoutShadow(matrixStack, new TranslationTextComponent(Text.importerMove), imageWidth - 30 + xOffset, 20 + yOffset, 328965);
-            this.drawCenteredStringWithoutShadow(matrixStack, new TranslationTextComponent(Text.importerRegister), 30 + xOffset, 20 + yOffset, 328965);
-            isWhiteButton.onValueUpdate(tileEntity);
-            isRegisterButton.onValueUpdate(tileEntity);
+            var isRegister = importerBlockEntity.getIsRegister();
+            var isWhite = importerBlockEntity.getIswhite();
+            var registerTxt = new TranslatableComponent(isRegister ? Text.importerRegisterOn : Text.importerRegisterOff);
+            var moveTxt = new TranslatableComponent(isWhite ? Text.importerMoveWhite : Text.importerMoveBlack);
+            drawCenteredString(poseStack, this.font, registerTxt, 30 + xOffset, 40 + yOffset, 14737632);
+            drawCenteredString(poseStack, this.font, moveTxt, imageWidth - 30 + xOffset, 40 + yOffset, 14737632);
+            this.drawCenteredStringWithoutShadow(poseStack, new TranslatableComponent(Text.importerMove), imageWidth - 30 + xOffset, 20 + yOffset, 328965);
+            this.drawCenteredStringWithoutShadow(poseStack, new TranslatableComponent(Text.importerRegister), 30 + xOffset, 20 + yOffset, 328965);
+            isWhiteButton.onValueUpdate(importerBlockEntity);
+            isRegisterButton.onValueUpdate(importerBlockEntity);
 
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    protected void renderBg(MatrixStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {//renderBg
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bind(DISPENSER_GUI_TEXTURE);
+    protected void renderBg(PoseStack poseStack, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, DISPENSER_GUI_TEXTURE);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        this.blit(p_230450_1_, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        this.blit(poseStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
     }
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {//renderLabels
-        super.renderLabels(matrixStack, mouseX, mouseY);
-        if (this.menu.getTile() instanceof ImporterTileEntity) {
-            this.isRegisterButton.renderToolTip(matrixStack, mouseX, mouseY);
-            this.isWhiteButton.renderToolTip(matrixStack, mouseX, mouseY);
+    protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
+        super.renderLabels(poseStack, mouseX, mouseY);
+        if (this.menu.getBlockEntity() instanceof ImporterBlockEntity) {
+
+            this.isRegisterButton.renderToolTip(poseStack, mouseX, mouseY);
+            this.isWhiteButton.renderToolTip(poseStack, mouseX, mouseY);
+
         }
     }
 
-    private void drawCenteredStringWithoutShadow(MatrixStack poseStack, ITextComponent string, float x, float y, int color) {
+    private void drawCenteredStringWithoutShadow(PoseStack poseStack, Component string, float x, float y, int color) {
         this.font.draw(poseStack, string, x - this.font.width(string) / 2, y, color);
     }
 
     @OnlyIn(Dist.CLIENT)
     class Button extends ExtendedButton {
         private boolean val = false;
-        private ITextComponent trueTxt, falseTxt;
+        private Component trueTxt, falseTxt;
         private int id;
 
-        protected Button(int x, int y, ITextComponent trueDisplayTxt, ITextComponent falseDisplayTxt, BlockPos blockPos, int id) {
-            super(x, y, 53, 20, StringTextComponent.EMPTY, (p) -> {
+        protected Button(int x, int y, Component trueDisplayTxt, Component falseDisplayTxt, BlockPos blockPos, int id) {
+            super(x, y, 53, 20, TextComponent.EMPTY, (p) -> {
                 MoreInventoryMOD.CHANNEL.sendToServer(new ServerboundImporterUpdatePacket(blockPos, id));
             });
             this.trueTxt = trueDisplayTxt;
@@ -121,18 +124,24 @@ public class TransportContainerScreen extends ContainerScreen<TransportContainer
         }
 
         @Override
-        public void renderToolTip(MatrixStack stack, int x, int y) {
-            super.renderToolTip(stack, x, y);
+        public void onClick(double mouseX, double mouseY) {
+            super.onClick(mouseX, mouseY);
+        }
+
+        @Override
+        public void renderToolTip(PoseStack poseStack, int x, int y) {
+            super.renderToolTip(poseStack, x, y);
             if (this.isHovered()) {
-                ITextComponent txt = val ? trueTxt : falseTxt;
-                TransportContainerScreen.this.renderTooltip(stack, txt, x - this.x, y / 2);
+                var txt = val ? trueTxt : falseTxt;
+                TransportContainerScreen.this.renderTooltip(poseStack, txt, x - this.x, y / 2);
             }
         }
 
-        public void onValueUpdate(ImporterTileEntity blockEntity) {
+        public void onValueUpdate(ImporterBlockEntity blockEntity) {
             int val = blockEntity.getValByID(this.id);
             this.setVal(MIMUtils.intToBool(val));
         }
+
     }
 
 }

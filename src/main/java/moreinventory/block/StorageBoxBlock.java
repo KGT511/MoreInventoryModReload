@@ -1,39 +1,41 @@
 package moreinventory.block;
 
+import java.lang.reflect.InvocationTargetException;
+
 import javax.annotation.Nullable;
 
-import moreinventory.tileentity.BaseStorageBoxTileEntity;
-import moreinventory.tileentity.storagebox.StorageBoxType;
-import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ToolType;
+import moreinventory.blockentity.BaseStorageBoxBlockEntity;
+import moreinventory.blockentity.storagebox.StorageBoxType;
+import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
 
-public class StorageBoxBlock extends ContainerBlock {
+public class StorageBoxBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     private StorageBoxType type;
 
@@ -41,9 +43,7 @@ public class StorageBoxBlock extends ContainerBlock {
         super(Properties.of(Material.METAL)
                 .sound(SoundType.METAL)
                 .strength(2.0F, 10.0F)
-                .requiresCorrectToolForDrops()//素手で壊すときに遅くなる？
-                .harvestLevel(0)
-                .harvestTool(ToolType.PICKAXE)
+                .requiresCorrectToolForDrops()
                 .noOcclusion());
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
         this.type = typeIn;
@@ -51,82 +51,82 @@ public class StorageBoxBlock extends ContainerBlock {
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
-            TileEntity tileentity = world.getBlockEntity(pos);
-            if (tileentity instanceof IInventory) {
-                InventoryHelper.dropContents(world, pos, (IInventory) tileentity);
-                world.updateNeighbourForOutputSignal(pos, this);
+            var blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof Container) {
+                Containers.dropContents(level, pos, (Container) blockEntity);
+                level.updateNeighbourForOutputSignal(pos, this);
             }
-            super.onRemove(state, world, pos, newState, isMoving);
+            super.onRemove(state, level, pos, newState, isMoving);
         }
     }
 
     @Override
-    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getBlockEntity(pos);
-        tile.onPlaced();
-        super.setPlacedBy(world, pos, state, placer, stack);
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        var storageBoxBlockEntity = (BaseStorageBoxBlockEntity) level.getBlockEntity(pos);
+        storageBoxBlockEntity.onPlaced();
+        super.setPlacedBy(level, pos, state, placer, stack);
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         //隣がコンテナだったときに限って呼ばれるように
         if (blockIn instanceof StorageBoxBlock) {
-            BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getBlockEntity(pos);
-            tile.onDestroyedNeighbor(fromPos);
+            var storageBoxBlockEntity = (BaseStorageBoxBlockEntity) level.getBlockEntity(pos);
+            storageBoxBlockEntity.onDestroyedNeighbor(fromPos);
         }
     }
 
     @Override
     //right click
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (world.isClientSide)
-            return ActionResultType.SUCCESS;
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+        if (level.isClientSide)
+            return InteractionResult.SUCCESS;
 
-        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getBlockEntity(pos);
-        ActionResultType ret = tile.rightClickEvent(world, player) ? ActionResultType.SUCCESS : ActionResultType.PASS;
+        var storageBoxBlockEntity = (BaseStorageBoxBlockEntity) level.getBlockEntity(pos);
+        var ret = storageBoxBlockEntity.rightClickEvent(level, player) ? InteractionResult.SUCCESS : InteractionResult.PASS;
         return ret;
 
     }
 
     @Override
     //left click
-    public void attack(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        if (world.isClientSide)
+    public void attack(BlockState state, Level level, BlockPos pos, Player player) {
+        if (level.isClientSide)
             return;
 
-        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getBlockEntity(pos);
-        tile.leftClickEvent(player);
+        var storageBoxBlockEntity = (BaseStorageBoxBlockEntity) level.getBlockEntity(pos);
+        storageBoxBlockEntity.leftClickEvent(player);
     }
 
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return newBlockEntity(world);
-    }
-
-    @Override
-    public TileEntity newBlockEntity(IBlockReader worldIn) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         try {
-            return StorageBoxTypeTileEntity.classMap.get(type).newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            return StorageBoxTypeBlockEntity.classMap.get(type).getDeclaredConstructor(BlockPos.class, BlockState.class).newInstance(pos, state);
+        } catch (InstantiationException
+                | IllegalAccessException
+                | IllegalArgumentException
+                | InvocationTargetException
+                | NoSuchMethodException
+                | SecurityException e) {
             e.printStackTrace();
-            return new BaseStorageBoxTileEntity(type);
+            return new BaseStorageBoxBlockEntity(type, pos, state);
         }
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction) {
+    public BlockState rotate(BlockState state, LevelAccessor level, BlockPos pos, Rotation direction) {
         return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
     }
 
@@ -137,13 +137,13 @@ public class StorageBoxBlock extends ContainerBlock {
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
+    @Nullable
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, StorageBoxTypeBlockEntity.map.get(type), BaseStorageBoxBlockEntity::tickFunc);
     }
 
 }

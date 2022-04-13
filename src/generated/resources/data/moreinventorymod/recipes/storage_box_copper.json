@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MSM",
+    "MWM",
+    "MSM"
+  ],
+  "key": {
+    "M": {
+      "item": "minecraft:copper_ingot"
+    },
+    "S": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "W": {
+      "item": "moreinventorymod:storage_box_wood"
+    }
+  },
+  "result": {
+    "item": "moreinventorymod:storage_box_copper",
+    "count": 3
+  }
+}

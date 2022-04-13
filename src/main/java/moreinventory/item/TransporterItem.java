@@ -6,39 +6,37 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import moreinventory.block.StorageBoxBlock;
+import moreinventory.blockentity.BaseStorageBoxBlockEntity;
+import moreinventory.blockentity.storagebox.StorageBoxType;
 import moreinventory.core.MoreInventoryMOD;
-import moreinventory.tileentity.BaseStorageBoxTileEntity;
-import moreinventory.tileentity.storagebox.StorageBoxType;
 import moreinventory.util.MIMUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FurnaceBlock;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FurnaceBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -46,7 +44,7 @@ public class TransporterItem extends Item {
     public TransporterItem() {
         super(new Properties()
                 .durability(40)
-                .tab(MoreInventoryMOD.itemGroup));
+                .tab(MoreInventoryMOD.creativeModeTab));
     }
 
     public static final ArrayList<Block> transportableBlocks = new ArrayList<>();
@@ -74,110 +72,110 @@ public class TransporterItem extends Item {
     }
 
     @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-        World world = context.getLevel();
-        if (world.isClientSide) {
-            return ActionResultType.SUCCESS;
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+        var level = context.getLevel();
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS;
         }
 
-        BlockPos blockPos = context.getClickedPos();
-        BlockState blockState = world.getBlockState(blockPos);
-        Block block = blockState.getBlock();
+        var blockPos = context.getClickedPos();
+        var blockState = level.getBlockState(blockPos);
+        var block = blockState.getBlock();
 
         if (!transportableBlocks.contains(block)) {
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
         }
 
-        if (holdBlock(context)) {
-            setIcon(context);
-            world.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
-            return ActionResultType.SUCCESS;
+        if (this.holdBlock(context)) {
+            this.setIcon(context);
+            level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
 
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
-        World world = context.getLevel();
-        if (world.isClientSide) {
-            return ActionResultType.SUCCESS;
+    public InteractionResult useOn(UseOnContext context) {
+        var level = context.getLevel();
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS;
         }
 
-        ItemStack itemStack = context.getItemInHand();
+        var itemStack = context.getItemInHand();
         if (itemStack.getTag().contains(tagKey)) {
-            CompoundNBT nbt = itemStack.getTag();
+            var nbt = itemStack.getTag();
 
             if (nbt == null) {
-                return ActionResultType.PASS;
+                return InteractionResult.PASS;
             }
-            ItemStack tileBlock = ItemStack.of(nbt.getCompound(tagKey));
+            var containerBlock = ItemStack.of(nbt.getCompound(tagKey));
 
-            if (tileBlock == ItemStack.EMPTY) {
-                return ActionResultType.PASS;
+            if (containerBlock.isEmpty()) {
+                return InteractionResult.PASS;
             }
 
             int damage = itemStack.getDamageValue() + 1;
-            if (placeBlock(context, tileBlock)) {
-                PlayerEntity player = context.getPlayer();
+            if (this.placeBlock(context, containerBlock)) {
+                var player = context.getPlayer();
 
                 itemStack.hurtAndBreak(damage, player, (tmp) -> {
-                    tmp.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
-                    world.playSound(tmp, context.getClickedPos(), SoundEvents.WOOD_BREAK, SoundCategory.PLAYERS, 1.5F, 0.85F);
+                    tmp.broadcastBreakEvent(EquipmentSlot.MAINHAND);
+                    level.playSound(tmp, context.getClickedPos(), SoundEvents.WOOD_BREAK, SoundSource.PLAYERS, 1.5F, 0.85F);
                 });
             }
         }
 
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
         if (stack.getTag() == null) {
             return;
         }
-        CompoundNBT contents = stack.getTag().getCompound(tagKey);
+        var contents = stack.getTag().getCompound(tagKey);
 
-        ItemStack hold = ItemStack.of(contents);
+        var hold = ItemStack.of(contents);
         if (hold.getItem() != Items.AIR) {
-            IFormattableTextComponent iformattabletextcomponent = hold.getDisplayName().copy();
-            tooltip.add(iformattabletextcomponent.withStyle(TextFormatting.AQUA));
+            var iformattabletextcomponent = hold.getDisplayName().copy();
+            tooltip.add(iformattabletextcomponent.withStyle(ChatFormatting.AQUA));
         }
         if (hold.getItem() instanceof BlockItem && ((BlockItem) hold.getItem()).getBlock() instanceof StorageBoxBlock) {
-            CompoundNBT compoundnbt = stack.getTag();
-            if (compoundnbt.contains(BaseStorageBoxTileEntity.tagKeyContents)) {
-                CompoundNBT nbt = compoundnbt.getCompound(BaseStorageBoxTileEntity.tagKeyContents);
-                ItemStack storageContents = ItemStack.of(nbt);
-                if (storageContents.getItem() != ItemStack.EMPTY.getItem()) {
-                    StorageBoxType type = StorageBoxType.valueOf(compoundnbt.getString(BaseStorageBoxTileEntity.tagKeyTypeName));
-                    NonNullList<ItemStack> storageItems = NonNullList.withSize(BaseStorageBoxTileEntity.getStorageStackSize(type), ItemStack.EMPTY);
+            var compoundnbt = stack.getTag();
+            if (compoundnbt.contains(BaseStorageBoxBlockEntity.tagKeyContents)) {
+                var nbt = compoundnbt.getCompound(BaseStorageBoxBlockEntity.tagKeyContents);
+                var storageContents = ItemStack.of(nbt);
+                if (!storageContents.isEmpty()) {
+                    var type = StorageBoxType.valueOf(compoundnbt.getString(BaseStorageBoxBlockEntity.tagKeyTypeName));
+                    var storageItems = NonNullList.withSize(BaseStorageBoxBlockEntity.getStorageStackSize(type), ItemStack.EMPTY);
                     MIMUtils.readNonNullListShort(compoundnbt, storageItems);
                     int count = 0;
-                    for (ItemStack storageItem : storageItems) {
+                    for (var storageItem : storageItems) {
                         if (storageItem.getItem() == storageContents.getItem()) {
                             count += storageItem.getCount();
                         }
                     }
-                    IFormattableTextComponent iformattabletextcomponent = storageContents.getDisplayName().copy();
+                    var iformattabletextcomponent = storageContents.getDisplayName().copy();
                     iformattabletextcomponent.append(" x").append(String.valueOf(count));
-                    tooltip.add(iformattabletextcomponent.withStyle(TextFormatting.WHITE));
+                    tooltip.add(iformattabletextcomponent.withStyle(ChatFormatting.WHITE));
                 }
             }
         } else {
-            CompoundNBT compoundnbt = stack.getTag();
+            var compoundnbt = stack.getTag();
             if (compoundnbt.contains("Items", 9)) {
-                NonNullList<ItemStack> nonnulllist = NonNullList.withSize(27, ItemStack.EMPTY);
-                ItemStackHelper.loadAllItems(compoundnbt, nonnulllist);
+                var nonnulllist = NonNullList.withSize(27, ItemStack.EMPTY);
+                ContainerHelper.loadAllItems(compoundnbt, nonnulllist);
                 int i = 0;
                 int j = 0;
 
-                for (ItemStack itemstack : nonnulllist) {
+                for (var itemstack : nonnulllist) {
                     if (!itemstack.isEmpty()) {
                         ++j;
                         if (i <= 4) {
                             ++i;
-                            IFormattableTextComponent iformattabletextcomponent = itemstack.getDisplayName().copy();
+                            var iformattabletextcomponent = itemstack.getDisplayName().copy();
                             iformattabletextcomponent.append(" x").append(String.valueOf(itemstack.getCount()));
                             tooltip.add(iformattabletextcomponent);
                         }
@@ -185,44 +183,44 @@ public class TransporterItem extends Item {
                 }
 
                 if (j - i > 0) {
-                    tooltip.add((new TranslationTextComponent("container.shulkerBox.more", j - i)).withStyle(TextFormatting.ITALIC));
+                    tooltip.add((new TranslatableComponent("container.shulkerBox.more", j - i)).withStyle(ChatFormatting.ITALIC));
                 }
             }
         }
 
     }
 
-    private boolean holdBlock(ItemUseContext context) {
-        ItemStack itemStack = context.getItemInHand();
-        World world = context.getLevel();
-        BlockPos blockPos = context.getClickedPos();
-        BlockState blockState = world.getBlockState(blockPos);
+    private boolean holdBlock(UseOnContext context) {
+        var itemStack = context.getItemInHand();
+        var level = context.getLevel();
+        var blockPos = context.getClickedPos();
+        var blockState = level.getBlockState(blockPos);
 
-        TileEntity tile = world.getBlockEntity(blockPos);
-        if (tile == null || !(tile instanceof IInventory) || itemStack.getTag().contains(tagKey)) {
+        var blockEntity = level.getBlockEntity(blockPos);
+        if (blockEntity == null || !(blockEntity instanceof Container) || itemStack.getTag().contains(tagKey)) {
             return false;
         }
-        if (tile != null && checkMatryoshka((IInventory) tile)) {
-            CompoundNBT nbt = itemStack.getOrCreateTag();
-            tile.save(nbt);
+        if (blockEntity != null && checkMatryoshka((Container) blockEntity)) {
+            var nbt = itemStack.getOrCreateTag();
+            blockEntity.save(nbt);
 
-            ItemStack tileBlock = new ItemStack(blockState.getBlock(), 1);
+            var containerBlock = new ItemStack(blockState.getBlock(), 1);
 
-            IInventory inventory = (IInventory) tile;
+            var inventory = (Container) blockEntity;
             inventory.clearContent();
 
             if (nbt.contains("RecipesUsed")) {
                 nbt.remove("RecipesUsed");
             }
 
-            CompoundNBT tag = new CompoundNBT();
-            if (tileBlock != ItemStack.EMPTY) {
-                tileBlock.save(tag);
+            var tag = new CompoundTag();
+            if (containerBlock != ItemStack.EMPTY) {
+                containerBlock.save(tag);
             }
             itemStack.setTag(tag);
 
             nbt.put(tagKey, tag);
-            nbt.put(blockStateKey, NBTUtil.writeBlockState(blockState));
+            nbt.put(blockStateKey, NbtUtils.writeBlockState(blockState));
 
             itemStack.setTag(nbt);
 
@@ -231,56 +229,54 @@ public class TransporterItem extends Item {
         return false;
     }
 
-    private boolean checkMatryoshka(IInventory inventory) {
+    private boolean checkMatryoshka(Container inventory) {
         ItemStack itemstack;
 
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             itemstack = inventory.getItem(i);
 
-            if (itemstack.getItem() == TransporterItem.this && itemstack.getTag().contains(tagKey)
-            //                    || itemstack.getItem() == MoreInventoryMod.pouch && !checkMatryoshka(new InventoryPouch(itemstack))
-            ) {
+            if (itemstack.getItem() == TransporterItem.this && itemstack.getTag().contains(tagKey)) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean placeBlock(ItemUseContext context, ItemStack tileBlock) {
+    private boolean placeBlock(UseOnContext context, ItemStack containerBlock) {
 
-        World world = context.getLevel();
-        Block block = Block.byItem(tileBlock.getItem());
-        ItemStack itemStack = context.getItemInHand();
-        BlockPos blockPos = context.getClickedPos();
-        BlockRayTraceResult blockRayTraceResult = new BlockRayTraceResult(context.getClickLocation(), context.getClickedFace(), blockPos, context.isInside());
-        BlockItemUseContext blockItemUseContext = new BlockItemUseContext(context.getPlayer(), context.getHand(), tileBlock, blockRayTraceResult);
+        var level = context.getLevel();
+        var block = Block.byItem(containerBlock.getItem());
+        var itemStack = context.getItemInHand();
+        var blockPos = context.getClickedPos();
+        var blockHitResult = new BlockHitResult(context.getClickLocation(), context.getClickedFace(), blockPos, context.isInside());
+        var blockPlaceContext = new BlockPlaceContext(context.getPlayer(), context.getHand(), containerBlock, blockHitResult);
 
-        if (blockItemUseContext.canPlace()) {
-            boolean isReplaceable = world.getBlockState(blockPos).canBeReplaced(new BlockItemUseContext(context));
+        if (blockPlaceContext.canPlace()) {
+            boolean isReplaceable = level.getBlockState(blockPos).canBeReplaced(new BlockPlaceContext(context));
 
-            TileEntity tile;
+            BlockEntity blockEntity;
             BlockPos setBlockPos = blockPos;
             if (!isReplaceable) {
                 setBlockPos = blockPos.relative(context.getClickedFace());
             }
-            BlockState state = readBlockState(context, tileBlock);
+            var state = this.readBlockState(context, containerBlock);
 
-            world.setBlockAndUpdate(setBlockPos, state);
-            tile = world.getBlockEntity(setBlockPos);
-            if (tile == null) {
-                world.setBlockAndUpdate(setBlockPos, Blocks.AIR.defaultBlockState());
+            level.setBlockAndUpdate(setBlockPos, state);
+            blockEntity = level.getBlockEntity(setBlockPos);
+            if (blockEntity == null) {
+                level.setBlockAndUpdate(setBlockPos, Blocks.AIR.defaultBlockState());
                 return false;
             }
 
-            CompoundNBT nbt = itemStack.getOrCreateTag();
+            var nbt = itemStack.getOrCreateTag();
 
-            nbt.putInt("x", tile.getBlockPos().getX());
-            nbt.putInt("y", tile.getBlockPos().getY());
-            nbt.putInt("z", tile.getBlockPos().getZ());
-            tile.load(tile.getBlockState(), nbt);
+            nbt.putInt("x", blockEntity.getBlockPos().getX());
+            nbt.putInt("y", blockEntity.getBlockPos().getY());
+            nbt.putInt("z", blockEntity.getBlockPos().getZ());
+            blockEntity.load(nbt);
 
-            block.setPlacedBy(world, tile.getBlockPos(), tile.getBlockState(), context.getPlayer(), tileBlock);
-            tile.setChanged();
+            block.setPlacedBy(level, blockEntity.getBlockPos(), blockEntity.getBlockState(), context.getPlayer(), containerBlock);
+            blockEntity.setChanged();
             itemStack.setTag(null);
             return true;
         }
@@ -288,28 +284,27 @@ public class TransporterItem extends Item {
 
     }
 
-    private BlockState readBlockState(ItemUseContext context, ItemStack tileBlock) {
-        ItemStack stack = context.getItemInHand();
-        CompoundNBT blockStateTag = stack.getTag().getCompound(blockStateKey);
+    private BlockState readBlockState(UseOnContext context, ItemStack containerBlock) {
+        var stack = context.getItemInHand();
+        var blockStateTag = stack.getTag().getCompound(blockStateKey);
 
-        Block block = Block.byItem(tileBlock.getItem());
-        BlockState state = block.getStateForPlacement(new BlockItemUseContext(context));
+        var block = Block.byItem(containerBlock.getItem());
+        var state = block.getStateForPlacement(new BlockPlaceContext(context));
 
         if (block instanceof FurnaceBlock) {
-            BlockState furnaceState = NBTUtil.readBlockState(blockStateTag);
+            var furnaceState = NbtUtils.readBlockState(blockStateTag);
             state = state.setValue(FurnaceBlock.LIT, furnaceState.getValue(FurnaceBlock.LIT));
         }
         return state;
     }
 
-    private void setIcon(ItemUseContext context) {
-        BlockState blockState = context.getLevel().getBlockState(context.getClickedPos());
-        Block block = blockState.getBlock();
+    private void setIcon(UseOnContext context) {
+        var blockState = context.getLevel().getBlockState(context.getClickedPos());
+        var block = blockState.getBlock();
         int num = transportableBlocks.contains(block) ? transportableBlocks.indexOf(block) + 1 : 0;
         if (block == Blocks.FURNACE && blockState.getValue(FurnaceBlock.LIT)) {
             num = 99;
         }
         MIMUtils.setIcon(context.getItemInHand(), (byte) num);
     }
-
 }

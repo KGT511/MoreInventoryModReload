@@ -3,17 +3,18 @@ package moreinventory.data;
 import java.util.function.Consumer;
 
 import moreinventory.block.Blocks;
-import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.Tags.IOptionalNamedTag;
 
 public class RecipesGenerator extends RecipeProvider {
     public RecipesGenerator(DataGenerator generatorIn) {
@@ -21,7 +22,7 @@ public class RecipesGenerator extends RecipeProvider {
     }
 
     @Override
-    protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         ShapedRecipeBuilder.shaped(Blocks.CATCHALL)
                 .pattern("P P")
                 .pattern("PCP")
@@ -53,7 +54,7 @@ public class RecipesGenerator extends RecipeProvider {
         registerStorageBoxRecipe(consumer, Blocks.DIAMOND_STORAGE_BOX, Tags.Items.GEMS_DIAMOND);
         registerStorageBoxRecipe(consumer, Blocks.EMERALD_STORAGE_BOX, Tags.Items.GEMS_EMERALD);
 
-        //        registerStorageBoxRecipe(consumer, Blocks.COPPER_STORAGE_BOX, Items.COPPER_INGOT);
+        registerStorageBoxRecipe(consumer, Blocks.COPPER_STORAGE_BOX, Items.COPPER_INGOT);
         //        registerStorageBoxRecipe(consumer, Blocks.TIN_STORAGE_BOX, Items.IRON_INGOT);
         //        registerStorageBoxRecipe(consumer, Blocks.BRONZE_STORAGE_BOX, Items.IRON_INGOT);
         //        registerStorageBoxRecipe(consumer, Blocks.SILVER_STORAGE_BOX, Items.IRON_INGOT);
@@ -100,11 +101,15 @@ public class RecipesGenerator extends RecipeProvider {
                 .save(consumer);
     }
 
-    private void registerStorageBoxRecipe(Consumer<IFinishedRecipe> consumer, Block block, IOptionalNamedTag<Item> ingotsIron) {
-        registerStorageBoxRecipe(consumer, block, Ingredient.of(ingotsIron));
+    private void registerStorageBoxRecipe(Consumer<FinishedRecipe> consumer, Block block, Tag<Item> material) {
+        registerStorageBoxRecipe(consumer, block, Ingredient.of(material));
     }
 
-    private void registerStorageBoxRecipe(Consumer<IFinishedRecipe> consumer, Block block, Ingredient material) {
+    private void registerStorageBoxRecipe(Consumer<FinishedRecipe> consumer, Block block, ItemLike material) {
+        registerStorageBoxRecipe(consumer, block, Ingredient.of(material));
+    }
+
+    private void registerStorageBoxRecipe(Consumer<FinishedRecipe> consumer, Block block, Ingredient material) {
         ShapedRecipeBuilder.shaped(block, 3)
                 .pattern("MSM")
                 .pattern("MWM")

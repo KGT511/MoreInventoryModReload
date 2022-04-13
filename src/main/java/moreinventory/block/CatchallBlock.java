@@ -1,141 +1,126 @@
 package moreinventory.block;
 
-import moreinventory.tileentity.CatchallTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ToolType;
-import net.minecraftforge.fml.network.NetworkHooks;
+import moreinventory.blockentity.CatchallBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
-public class CatchallBlock extends ContainerBlock {
+public class CatchallBlock extends BaseEntityBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     protected static final VoxelShape insideShape = Block.box(1.0D, 1.0D, 1.0D, 15.0D, 12.0D, 15.0D);
     protected static final VoxelShape renderShape = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
-    protected static final VoxelShape shape = VoxelShapes.join(renderShape, insideShape, IBooleanFunction.ONLY_FIRST);
+    protected static final VoxelShape shape = Shapes.join(renderShape, insideShape, BooleanOp.ONLY_FIRST);
 
     public CatchallBlock() {
-        super(Properties.of(Material.WOOD)
+        super(Properties.of(Material.WOOD, MaterialColor.WOOD)
                 .sound(SoundType.WOOD)
-                .strength(1.0F, 5.0F)
-                .harvestLevel(0)
-                .harvestTool(ToolType.AXE));
+                .strength(1.0F, 5.0F));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
-            TileEntity tileentity = world.getBlockEntity(pos);
-            if (tileentity instanceof IInventory) {
-                InventoryHelper.dropContents(world, pos, (IInventory) tileentity);
-                world.updateNeighbourForOutputSignal(pos, this);
+            var blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof Container) {
+                Containers.dropContents(level, pos, (Container) blockEntity);
+                level.updateNeighbourForOutputSignal(pos, this);
             }
-            super.onRemove(state, world, pos, newState, isMoving);
+            super.onRemove(state, level, pos, newState, isMoving);
         }
     }
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (world.isClientSide) {
-            return ActionResultType.SUCCESS;
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS;
         }
 
-        CatchallTileEntity tile = ((CatchallTileEntity) world.getBlockEntity(pos));
-        if (tile != null) {
-            if (!player.isShiftKeyDown() && tile.transferTo(player)) {
-                BlockState newState = world.getBlockState(pos);
-                world.sendBlockUpdated(pos, state, newState, 0);
-            } else {
-                INamedContainerProvider namedContainerProvider = this.getMenuProvider(state, world, pos);
-                if (namedContainerProvider != null) {
-                    ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
-                    NetworkHooks.openGui(serverPlayerEntity, namedContainerProvider,
-                            (packetBuffer -> {
-                                packetBuffer.writeBlockPos(pos);
-                            }));
-                }
+        var catchAllBlockEntity = ((CatchallBlockEntity) level.getBlockEntity(pos));
+        if (!player.isShiftKeyDown() && catchAllBlockEntity.transferTo(player)) {
+            var newState = level.getBlockState(pos);
+            level.sendBlockUpdated(pos, state, newState, 0);
+        } else {
+            var namedContainerProvider = this.getMenuProvider(state, level, pos);
+            if (namedContainerProvider != null) {
+                var serverPlayerEntity = (ServerPlayer) player;
+                NetworkHooks.openGui(serverPlayerEntity, namedContainerProvider,
+                        (packetBuffer -> {
+                            packetBuffer.writeBlockPos(pos);
+                        }));
             }
         }
 
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public VoxelShape getOcclusionShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter worldIn, BlockPos pos) {
         return renderShape;
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return renderShape;
     }
 
     @Override
-    public VoxelShape getInteractionShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    public VoxelShape getInteractionShape(BlockState state, BlockGetter worldIn, BlockPos pos) {
         return insideShape;
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
-    }
-
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return newBlockEntity(world);
-    }
-
-    @Override
-    public TileEntity newBlockEntity(IBlockReader world) {
-        return new CatchallTileEntity();
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction) {
+    public BlockState rotate(BlockState state, LevelAccessor world, BlockPos pos, Rotation direction) {
         return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new CatchallBlockEntity(pos, state);
     }
 }

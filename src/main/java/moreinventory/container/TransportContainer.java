@@ -1,96 +1,95 @@
 package moreinventory.container;
 
 import moreinventory.block.Blocks;
-import moreinventory.tileentity.BaseTransportTileEntity;
-import moreinventory.tileentity.ImporterTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntReferenceHolder;
+import moreinventory.blockentity.BaseTransportBlockEntity;
+import moreinventory.blockentity.ImporterBlockEntity;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.DataSlot;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class TransportContainer extends Container {
+public class TransportContainer extends AbstractContainerMenu {
 
-    public static TransportContainer createContainerClientSide(int windowID, PlayerInventory playerInventory, PacketBuffer extraData) {
-        BaseTransportTileEntity tile = (BaseTransportTileEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos());
-        return new TransportContainer(windowID, playerInventory, tile);
+    public static TransportContainer createContainerClientSide(int windowID, Inventory playerInventory, FriendlyByteBuf extraData) {
+        var blockEntity = (BaseTransportBlockEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos());
+        return new TransportContainer(windowID, playerInventory, blockEntity);
     }
 
-    public final int slotSize = BaseTransportTileEntity.inventorySize;
+    public final int slotSize = BaseTransportBlockEntity.inventorySize;
 
-    private BaseTransportTileEntity transportManager;
+    private BaseTransportBlockEntity transportBlockEntity;
 
-    public TransportContainer(int windowID, PlayerInventory playerInventory, BaseTransportTileEntity tile) {
-        super(Containers.TRANSPORT_MANAGER_CONTAINER_TYPE, windowID);
-        this.transportManager = tile;
+    public TransportContainer(int windowID, Inventory playerInventory, BaseTransportBlockEntity blockEntity) {
+        super(Containers.TRANSPORT_CONTAINER_TYPE, windowID);
+        this.transportBlockEntity = blockEntity;
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                this.addSlot(new Slot(tile, j + i * 3, 54 + 8 + j * 18, 17 + i * 18));
+                this.addSlot(new Slot(blockEntity, j + i * 3, 54 + 8 + j * 18, 17 + i * 18));
             }
         }
 
         this.bindPlayerInventory(playerInventory);
-        if (tile instanceof ImporterTileEntity) {
-            this.trackAllIntFields((ImporterTileEntity) tile, ImporterTileEntity.Val.values().length);
+        if (blockEntity instanceof ImporterBlockEntity) {
+            this.trackAllIntFields((ImporterBlockEntity) blockEntity, ImporterBlockEntity.Val.values().length);
         }
     }
 
-    protected void bindPlayerInventory(PlayerInventory player) {
+    protected void bindPlayerInventory(Inventory player) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                this.addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
         for (int i = 0; i < 9; i++) {
-            addSlot(new Slot(player, i, 8 + i * 18, 138 + 4));
+            this.addSlot(new Slot(player, i, 8 + i * 18, 138 + 4));
         }
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
-        Block block = (transportManager instanceof ImporterTileEntity ? Blocks.IMPORTER : Blocks.EXPORTER);
-        return stillValid(IWorldPosCallable.create(transportManager.getLevel(), transportManager.getBlockPos()), playerIn, block);
+    public boolean stillValid(Player playerIn) {
+        var block = (transportBlockEntity instanceof ImporterBlockEntity ? Blocks.IMPORTER : Blocks.EXPORTER);
+        return stillValid(ContainerLevelAccess.create(transportBlockEntity.getLevel(), transportBlockEntity.getBlockPos()), playerIn, block);
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int slot) {
+    public ItemStack quickMoveStack(Player player, int slot) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
+    public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
         if (0 <= slotId && slotId < 9) {
             if (dragType == 0) {
-                ItemStack setItem = player.inventory.getCarried().copy();
+                var setItem = player.getInventory().player.containerMenu.getCarried().copy();
                 setItem.setCount(1);
-                transportManager.setItem(slotId, setItem);
+                transportBlockEntity.setItem(slotId, setItem);
             } else {
-                transportManager.removeItemNoUpdate(slotId);
+                transportBlockEntity.removeItemNoUpdate(slotId);
             }
-            return player.inventory.getCarried();
-        } else
-            return super.clicked(slotId, dragType, clickTypeIn, player);
+        } else {
+            super.clicked(slotId, dragType, clickTypeIn, player);
+        }
     }
 
-    public BaseTransportTileEntity getTile() {
-        return transportManager;
+    public BaseTransportBlockEntity getBlockEntity() {
+        return transportBlockEntity;
     }
 
-    protected void trackAllIntFields(ImporterTileEntity blockEntity, int valCount) {
+    protected void trackAllIntFields(ImporterBlockEntity blockEntity, int valCount) {
         for (int f = 0; f < valCount; f++) {
             trackIntField(blockEntity, f);
         }
     }
 
-    protected void trackIntField(ImporterTileEntity blockEntity, int id) {
-        addDataSlot(new IntReferenceHolder() {
+    protected void trackIntField(ImporterBlockEntity blockEntity, int id) {
+        addDataSlot(new DataSlot() {
 
             @Override
             public int get() {

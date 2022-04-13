@@ -12,7 +12,7 @@ public class MIMLog {
     private static boolean configured;
 
     private static void configureLogging() {
-        log.myLog = LogManager.getLogger("MoreInventoryModReload");
+        log.myLog = LogManager.getLogger("MoreInventoryMod");
 
         configured = true;
     }

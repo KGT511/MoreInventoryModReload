@@ -4,6 +4,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import moreinventory.block.Blocks;
+import moreinventory.blockentity.BlockEntities;
+import moreinventory.blockentity.storagebox.StorageBoxInventorySize;
+import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
+import moreinventory.client.model.ModelLayers;
 import moreinventory.client.renderer.CatchallRenderer;
 import moreinventory.client.renderer.StorageBoxRenderer;
 import moreinventory.client.renderer.TransportRenderer;
@@ -12,36 +16,36 @@ import moreinventory.client.screen.TransportContainerScreen;
 import moreinventory.container.Containers;
 import moreinventory.item.TransporterItem;
 import moreinventory.network.ServerboundImporterUpdatePacket;
-import moreinventory.tileentity.TileEntities;
-import moreinventory.tileentity.storagebox.StorageBoxInventorySize;
-import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
-import net.minecraft.client.gui.ScreenManager;
+import moreinventory.util.MIMLog;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
 
-@Mod(MoreInventoryMOD.MODID)
+@Mod(MoreInventoryMOD.MOD_ID)
 public class MoreInventoryMOD {
-    public static final String MODID = "moreinventorymod";
+    public static final String MOD_ID = "moreinventorymod";
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final ItemGroup itemGroup = new MoreInventoryMODItemGroup();
+    public static final CreativeModeTab creativeModeTab = new MoreInventoryMODCreativeModeTab();
     //    public static final SimpleNetworkWrapper network = new SimpleNetworkWrapper(MOD_ID);
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
-            .named(new ResourceLocation(MODID, "main"))
+            .named(new ResourceLocation(MOD_ID, "main"))
             .networkProtocolVersion(() -> PROTOCOL_VERSION)
             .clientAcceptedVersions(PROTOCOL_VERSION::equals)
             .serverAcceptedVersions(PROTOCOL_VERSION::equals)
@@ -59,48 +63,56 @@ public class MoreInventoryMOD {
 
     private void setup(final FMLCommonSetupEvent event) {
         LOGGER.info("SETUP START");
-
-        init();
+        MoreInventoryMOD.init();
 
         LOGGER.info("SETUP END");
     }
 
     public static void init() {
-        TransporterItem.setTransportableBlocks();
         StorageBoxInventorySize.init();
-        StorageBoxTypeTileEntity.init();
-
+        StorageBoxTypeBlockEntity.init();
+        TransporterItem.setTransportableBlocks();
     }
 
     public static void initNetwork() {
-        int id = 0;
+        var id = 0;
         CHANNEL.messageBuilder(ServerboundImporterUpdatePacket.class, id++)
                 .encoder(ServerboundImporterUpdatePacket::encode).decoder(ServerboundImporterUpdatePacket::decode)
                 .consumer(ServerboundImporterUpdatePacket::handle)
                 .add();
     }
 
-    private void doClientStuff(final FMLClientSetupEvent event) {
-        // do something that can only be done on the client
-        //bind renderers and gui factories
-        ClientRegistry.bindTileEntityRenderer(TileEntities.CATCHALL_TILE_TYPE, CatchallRenderer::new);
-        StorageBoxTypeTileEntity.map.forEach((key, val) -> {
-            ClientRegistry.bindTileEntityRenderer(val, StorageBoxRenderer::new);
-        });
-        RenderTypeLookup.setRenderLayer(Blocks.GLASS_STORAGE_BOX, RenderType.translucent());
-        ClientRegistry.bindTileEntityRenderer(TileEntities.IMPORTER_TILE_TYPE, TransportRenderer::new);
-        ClientRegistry.bindTileEntityRenderer(TileEntities.EXPORTER_TILE_TYPE, TransportRenderer::new);
-
-        ScreenManager.register(Containers.CATCHALL_CONTAINER_TYPE, CatchallContainerScreen::new);
-        ScreenManager.register(Containers.TRANSPORT_MANAGER_CONTAINER_TYPE, TransportContainerScreen::new);
-    }
-
     private void enqueueIMC(final InterModEnqueueEvent event) {
         // some example code to dispatch IMC to another mod
+        MIMLog.warning("enqueueIMC");
     }
 
     private void processIMC(final InterModProcessEvent event) {
         // some example code to receive and process InterModComms from other mods
+        MIMLog.warning("processIMC");
+    }
+
+    private void doClientStuff(final FMLClientSetupEvent event) {
+        // do something that can only be done on the client
+        //bind renderers and gui factories
+        BlockEntityRenderers.register(BlockEntities.CATCHALL_BLOCK_ENTITY_TYPE, CatchallRenderer::new);
+        StorageBoxTypeBlockEntity.map.forEach((key, val) -> {
+            BlockEntityRenderers.register(val, StorageBoxRenderer::new);
+        });
+        ItemBlockRenderTypes.setRenderLayer(Blocks.GLASS_STORAGE_BOX, RenderType.translucent());
+        BlockEntityRenderers.register(BlockEntities.IMPORTER_BLOCK_ENTITY_TYPE, TransportRenderer::new);
+        BlockEntityRenderers.register(BlockEntities.EXPORTER_BLOCK_ENTITY_TYPE, TransportRenderer::new);
+
+        MenuScreens.register(Containers.CATCHALL_CONTAINER_TYPE, CatchallContainerScreen::new);
+        MenuScreens.register(Containers.TRANSPORT_CONTAINER_TYPE, TransportContainerScreen::new);
+
+        ForgeHooksClient.registerLayerDefinition(ModelLayers.TRANPORT, TransportRenderer::createBodyLayer);
+    }
+
+    @SubscribeEvent
+    public static void registerLayerDefinition(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        MIMLog.warning("render\n\n");
+
     }
 
     @SubscribeEvent

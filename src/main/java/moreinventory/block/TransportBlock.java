@@ -2,107 +2,110 @@ package moreinventory.block;
 
 import javax.annotation.Nullable;
 
-import moreinventory.tileentity.ExporterTileEntity;
-import moreinventory.tileentity.ImporterTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import moreinventory.blockentity.BaseTransportBlockEntity;
+import moreinventory.blockentity.BlockEntities;
+import moreinventory.blockentity.ExporterBlockEntity;
+import moreinventory.blockentity.ImporterBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
-public class TransportBlock extends ContainerBlock {
+public class TransportBlock extends BaseEntityBlock {
 
     public static final DirectionProperty FACING_IN = DirectionProperty.create("facing_in", Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP, Direction.DOWN);;
     public static final DirectionProperty FACING_OUT = DirectionProperty.create("facing_out", Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP, Direction.DOWN);;
     private boolean isImporter;
 
     private static final VoxelShape SHAPE_CENTER = Block.box(7.0D, 7.0D, 7.0D, 9.0D, 9.0D, 9.0D);
-    private static final VoxelShape SHAPE_IN_DOWN = VoxelShapes.or(
+    private static final VoxelShape SHAPE_IN_DOWN = Shapes.or(
             Block.box(2.0D, 0.0D, 2.0D, 14.0D, 1.0D, 14.0D),
             Block.box(4.0D, 1.0D, 4.0D, 12.0D, 2.0D, 12.0D),
             Block.box(5.0D, 3.0D, 5.0D, 11.0D, 4.0D, 11.0D),
             Block.box(6.0D, 5.0D, 6.0D, 10.0D, 6.0D, 10.0D));
-    private static final VoxelShape SHAPE_IN_UP = VoxelShapes.or(
+    private static final VoxelShape SHAPE_IN_UP = Shapes.or(
             Block.box(2.0D, 15.0D, 2.0D, 14.0D, 16.0D, 14.0D),
             Block.box(4.0D, 14.0D, 4.0D, 12.0D, 15.0D, 12.0D),
             Block.box(5.0D, 12.0D, 5.0D, 11.0D, 13.0D, 11.0D),
             Block.box(6.0D, 10.0D, 6.0D, 10.0D, 11.0D, 10.0D));
-    private static final VoxelShape SHAPE_IN_NORTH = VoxelShapes.or(
+    private static final VoxelShape SHAPE_IN_NORTH = Shapes.or(
             Block.box(2.0D, 2.0D, 0.0D, 14.0D, 14.0D, 1.0D),
             Block.box(4.0D, 4.0D, 1.0D, 12.0D, 12.0D, 2.0D),
             Block.box(5.0D, 5.0D, 3.0D, 11.0D, 11.0D, 4.0D),
             Block.box(6.0D, 6.0D, 5.0D, 10.0D, 10.0D, 6.0D));
-    private static final VoxelShape SHAPE_IN_SOUTH = VoxelShapes.or(
+    private static final VoxelShape SHAPE_IN_SOUTH = Shapes.or(
             Block.box(2.0D, 2.0D, 15.0D, 14.0D, 14.0D, 16.0D),
             Block.box(4.0D, 4.0D, 14.0D, 12.0D, 12.0D, 15.0D),
             Block.box(5.0D, 5.0D, 12.0D, 11.0D, 11.0D, 13.0D),
             Block.box(6.0D, 6.0D, 11.0D, 10.0D, 10.0D, 16.0D));
-    private static final VoxelShape SHAPE_IN_WEST = VoxelShapes.or(
+    private static final VoxelShape SHAPE_IN_WEST = Shapes.or(
             Block.box(0.0D, 2.0D, 2.0D, 1.0D, 14.0D, 14.0D),
             Block.box(1.0D, 4.0D, 4.0D, 2.0D, 12.0D, 12.0D),
             Block.box(3.0D, 5.0D, 5.0D, 4.0D, 11.0D, 11.0D),
             Block.box(5.0D, 6.0D, 6.0D, 6.0D, 10.0D, 10.0D));
-    private static final VoxelShape SHAPE_IN_EAST = VoxelShapes.or(
+    private static final VoxelShape SHAPE_IN_EAST = Shapes.or(
             Block.box(15.0D, 2.0D, 2.0D, 16.0D, 14.0D, 14.0D),
             Block.box(14.0D, 4.0D, 4.0D, 15.0D, 12.0D, 12.0D),
             Block.box(12.0D, 5.0D, 5.0D, 13.0D, 11.0D, 11.0D),
             Block.box(12.0D, 6.0D, 6.0D, 13.0D, 10.0D, 10.0D));
 
-    private static final VoxelShape SHAPE_OUT_DOWN = VoxelShapes.or(
+    private static final VoxelShape SHAPE_OUT_DOWN = Shapes.or(
             Block.box(7.0D, 0.0D, 7.0D, 9.0D, 2.0D, 9.0D),
             Block.box(6.0D, 2.0D, 6.0D, 10.0D, 3.0D, 10.0D),
             Block.box(4.0D, 3.0D, 4.0D, 12.0D, 4.0D, 12.0D),
             Block.box(5.0D, 4.0D, 5.0D, 11.0D, 5.0D, 11.0D),
             Block.box(6.0D, 5.0D, 6.0D, 10.0D, 6.0D, 10.0D));
-    private static final VoxelShape SHAPE_OUT_UP = VoxelShapes.or(
+    private static final VoxelShape SHAPE_OUT_UP = Shapes.or(
             Block.box(7.0D, 14.0D, 7.0D, 9.0D, 16.0D, 9.0D),
             Block.box(6.0D, 13.0D, 6.0D, 10.0D, 14.0D, 10.0D),
             Block.box(4.0D, 12.0D, 4.0D, 12.0D, 13.0D, 12.0D),
             Block.box(5.0D, 11.0D, 5.0D, 11.0D, 12.0D, 11.0D),
             Block.box(6.0D, 10.0D, 6.0D, 10.0D, 11.0D, 10.0D));
-    private static final VoxelShape SHAPE_OUT_NORTH = VoxelShapes.or(
+    private static final VoxelShape SHAPE_OUT_NORTH = Shapes.or(
             Block.box(7.0D, 7.0D, 0.0D, 9.0D, 9.0D, 2.0D),
             Block.box(6.0D, 6.0D, 2.0D, 10.0D, 10.0D, 3.0D),
             Block.box(4.0D, 4.0D, 3.0D, 12.0D, 12.0D, 4.0D),
             Block.box(5.0D, 5.0D, 4.0D, 11.0D, 11.0D, 5.0D),
             Block.box(6.0D, 6.0D, 5.0D, 10.0D, 10.0D, 6.0D));
-    private static final VoxelShape SHAPE_OUT_SOUTH = VoxelShapes.or(
+    private static final VoxelShape SHAPE_OUT_SOUTH = Shapes.or(
             Block.box(7.0D, 7.0D, 14.0D, 9.0D, 9.0D, 16.0D),
             Block.box(6.0D, 6.0D, 13.0D, 10.0D, 10.0D, 14.0D),
             Block.box(4.0D, 4.0D, 12.0D, 12.0D, 12.0D, 13.0D),
             Block.box(5.0D, 5.0D, 11.0D, 11.0D, 11.0D, 12.0D),
             Block.box(6.0D, 6.0D, 10.0D, 10.0D, 10.0D, 11.0D));
-    private static final VoxelShape SHAPE_OUT_WEST = VoxelShapes.or(
+    private static final VoxelShape SHAPE_OUT_WEST = Shapes.or(
             Block.box(0.0D, 7.0D, 7.0D, 2.0D, 9.0D, 9.0D),
             Block.box(2.0D, 6.0D, 6.0D, 3.0D, 10.0D, 10.0D),
             Block.box(3.0D, 4.0D, 4.0D, 4.0D, 12.0D, 12.0D),
             Block.box(4.0D, 5.0D, 5.0D, 5.0D, 11.0D, 11.0D),
             Block.box(5.0D, 6.0D, 6.0D, 6.0D, 10.0D, 10.0D));
-    private static final VoxelShape SHAPE_OUT_EAST = VoxelShapes.or(
+    private static final VoxelShape SHAPE_OUT_EAST = Shapes.or(
             Block.box(14.0D, 7.0D, 7.0D, 16.0D, 9.0D, 9.0D),
             Block.box(13.0D, 6.0D, 6.0D, 14.0D, 10.0D, 10.0D),
             Block.box(12.0D, 4.0D, 4.0D, 13.0D, 12.0D, 12.0D),
@@ -118,48 +121,45 @@ public class TransportBlock extends ContainerBlock {
     }
 
     @Override
-    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        super.setPlacedBy(world, pos, state, placer, stack);
-        if (!world.isClientSide) {
-            BlockState newState = rotate(state, world, pos, null);
-            world.setBlockAndUpdate(pos, newState);
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(level, pos, state, placer, stack);
+        if (!level.isClientSide) {
+            var newState = this.rotate(state, level, pos, null);
+            level.setBlockAndUpdate(pos, newState);
         }
     }
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (world.isClientSide) {
-            return ActionResultType.SUCCESS;
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS;
         }
         if (!player.isShiftKeyDown()) {
-            INamedContainerProvider namedContainerProvider = this.getMenuProvider(state, world, pos);
-            if (namedContainerProvider != null) {
-                ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
-                NetworkHooks.openGui(serverPlayerEntity, namedContainerProvider,
-                        (packetBuffer -> {
-                            packetBuffer.writeBlockPos(pos);
-                        }));
+            var menuProvider = this.getMenuProvider(state, level, pos);
+            if (menuProvider != null) {
+                var serverPlayerEntity = (ServerPlayer) player;
+                NetworkHooks.openGui(serverPlayerEntity, menuProvider, level.getBlockEntity(pos).getBlockPos());
             }
-        } else if (player.getMainHandItem().getItem() == ItemStack.EMPTY.getItem()) {
+        } else if (player.getMainHandItem().isEmpty()) {
             if (state.getBlock() instanceof TransportBlock) {
-                world.setBlockAndUpdate(pos, ((TransportBlock) state.getBlock()).rotate(world.getBlockState(pos), world, pos, Rotation.CLOCKWISE_90));
+                level.setBlockAndUpdate(pos, ((TransportBlock) state.getBlock()).rotate(level.getBlockState(pos), level, pos, Rotation.CLOCKWISE_90));
             }
         }
 
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return Block.box(1.0D, 1.0D, 1.0D, 15.0D, 15.0D, 15.0D);
     }
 
     @Override
-    public VoxelShape getOcclusionShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        VoxelShape shapeIn = SHAPE_IN_DOWN;
-        VoxelShape shapeOut = SHAPE_OUT_UP;
-        Direction in = state.getValue(FACING_IN);
-        Direction out = state.getValue(FACING_OUT);
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter worldIn, BlockPos pos) {
+        var shapeIn = SHAPE_IN_DOWN;
+        var shapeOut = SHAPE_OUT_UP;
+        var in = state.getValue(FACING_IN);
+        var out = state.getValue(FACING_OUT);
 
         switch (in) {
         case DOWN:
@@ -202,43 +202,43 @@ public class TransportBlock extends ContainerBlock {
             break;
         }
 
-        return VoxelShapes.or(shapeIn, SHAPE_CENTER, shapeOut);
+        return Shapes.or(shapeIn, SHAPE_CENTER, shapeOut);
     }
 
     @Override
-    public VoxelShape getInteractionShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return getOcclusionShape(state, worldIn, pos);
+    public VoxelShape getInteractionShape(BlockState state, BlockGetter worldIn, BlockPos pos) {
+        return this.getOcclusionShape(state, worldIn, pos);
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
-    public TileEntity newBlockEntity(IBlockReader worldIn) {
-        return isImporter ? new ImporterTileEntity() : new ExporterTileEntity();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return isImporter ? new ImporterBlockEntity(pos, state) : new ExporterBlockEntity(pos, state);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING_IN, FACING_OUT);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING_IN, Direction.DOWN).setValue(FACING_OUT, Direction.UP);
     }
 
-    public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction) {
+    public BlockState rotate(BlockState state, LevelAccessor level, BlockPos pos, Rotation direction) {
         boolean flag = false;
 
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
-                state = rotateTop(state);
-                Direction in = state.getValue(FACING_IN);
-                Direction out = state.getValue(FACING_OUT);
-                if (haveIInventory(in, world, pos) && haveIInventory(out, world, pos)) {
+                state = this.rotateTop(state);
+                var in = state.getValue(FACING_IN);
+                var out = state.getValue(FACING_OUT);
+                if (this.haveContainer(in, level, pos) && this.haveContainer(out, level, pos)) {
                     flag = true;
                     break;
                 }
@@ -255,8 +255,8 @@ public class TransportBlock extends ContainerBlock {
     }
 
     private BlockState rotateTop(BlockState state) {
-        Direction in = state.getValue(FACING_IN);
-        Direction out = state.getValue(FACING_OUT);
+        var in = state.getValue(FACING_IN);
+        var out = state.getValue(FACING_OUT);
         int out_idx = out.get3DDataValue();
         out = Direction.from3DDataValue(out_idx + 1);
         if (out_idx + 1 > Direction.values().length - 1) {
@@ -270,9 +270,16 @@ public class TransportBlock extends ContainerBlock {
         return state;
     }
 
-    public boolean haveIInventory(Direction side, IWorld world, BlockPos pos) {
-        TileEntity tile = world.getBlockEntity(pos.relative(side));
-        return tile != null && tile instanceof IInventory;
+    public boolean haveContainer(Direction side, LevelAccessor level, BlockPos pos) {
+        var blockEntity = level.getBlockEntity(pos.relative(side));
+        return blockEntity != null && blockEntity instanceof Container;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        var blockEntity = isImporter ? BlockEntities.IMPORTER_BLOCK_ENTITY_TYPE : BlockEntities.EXPORTER_BLOCK_ENTITY_TYPE;
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, blockEntity, BaseTransportBlockEntity::tickFunc);
     }
 
 }

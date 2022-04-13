@@ -1,9 +1,9 @@
 package moreinventory.util;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.item.ItemStack;
 
 public final class MIMUtils {
     public static int normalIndex(int idx, int size) {
@@ -15,13 +15,13 @@ public final class MIMUtils {
     }
 
     //ItemStackHelperがByteだったため
-    public static CompoundNBT writeNonNullListShort(CompoundNBT tag, NonNullList<ItemStack> list, boolean saveEmpty) {
-        ListNBT listnbt = new ListNBT();
+    public static CompoundTag writeNonNullListShort(CompoundTag tag, NonNullList<ItemStack> list, boolean saveEmpty) {
+        ListTag listnbt = new ListTag();
 
         for (int i = 0; i < list.size(); ++i) {
             ItemStack itemstack = list.get(i);
             if (!itemstack.isEmpty()) {
-                CompoundNBT compoundnbt = new CompoundNBT();
+                CompoundTag compoundnbt = new CompoundTag();
                 compoundnbt.putShort("Slot", (short) i);
                 itemstack.save(compoundnbt);
                 listnbt.add(compoundnbt);
@@ -35,11 +35,11 @@ public final class MIMUtils {
         return tag;
     }
 
-    public static void readNonNullListShort(CompoundNBT tag, NonNullList<ItemStack> list) {
-        ListNBT listnbt = tag.getList("Items", 10);
+    public static void readNonNullListShort(CompoundTag tag, NonNullList<ItemStack> list) {
+        ListTag listnbt = tag.getList("Items", 10);
 
         for (int i = 0; i < listnbt.size(); ++i) {
-            CompoundNBT compoundnbt = listnbt.getCompound(i);
+            CompoundTag compoundnbt = listnbt.getCompound(i);
             int j = compoundnbt.getShort("Slot");
             if (j >= 0 && j < list.size()) {
                 list.set(j, ItemStack.of(compoundnbt));
@@ -49,7 +49,7 @@ public final class MIMUtils {
 
     public static void setIcon(ItemStack s, byte num) {
         final String key = "CustomModelData";
-        CompoundNBT tag = s.getOrCreateTag();
+        CompoundTag tag = s.getOrCreateTag();
         tag.putByte(key, (byte) num);
         s.setTag(tag);
     }

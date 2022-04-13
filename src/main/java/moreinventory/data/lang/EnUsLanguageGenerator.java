@@ -13,12 +13,12 @@ public class EnUsLanguageGenerator extends LanguageProvider {
 
     @Override
     public String getName() {
-        return MoreInventoryMOD.MODID + " " + super.getName();
+        return MoreInventoryMOD.MOD_ID + " " + super.getName();
     }
 
     @Override
     protected void addTranslations() {
-        add(MoreInventoryMOD.itemGroup.getDisplayName().getString(), "MoreInventoryMOD");
+        add(MoreInventoryMOD.creativeModeTab.getDisplayName().getString(), "MoreInventoryMOD");
 
         add(Blocks.CATCHALL, "catchall");
         add(Items.TRANSPORTER, "transporter");

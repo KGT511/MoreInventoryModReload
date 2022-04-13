@@ -1,33 +1,29 @@
 package moreinventory.client.renderer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 
 import moreinventory.block.CatchallBlock;
-import moreinventory.tileentity.CatchallTileEntity;
+import moreinventory.blockentity.CatchallBlockEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-public class CatchallRenderer extends TileEntityRenderer<CatchallTileEntity> {
+public class CatchallRenderer implements BlockEntityRenderer<CatchallBlockEntity> {
 
     public final int width = 9;
-    public final int height = CatchallTileEntity.inventorySize / width;
+    public final int height = CatchallBlockEntity.inventorySize / width;
 
-    public CatchallRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
-        super(rendererDispatcherIn);
-
+    public CatchallRenderer(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
-    public void render(CatchallTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        Direction direction = tileEntityIn.getBlockState().getValue(CatchallBlock.FACING);
+    public void render(CatchallBlockEntity blockEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+        var direction = blockEntityIn.getBlockState().getValue(CatchallBlock.FACING);
         float f = direction.toYRot();
         matrixStackIn.pushPose();
 
@@ -35,14 +31,14 @@ public class CatchallRenderer extends TileEntityRenderer<CatchallTileEntity> {
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(-f));
         matrixStackIn.translate(-0.5D, -0.5D, -0.5D);
 
-        NonNullList<ItemStack> nonnulllist = tileEntityIn.getItems();
+        var nonnulllist = blockEntityIn.getItems();
         final int slotWidth = 3;
         final double scale = 16.D;
         for (int i = 0; i < height; ++i) {
             for (int j = 0; j < width / slotWidth; ++j) {
                 for (int k = 0; k < slotWidth; ++k) {
                     int val = i * width + (width / slotWidth - j - 1) * slotWidth + k;
-                    ItemStack itemstack = nonnulllist.get(val);
+                    var itemstack = nonnulllist.get(val);
                     if (itemstack == ItemStack.EMPTY)
                         continue;
                     if (itemstack.getItem() == Items.AIR)
@@ -56,7 +52,7 @@ public class CatchallRenderer extends TileEntityRenderer<CatchallTileEntity> {
                     matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(90.0F));
                     matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180.F));
                     matrixStackIn.scale(0.25F, 0.25F, 0.25F);
-                    Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
+                    Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, 0);
                     matrixStackIn.popPose();
                 }
             }

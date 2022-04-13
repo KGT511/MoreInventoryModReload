@@ -1,51 +1,57 @@
 package moreinventory.client.renderer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import moreinventory.block.TransportBlock;
+import moreinventory.blockentity.BaseTransportBlockEntity;
+import moreinventory.blockentity.ImporterBlockEntity;
+import moreinventory.client.model.ModelLayers;
 import moreinventory.core.MoreInventoryMOD;
-import moreinventory.tileentity.BaseTransportTileEntity;
-import moreinventory.tileentity.ImporterTileEntity;
 import moreinventory.util.MIMUtils;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 
-public class TransportRenderer extends TileEntityRenderer<BaseTransportTileEntity> {
-    private static ResourceLocation IMPORTER_LIGHT_TEXTURE = new ResourceLocation(MoreInventoryMOD.MODID, "textures/block/importer.png");
-    private static ResourceLocation IMPORTER_DARK_TEXTURE = new ResourceLocation(MoreInventoryMOD.MODID, "textures/block/importer_black.png");
-    private static ResourceLocation EXPORTER_LIGHT_TEXTURE = new ResourceLocation(MoreInventoryMOD.MODID, "textures/block/exporter.png");
-    private static ResourceLocation EXPORTER_DARK_TEXTURE = new ResourceLocation(MoreInventoryMOD.MODID, "textures/block/exporter_black.png");
+public class TransportRenderer implements BlockEntityRenderer<BaseTransportBlockEntity> {
+    private static ResourceLocation IMPORTER_LIGHT_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/importer.png");
+    private static ResourceLocation IMPORTER_DARK_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/importer_black.png");
+    private static ResourceLocation EXPORTER_LIGHT_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/exporter.png");
+    private static ResourceLocation EXPORTER_DARK_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/exporter_black.png");
 
-    private final ModelRenderer in1;
-    private final ModelRenderer in2;
-    private final ModelRenderer center;
-    private final ModelRenderer out;
+    private final ModelPart in1;
+    private final ModelPart in2;
+    private final ModelPart center;
+    private final ModelPart out;
 
-    public TransportRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
-        super(rendererDispatcherIn);
-        in1 = new ModelRenderer(64, 64, 0, 0);
-        in1.x = 8.0F;
-        in1.y = 8.0F;
-        in1.z = 8.0F;
-        in1.addBox(-3.0F, -5.0F, -3.0F, 6.0F, 1.0F, 6.F, 0.F);
-        in2 = new ModelRenderer(64, 64, 0, 0);
-        in2.x = 8.0F;
-        in2.y = 8.0F;
-        in2.z = 8.0F;
-        in2.addBox(-2.0F, -3.0F, -2.0F, 4.0F, 1.0F, 4.F, 0.F);
-        center = new ModelRenderer(64, 64, 0, 0);
-        center.addBox(7.0F, 7.0F, 7.0F, 2.0F, 2.0F, 2.0F, 0.F);
-        out = new ModelRenderer(64, 64, 0, 0);
-        out.x = 8.0F;
-        out.y = 8.0F;
-        out.z = 8.0F;
-        out.addBox(-2.0F, 2.0F, -2.0F, 4.0F, 1.0F, 4.F, 0.F);
+    private static final String in1Str = "in1";
+    private static final String in2Str = "in2";
+    private static final String centerStr = "center";
+    private static final String outStr = "out";
+
+    public TransportRenderer(Context context) {
+        ModelPart modelpart = context.bakeLayer(ModelLayers.TRANPORT);
+        this.in1 = modelpart.getChild(in1Str);
+        this.in2 = modelpart.getChild(in2Str);
+        this.center = modelpart.getChild(centerStr);
+        this.out = modelpart.getChild(outStr);
+    }
+
+    public static LayerDefinition createBodyLayer() {
+        var meshDefinition = new MeshDefinition();
+        var partDefinition = meshDefinition.getRoot();
+        partDefinition.addOrReplaceChild(in1Str, CubeListBuilder.create().texOffs(0, 0).addBox(-3.0F, -5.0F, -3.0F, 6.0F, 1.0F, 6.F), PartPose.offset(8.0F, 8.0F, 8.0F));
+        partDefinition.addOrReplaceChild(in2Str, CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -3.0F, -2.0F, 4.0F, 1.0F, 4.F), PartPose.offset(8.0F, 8.0F, 8.0F));
+        partDefinition.addOrReplaceChild(centerStr, CubeListBuilder.create().texOffs(0, 0).addBox(7.0F, 7.0F, 7.0F, 2.0F, 2.0F, 2.0F), PartPose.ZERO);
+        partDefinition.addOrReplaceChild(outStr, CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, 2.0F, -2.0F, 4.0F, 1.0F, 4.F), PartPose.offset(8.0F, 8.0F, 8.0F));
+        return LayerDefinition.create(meshDefinition, 64, 64);
     }
 
     private float degToRad(float deg) {
@@ -53,10 +59,10 @@ public class TransportRenderer extends TileEntityRenderer<BaseTransportTileEntit
     }
 
     @Override
-    public void render(BaseTransportTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        matrixStackIn.pushPose();
+    public void render(BaseTransportBlockEntity blockEntityIn, float partialTicks, PoseStack poseStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+        poseStackIn.pushPose();
         ResourceLocation lightTexture, darkTexture;
-        if (tileEntityIn instanceof ImporterTileEntity) {
+        if (blockEntityIn instanceof ImporterBlockEntity) {
             lightTexture = IMPORTER_LIGHT_TEXTURE;
             darkTexture = IMPORTER_DARK_TEXTURE;
         } else {
@@ -64,26 +70,26 @@ public class TransportRenderer extends TileEntityRenderer<BaseTransportTileEntit
             darkTexture = EXPORTER_DARK_TEXTURE;
         }
 
-        Direction inD = tileEntityIn.getBlockState().getValue(TransportBlock.FACING_IN);
-        Direction outD = tileEntityIn.getBlockState().getValue(TransportBlock.FACING_OUT);
-        rotateModels(inD, in1);
-        rotateModels(inD, in2);
-        rotateModels(outD.getOpposite(), out);
+        var inD = blockEntityIn.getBlockState().getValue(TransportBlock.FACING_IN);
+        var outD = blockEntityIn.getBlockState().getValue(TransportBlock.FACING_OUT);
+        this.rotateModels(inD, in1);
+        this.rotateModels(inD, in2);
+        this.rotateModels(outD.getOpposite(), out);
 
-        byte emitLevel = (byte) (tileEntityIn.getLevel().getGameTime() % 40 / 10);
+        var emitLevel = (byte) (blockEntityIn.getLevel().getGameTime() % 40 / 10);
 
-        ModelRenderer[] models = { in1, in2, center, out };
-        IVertexBuilder lightIvertexbuilder = bufferIn.getBuffer(RenderType.entitySolid(lightTexture));
-        models[emitLevel].render(matrixStackIn, lightIvertexbuilder, combinedLightIn, combinedOverlayIn);
-        IVertexBuilder darkIvertexbuilder = bufferIn.getBuffer(RenderType.entitySolid(darkTexture));
+        ModelPart[] models = { in1, in2, center, out };
+        var lightIvertexbuilder = bufferIn.getBuffer(RenderType.entitySolid(lightTexture));
+        models[emitLevel].render(poseStackIn, lightIvertexbuilder, combinedLightIn, combinedOverlayIn);
+        var darkIvertexbuilder = bufferIn.getBuffer(RenderType.entitySolid(darkTexture));
         for (int i = 0; i < 3; ++i)
-            models[MIMUtils.normalIndex(emitLevel + i + 1, 4)].render(matrixStackIn, darkIvertexbuilder, combinedLightIn, combinedOverlayIn);
+            models[MIMUtils.normalIndex(emitLevel + i + 1, 4)].render(poseStackIn, darkIvertexbuilder, combinedLightIn, combinedOverlayIn);
 
-        matrixStackIn.popPose();
+        poseStackIn.popPose();
 
     }
 
-    private void rotateModels(Direction side, ModelRenderer model) {
+    private void rotateModels(Direction side, ModelPart model) {
         switch (side) {
         case DOWN:
             model.xRot = degToRad(0);

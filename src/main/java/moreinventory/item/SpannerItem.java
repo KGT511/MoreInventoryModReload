@@ -2,41 +2,36 @@ package moreinventory.item;
 
 import moreinventory.block.Blocks;
 import moreinventory.core.MoreInventoryMOD;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.Rotation;
 
 public class SpannerItem extends Item {
     public SpannerItem() {
         super(new Properties()
                 .durability(0)
-                .tab(MoreInventoryMOD.itemGroup));
+                .tab(MoreInventoryMOD.creativeModeTab));
     }
 
     @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-        World world = context.getLevel();
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+        var world = context.getLevel();
         if (world.isClientSide) {
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
         }
 
-        PlayerEntity player = context.getPlayer();
-        BlockPos pos = context.getClickedPos();
+        var player = context.getPlayer();
+        var pos = context.getClickedPos();
         if (!player.isShiftKeyDown()) {
-            BlockState state = world.getBlockState(pos);
-            Block block = state.getBlock();
+            var state = world.getBlockState(pos);
+            var block = state.getBlock();
             if (Blocks.blockList.contains(block)) {
                 world.setBlockAndUpdate(pos, block.rotate(world.getBlockState(pos), world, pos, Rotation.CLOCKWISE_90));
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 }

@@ -1,60 +1,60 @@
 package moreinventory.container;
 
-import moreinventory.tileentity.CatchallTileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import moreinventory.blockentity.CatchallBlockEntity;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class CatchallContainer extends Container {
-    public static CatchallContainer createContainerClientSide(int windowID, PlayerInventory playerInventory, PacketBuffer extraData) {
-        CatchallTileEntity tile = (CatchallTileEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos());
-        return new CatchallContainer(windowID, playerInventory, tile);
+public class CatchallContainer extends AbstractContainerMenu {
+    public static CatchallContainer createContainerClientSide(int windowID, Inventory playerInventory, FriendlyByteBuf extraData) {
+        var blockEntity = (CatchallBlockEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos());
+        return new CatchallContainer(windowID, playerInventory, blockEntity);
     }
 
-    public final int slotSize = CatchallTileEntity.inventorySize;
+    public final int slotSize = CatchallBlockEntity.inventorySize;
 
-    private CatchallTileEntity catchall;
+    private CatchallBlockEntity catchall;
 
-    public CatchallContainer(int windowID, PlayerInventory playerInventory, CatchallTileEntity tile) {
+    public CatchallContainer(int windowID, Inventory playerInventory, CatchallBlockEntity blockEntity) {
         super(Containers.CATCHALL_CONTAINER_TYPE, windowID);
-        this.catchall = tile;
+        this.catchall = blockEntity;
 
         for (int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(tile, i, 8 + i * 18 + 27, 72 + 4));
+            this.addSlot(new Slot(blockEntity, i, 8 + i * 18 + 27, 72 + 4));
         }
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(tile, j + i * 9 + 9, 8 + j * 18 + 27, 18 + i * 18));
+                this.addSlot(new Slot(blockEntity, j + i * 9 + 9, 8 + j * 18 + 27, 18 + i * 18));
             }
         }
-        this.addSlot(new Slot(tile, slotSize - 1, 8, 72 + 4));
+        this.addSlot(new Slot(blockEntity, slotSize - 1, 8, 72 + 4));
 
-        bindPlayerInventory(playerInventory);
+        this.bindPlayerInventory(playerInventory);
     }
 
-    protected void bindPlayerInventory(PlayerInventory inventory) {
+    protected void bindPlayerInventory(Inventory inventory) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                addSlot(new Slot(inventory, j + i * 9 + 9, 8 + j * 18 + 27, 108 + i * 18));
+                this.addSlot(new Slot(inventory, j + i * 9 + 9, 8 + j * 18 + 27, 108 + i * 18));
             }
         }
 
         for (int i = 0; i < 9; ++i) {
-            addSlot(new Slot(inventory, i, 8 + i * 18 + 27, 162 + 4));
+            this.addSlot(new Slot(inventory, i, 8 + i * 18 + 27, 162 + 4));
         }
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int index) {
-        ItemStack itemstack = ItemStack.EMPTY;
+    public ItemStack quickMoveStack(Player player, int index) {
+        var itemstack = ItemStack.EMPTY;
 
-        Slot slot = this.slots.get(index);
+        var slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
-            ItemStack itemstack1 = slot.getItem();
+            var itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
             if (index < slotSize) {
@@ -76,7 +76,7 @@ public class CatchallContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return catchall != null && catchall.stillValid(playerIn);
     }
 }

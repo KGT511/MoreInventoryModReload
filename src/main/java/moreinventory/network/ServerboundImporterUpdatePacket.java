@@ -2,11 +2,10 @@ package moreinventory.network;
 
 import java.util.function.Supplier;
 
-import moreinventory.tileentity.ImporterTileEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkEvent;
+import moreinventory.blockentity.ImporterBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 public class ServerboundImporterUpdatePacket {
     private final BlockPos blockPos;
@@ -25,16 +24,16 @@ public class ServerboundImporterUpdatePacket {
         this.val = -1;
     }
 
-    public ServerboundImporterUpdatePacket(PacketBuffer buffer) {
+    public ServerboundImporterUpdatePacket(FriendlyByteBuf buffer) {
         this(buffer.readBlockPos(), buffer.readInt(), buffer.readInt());
     }
 
-    public static ServerboundImporterUpdatePacket decode(PacketBuffer buffer) {
-        ServerboundImporterUpdatePacket packet = new ServerboundImporterUpdatePacket(buffer);
+    public static ServerboundImporterUpdatePacket decode(FriendlyByteBuf buffer) {
+        var packet = new ServerboundImporterUpdatePacket(buffer);
         return packet;
     }
 
-    public static void encode(ServerboundImporterUpdatePacket msg, PacketBuffer buffer) {
+    public static void encode(ServerboundImporterUpdatePacket msg, FriendlyByteBuf buffer) {
         buffer.writeBlockPos(msg.blockPos);
         buffer.writeInt(msg.id);
         buffer.writeInt(msg.val);
@@ -42,15 +41,15 @@ public class ServerboundImporterUpdatePacket {
 
     public static void handle(ServerboundImporterUpdatePacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            TileEntity tileEntity = ctx.get().getSender().getCommandSenderWorld().getBlockEntity(msg.blockPos);
-            if (tileEntity instanceof ImporterTileEntity) {
-                ImporterTileEntity importerTileEntity = (ImporterTileEntity) tileEntity;
-                int val = (importerTileEntity.getValByID(msg.id) + 1) % 2;
-                importerTileEntity.setValByID(msg.id, val);
-
+            var blockEntity = ctx.get().getSender().getCommandSenderWorld().getBlockEntity(msg.blockPos);
+            if (blockEntity instanceof ImporterBlockEntity) {
+                var importerBlockEntity = (ImporterBlockEntity) blockEntity;
+                var val = (importerBlockEntity.getValByID(msg.id) + 1) % 2;
+                importerBlockEntity.setValByID(msg.id, val);
             }
         });
 
         ctx.get().setPacketHandled(true);
     }
+
 }
