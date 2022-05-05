@@ -3,6 +3,7 @@ package moreinventory.item;
 import moreinventory.container.PouchContainerProvider;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.inventory.PouchInventory;
+import moreinventory.util.MIMLog;
 import moreinventory.util.MIMUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -61,17 +62,22 @@ public class PouchItem extends Item {
     @Override
     public ActionResultType useOn(ItemUseContext context) {
         World world = context.getLevel();
+
         PlayerEntity player = context.getPlayer();
         BlockPos blockPos = context.getClickedPos();
         if (player.isShiftKeyDown()) {
             TileEntity tile = world.getBlockEntity(blockPos);
-            PouchInventory inventory = new PouchInventory(player.getMainHandItem());
+            ItemStack itemStack = player.getMainHandItem();
+            CompoundNBT tmp = itemStack.getOrCreateTag();
+            PouchInventory inventory = new PouchInventory(itemStack);
 
             if (tile == null) {
                 inventory.collectAllItemStack(player.inventory, true);
             } else if (tile instanceof IInventory) {
                 inventory.transferToChest((IInventory) tile);
             }
+
+            MIMLog.warning(tmp.toString());
 
             return ActionResultType.SUCCESS;
         }

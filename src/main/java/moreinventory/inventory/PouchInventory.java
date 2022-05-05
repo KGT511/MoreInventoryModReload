@@ -9,6 +9,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 
@@ -18,7 +19,6 @@ public class PouchInventory implements IInventory {
     public static final int collectableSlotSize = 18;
     private NonNullList<ItemStack> slotItems = NonNullList.withSize(slotSize + collectableSlotSize, ItemStack.EMPTY);
 
-    private PlayerEntity usingPlayer;
     private ItemStack usingPouch;
 
     public enum Val {
@@ -38,7 +38,6 @@ public class PouchInventory implements IInventory {
     public ITextComponent customName;
 
     public PouchInventory(PlayerEntity player, ItemStack itemStack) {
-        this.usingPlayer = player;
         this.usingPouch = itemStack;
         this.customName = itemStack.getDisplayName();
         this.readToNBT(this.usingPouch.getOrCreateTag());
@@ -55,9 +54,9 @@ public class PouchInventory implements IInventory {
             }
             this.slotItems = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
             ItemStackHelper.loadAllItems(nbt, this.slotItems);
-            this.isStorageBox = nbt.getBoolean(isStorageBoxTagKey);
-            this.isHotBar = nbt.getBoolean(isHotBarTagKey);
-            this.isAutoCollect = nbt.getBoolean(isAutoCollectTagKey);
+            this.isStorageBox = (nbt.contains(isStorageBoxTagKey) ? nbt.getBoolean(isStorageBoxTagKey) : this.isStorageBox);
+            this.isHotBar = (nbt.contains(isHotBarTagKey) ? nbt.getBoolean(isHotBarTagKey) : this.isHotBar);
+            this.isAutoCollect = (nbt.contains(isAutoCollectTagKey) ? nbt.getBoolean(isAutoCollectTagKey) : this.isAutoCollect);
             this.grade = nbt.getInt(gradeTagKey);
         }
     }
@@ -105,8 +104,7 @@ public class PouchInventory implements IInventory {
     @Override
     public void setItem(int index, ItemStack stack) {
         slotItems.set(index, stack);
-        setChanged();
-        this.writeToNBT(this.usingPouch.getTag());
+        this.setChanged();
     }
 
     @Override
@@ -121,6 +119,7 @@ public class PouchInventory implements IInventory {
 
     @Override
     public void setChanged() {
+        this.writeToNBT(this.usingPouch.getOrCreateTag());
     }
 
     @Override
@@ -141,16 +140,16 @@ public class PouchInventory implements IInventory {
     }
 
     public boolean isCollectableItem(ItemStack itemstack) {
-        return this.getCollectableSlotItems().contains(itemstack);
+        for (ItemStack colletctableItemStack : this.getCollectableSlotItems())
+            if (itemstack.sameItem(colletctableItemStack))
+                return true;
+
+        return false;
     }
 
     public void collectAllItemStack(IInventory inventory, boolean flag) {
         ItemStack itemStack;
-        int origin = 0;
-
-        if (!isHotBar) {
-            origin = 9;
-        }
+        int origin = (isHotBar ? 0 : 9);
 
         for (int i = origin; i < inventory.getContainerSize(); i++) {
             itemStack = inventory.getItem(i);
@@ -160,12 +159,12 @@ public class PouchInventory implements IInventory {
 
             if (itemStack.getItem() == Items.POUCH) {
                 PouchInventory pouch = new PouchInventory(itemStack);
-                if (pouch.isAutoCollect && flag && itemStack != usingPouch) {
+                if (pouch.isAutoCollect && flag && itemStack != this.usingPouch) {
                     pouch.collectAllItemStack(inventory, false);
                 }
             } else {
                 if (isCollectableItem(itemStack)) {
-                    MIMUtils.mergeItemStack(itemStack, this);
+                    mergeItemStack(itemStack, this);
                 }
             }
         }
@@ -181,6 +180,7 @@ public class PouchInventory implements IInventory {
                 }
             }
         }
+        this.setChanged();
     }
 
     public boolean getIsStorageBox() {
@@ -223,10 +223,10 @@ public class PouchInventory implements IInventory {
             break;
         }
         this.writeToNBT(this.usingPouch.getOrCreateTag());
+
     }
 
     public int getValByID(int id) {
-        this.readToNBT(this.usingPouch.getOrCreateTag());
         if (Val.values().length <= id) {
             return 0;
         }
@@ -242,4 +242,56 @@ public class PouchInventory implements IInventory {
         return 0;
     }
 
+    public static boolean mergeItemStack(ItemStack itemstack, IInventory inventory) {
+        if (itemstack == null) {
+            return false;
+        }
+
+        boolean success = false;
+        int size = slotSize;
+        Direction side = Direction.DOWN;
+
+        if (itemstack.isStackable()) {
+            for (int i = 0; i < size; ++i) {
+                ItemStack item = inventory.getItem(i);
+
+                if (item != null && item.getItem() == itemstack.getItem() && itemstack.getDamageValue() == item.getDamageValue() && ItemStack.tagMatches(itemstack, item)) {
+                    if (MIMUtils.canAccessFromSide(inventory, i, side) && MIMUtils.canInsertFromSide(inventory, itemstack, i, side)) {
+                        int sum = item.getCount() + itemstack.getCount();
+
+                        if (sum <= itemstack.getMaxStackSize()) {
+                            itemstack.setCount(0);
+                            item.setCount(sum);
+                            inventory.setItem(i, item.copy());
+                            success = true;
+                        } else if (item.getCount() < itemstack.getMaxStackSize()) {
+                            itemstack.shrink(itemstack.getMaxStackSize() - item.getCount());
+                            item.setCount(itemstack.getMaxStackSize());
+                            inventory.setItem(i, item.copy());
+                            success = true;
+                        }
+                    }
+                }
+
+                if (itemstack.getCount() <= 0) {
+                    return success;
+                }
+            }
+        }
+
+        if (itemstack.getCount() > 0) {
+            for (int i = 0; i < size; ++i) {
+                ItemStack item = inventory.getItem(i);
+
+                if (item.getItem() == ItemStack.EMPTY.getItem() && MIMUtils.canAccessFromSide(inventory, i, side) && MIMUtils.canInsertFromSide(inventory, itemstack, i, side)) {
+                    inventory.setItem(i, itemstack.copy());
+                    itemstack.setCount(0);
+                    success = true;
+                    break;
+                }
+            }
+        }
+
+        return success;
+    }
 }

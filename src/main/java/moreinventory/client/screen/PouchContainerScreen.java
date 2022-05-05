@@ -11,7 +11,6 @@ import moreinventory.network.ServerboundPouchUpdatePacket;
 import moreinventory.util.HoverChecker;
 import moreinventory.util.MIMUtils;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -21,7 +20,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 public class PouchContainerScreen extends ContainerScreen<PouchContainer> {
     private static final ResourceLocation POUCH_GUI_TEXTURE = ConfigButton.POUCH_GUI_TEXTURE;
 
-    private PlayerEntity usingPlayer;
     private PouchInventory pouch;
     private int grade;
 
@@ -38,7 +36,6 @@ public class PouchContainerScreen extends ContainerScreen<PouchContainer> {
         this.imageWidth = 176;
         this.imageHeight = 223;
         this.inventoryLabelY = this.imageHeight - 96 + 2;
-        this.usingPlayer = inv.player;
         this.pouch = pouchContainer.getInventory();
         this.grade = this.pouch.getGrade() + 2;
     }
