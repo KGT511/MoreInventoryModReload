@@ -8,10 +8,12 @@ import moreinventory.client.renderer.CatchallRenderer;
 import moreinventory.client.renderer.StorageBoxRenderer;
 import moreinventory.client.renderer.TransportRenderer;
 import moreinventory.client.screen.CatchallContainerScreen;
+import moreinventory.client.screen.PouchContainerScreen;
 import moreinventory.client.screen.TransportContainerScreen;
 import moreinventory.container.Containers;
 import moreinventory.item.TransporterItem;
 import moreinventory.network.ServerboundImporterUpdatePacket;
+import moreinventory.network.ServerboundPouchUpdatePacket;
 import moreinventory.tileentity.TileEntities;
 import moreinventory.tileentity.storagebox.StorageBoxInventorySize;
 import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
@@ -75,8 +77,14 @@ public class MoreInventoryMOD {
     public static void initNetwork() {
         int id = 0;
         CHANNEL.messageBuilder(ServerboundImporterUpdatePacket.class, id++)
-                .encoder(ServerboundImporterUpdatePacket::encode).decoder(ServerboundImporterUpdatePacket::decode)
+                .encoder(ServerboundImporterUpdatePacket::encode)
+                .decoder(ServerboundImporterUpdatePacket::decode)
                 .consumer(ServerboundImporterUpdatePacket::handle)
+                .add();
+        CHANNEL.messageBuilder(ServerboundPouchUpdatePacket.class, id++)
+                .encoder(ServerboundPouchUpdatePacket::encode)
+                .decoder(ServerboundPouchUpdatePacket::decode)
+                .consumer(ServerboundPouchUpdatePacket::handle)
                 .add();
     }
 
@@ -93,6 +101,7 @@ public class MoreInventoryMOD {
 
         ScreenManager.register(Containers.CATCHALL_CONTAINER_TYPE, CatchallContainerScreen::new);
         ScreenManager.register(Containers.TRANSPORT_MANAGER_CONTAINER_TYPE, TransportContainerScreen::new);
+        ScreenManager.register(Containers.POUCH_CONTAINER_TYPE, PouchContainerScreen::new);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

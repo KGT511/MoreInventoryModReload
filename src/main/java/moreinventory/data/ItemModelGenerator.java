@@ -5,10 +5,12 @@ import java.util.Locale;
 import moreinventory.block.Blocks;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.item.Items;
+import moreinventory.item.PouchItem;
 import moreinventory.item.TransporterItem;
 import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -35,6 +37,8 @@ public class ItemModelGenerator extends ItemModelProvider {
         singleTexTool(Items.IMPORTER);
         singleTexTool(Items.EXPORTER);
         singleTexTool(Items.SPANNER);
+        singleTexTool(Items.POUCH);
+        registerPouch();
     }
 
     public static String name(Block block) {
@@ -95,6 +99,21 @@ public class ItemModelGenerator extends ItemModelProvider {
         }
 
         builder.override().predicate(predicateName, 99).model(getBuilder(name + "_furnace_lit"));
+    }
+
+    public void registerPouch() {
+        for (DyeColor color : DyeColor.values()) {
+            String name = "pouch_" + color.getName();
+            tool(name, prefix("item/" + name));
+        }
+        String name = "item/" + name(Items.POUCH);
+        ItemModelBuilder builder = tool(name(Items.POUCH), prefix(name));
+        ResourceLocation predicateName = new ResourceLocation("custom_model_data");
+        builder.override().predicate(predicateName, PouchItem.default_color).model(getBuilder(name));
+        for (DyeColor color : DyeColor.values()) {
+            builder.override().predicate(predicateName, color.getId() + 1).model(getBuilder(name + "_" + color.getName()));
+        }
+
     }
 
 }

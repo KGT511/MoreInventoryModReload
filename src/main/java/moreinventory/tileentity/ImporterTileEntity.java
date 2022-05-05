@@ -81,7 +81,7 @@ public class ImporterTileEntity extends BaseTransportTileEntity {
 
                 ItemStack itemstack = inventory.getItem(slot);
                 if (itemstack != null && canExtract(itemstack)) {
-                    if (canAccessFromSide(inventory, slot, in.getOpposite()) && canExtractFromSide(inventory, itemstack, slot, in.getOpposite())) {
+                    if (MIMUtils.canAccessFromSide(inventory, slot, in.getOpposite()) && MIMUtils.canExtractFromSide(inventory, itemstack, slot, in.getOpposite())) {
                         if (tile instanceof BaseStorageBoxTileEntity && ((BaseStorageBoxTileEntity) tile).getStorageBoxNetworkManager().storeToNetwork(itemstack, register, outPos)) {
 
                             return;

@@ -22,6 +22,11 @@
   "gui.moreinventorymod.importer.register_off.detail": "Transport items that already registered to Container Box",
   "gui.moreinventorymod.importer.register_on": "ON",
   "gui.moreinventorymod.importer.register_on.detail": "Transport register items to empty Container Box if items didn't register",
+  "gui.moreinventorymod.pouch.config": "config",
+  "gui.moreinventorymod.pouch.config.autocollect.detail": "If enabled, this pouch will collect registered items when you picked up item.",
+  "gui.moreinventorymod.pouch.config.hotbar.detail": "If enabled, this pouch can collect from your player hotbar when sneak and use.",
+  "gui.moreinventorymod.pouch.config.storagebox.detail": "If enabled, container box can collect from this pouch.",
+  "item.moreinventorymod.pouch": "Pouch",
   "item.moreinventorymod.spanner": "spanner",
   "item.moreinventorymod.transporter": "transporter",
   "itemGroup.moreinventorymod": "MoreInventoryMOD"

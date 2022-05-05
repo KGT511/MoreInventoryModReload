@@ -5,6 +5,7 @@ import java.util.List;
 import moreinventory.block.Blocks;
 import moreinventory.block.TransportBlock;
 import moreinventory.container.TransportContainer;
+import moreinventory.util.MIMUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -57,7 +58,7 @@ public class ExporterTileEntity extends BaseTransportTileEntity {
                     for (int j = 0; j < tile.getContainerSize(); j++) {
                         ItemStack itemstack1 = tile.getItem(j);
 
-                        if (mergeItemStack(itemstack1, inventory, out.getOpposite())) {
+                        if (MIMUtils.mergeItemStack(itemstack1, inventory, out.getOpposite())) {
                             break extract;
                         }
                     }
@@ -90,55 +91,4 @@ public class ExporterTileEntity extends BaseTransportTileEntity {
         return false;
     }
 
-    public static boolean mergeItemStack(ItemStack itemstack, IInventory inventory, Direction side) {
-        if (itemstack.getItem() == ItemStack.EMPTY.getItem()) {
-            return false;
-        }
-
-        boolean success = false;
-        int size = inventory.getContainerSize();
-
-        if (itemstack.isStackable()) {
-            for (int i = 0; i < size; ++i) {
-                ItemStack item = inventory.getItem(i);
-
-                if (item != null && item.getItem() == itemstack.getItem() && itemstack.getDamageValue() == item.getDamageValue() && ItemStack.tagMatches(itemstack, item)) {
-                    if (canAccessFromSide(inventory, i, side) && canInsertFromSide(inventory, itemstack, i, side)) {
-                        int sum = item.getCount() + itemstack.getCount();
-
-                        if (sum <= itemstack.getMaxStackSize()) {
-                            itemstack.setCount(0);
-                            item.setCount(sum);
-                            inventory.setItem(i, item.copy());
-                            success = true;
-                        } else if (item.getCount() < itemstack.getMaxStackSize()) {
-                            itemstack.shrink(itemstack.getMaxStackSize() - item.getCount());
-                            item.setCount(itemstack.getMaxStackSize());
-                            inventory.setItem(i, item.copy());
-                            success = true;
-                        }
-                    }
-                }
-
-                if (itemstack.getCount() <= 0) {
-                    return success;
-                }
-            }
-        }
-
-        if (itemstack.getCount() > 0) {
-            for (int i = 0; i < size; ++i) {
-                ItemStack item = inventory.getItem(i);
-
-                if (item.getItem() == ItemStack.EMPTY.getItem() && canAccessFromSide(inventory, i, side) && canInsertFromSide(inventory, itemstack, i, side)) {
-                    inventory.setItem(i, itemstack.copy());
-                    itemstack.setCount(0);
-                    success = true;
-                    break;
-                }
-            }
-        }
-
-        return success;
-    }
 }

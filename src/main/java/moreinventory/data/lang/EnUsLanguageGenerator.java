@@ -48,5 +48,10 @@ public class EnUsLanguageGenerator extends LanguageProvider {
         add(Text.importerMoveWhiteDetail, "List is White List");
         add(Text.importerMoveBlackDetail, "List is Black List");
 
+        add(Items.POUCH, "Pouch");
+        add(Text.pouchConfig, "config");
+        add(Text.pouchConfigStorageBox, "If enabled, container box can collect from this pouch.");
+        add(Text.pouchConfigHotBar, "If enabled, this pouch can collect from your player hotbar when sneak and use.");
+        add(Text.pouchConfigAutoCollect, "If enabled, this pouch will collect registered items when you picked up item.");
     }
 }

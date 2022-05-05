@@ -4,7 +4,6 @@ import moreinventory.block.TransportBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
@@ -177,26 +176,6 @@ public abstract class BaseTransportTileEntity extends LockableLootTileEntity imp
                 }
             }
         }
-    }
-
-    public static boolean canAccessFromSide(IInventory inventory, int slot, Direction side) {
-        if (inventory instanceof ISidedInventory) {
-            for (int i : ((ISidedInventory) inventory).getSlotsForFace(side)) {
-                if (i == slot) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean canExtractFromSide(IInventory inventory, ItemStack itemstack, int slot, Direction side) {
-        return !(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canTakeItemThroughFace(slot, itemstack, side);
-    }
-
-    public static boolean canInsertFromSide(IInventory inventory, ItemStack itemstack, int slot, Direction side) {
-        return inventory.canPlaceItem(slot, itemstack) && (!(inventory instanceof ISidedInventory) || ((ISidedInventory) inventory).canPlaceItemThroughFace(slot, itemstack, side));
     }
 
 }

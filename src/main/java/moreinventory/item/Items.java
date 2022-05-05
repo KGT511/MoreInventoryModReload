@@ -19,6 +19,7 @@ public class Items {
     public static Item CATCHALL = register("catchall", Blocks.CATCHALL);
     public static TransporterItem TRANSPORTER = (TransporterItem) register("transporter", new TransporterItem());
     public static SpannerItem SPANNER = (SpannerItem) register("spanner", new SpannerItem());
+    public static PouchItem POUCH = (PouchItem) register("pouch", new PouchItem());
 
     public static Item WOOD_STORAGE_BOX = register("storage_box_wood", Blocks.WOOD_STORAGE_BOX);
     public static Item IRON_STORAGE_BOX = register("storage_box_iron", Blocks.IRON_STORAGE_BOX);

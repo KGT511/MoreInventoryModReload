@@ -50,7 +50,7 @@ public class TransportContainerScreen extends ContainerScreen<TransportContainer
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {//render
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
@@ -66,8 +66,8 @@ public class TransportContainerScreen extends ContainerScreen<TransportContainer
             TranslationTextComponent moveTxt = new TranslationTextComponent(isWhite ? Text.importerMoveWhite : Text.importerMoveBlack);
             drawCenteredString(matrixStack, this.font, registerTxt, 30 + xOffset, 40 + yOffset, 14737632);
             drawCenteredString(matrixStack, this.font, moveTxt, imageWidth - 30 + xOffset, 40 + yOffset, 14737632);
-            this.drawCenteredStringWithoutShadow(matrixStack, new TranslationTextComponent(Text.importerMove), imageWidth - 30 + xOffset, 20 + yOffset, 328965);
-            this.drawCenteredStringWithoutShadow(matrixStack, new TranslationTextComponent(Text.importerRegister), 30 + xOffset, 20 + yOffset, 328965);
+            MIMUtils.drawCenteredStringWithoutShadow(matrixStack, this.font, new TranslationTextComponent(Text.importerMove), imageWidth - 30 + xOffset, 20 + yOffset, 328965);
+            MIMUtils.drawCenteredStringWithoutShadow(matrixStack, this.font, new TranslationTextComponent(Text.importerRegister), 30 + xOffset, 20 + yOffset, 328965);
             isWhiteButton.onValueUpdate(tileEntity);
             isRegisterButton.onValueUpdate(tileEntity);
 
@@ -76,7 +76,7 @@ public class TransportContainerScreen extends ContainerScreen<TransportContainer
 
     @SuppressWarnings("deprecation")
     @Override
-    protected void renderBg(MatrixStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {//renderBg
+    protected void renderBg(MatrixStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bind(DISPENSER_GUI_TEXTURE);
         int i = (this.width - this.imageWidth) / 2;
@@ -85,16 +85,12 @@ public class TransportContainerScreen extends ContainerScreen<TransportContainer
     }
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {//renderLabels
+    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
         super.renderLabels(matrixStack, mouseX, mouseY);
         if (this.menu.getTile() instanceof ImporterTileEntity) {
             this.isRegisterButton.renderToolTip(matrixStack, mouseX, mouseY);
             this.isWhiteButton.renderToolTip(matrixStack, mouseX, mouseY);
         }
-    }
-
-    private void drawCenteredStringWithoutShadow(MatrixStack poseStack, ITextComponent string, float x, float y, int color) {
-        this.font.draw(poseStack, string, x - this.font.width(string) / 2, y, color);
     }
 
     @OnlyIn(Dist.CLIENT)

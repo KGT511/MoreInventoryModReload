@@ -1,13 +1,11 @@
 package moreinventory.container;
 
-import moreinventory.core.MoreInventoryMOD;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import moreinventory.core.MoreInventoryMOD;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
-
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,6 +20,8 @@ public class Containers {
             IForgeContainerType.create(CatchallContainer::createContainerClientSide));
     public static ContainerType<TransportContainer> TRANSPORT_MANAGER_CONTAINER_TYPE = (ContainerType<TransportContainer>) register("importer_container",
             IForgeContainerType.create(TransportContainer::createContainerClientSide));
+    public static ContainerType<PouchContainer> POUCH_CONTAINER_TYPE = (ContainerType<PouchContainer>) register("pouch_container",
+            IForgeContainerType.create(PouchContainer::createContainerClientSide));
 
     private static <T extends Container> ForgeRegistryEntry<ContainerType<?>> register(String key, ContainerType<T> itemIn) {
         containerList.add(itemIn);

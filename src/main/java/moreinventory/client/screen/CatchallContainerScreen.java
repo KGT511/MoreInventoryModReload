@@ -24,7 +24,7 @@ public class CatchallContainerScreen extends ContainerScreen<CatchallContainer> 
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {//render
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
@@ -33,7 +33,7 @@ public class CatchallContainerScreen extends ContainerScreen<CatchallContainer> 
 
     @SuppressWarnings("deprecation")
     @Override
-    protected void renderBg(MatrixStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {//drawGuiContainerBackgroundLayer
+    protected void renderBg(MatrixStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bind(CATCHALL_GUI_TEXTURE);
         int i = (this.width - this.imageWidth) / 2;

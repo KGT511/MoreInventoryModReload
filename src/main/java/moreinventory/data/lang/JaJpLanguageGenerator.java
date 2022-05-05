@@ -46,5 +46,10 @@ public class JaJpLanguageGenerator extends LanguageProvider {
         add(Text.importerMoveWhiteDetail, "リストのアイテムのみ輸送します");
         add(Text.importerMoveBlackDetail, "リスト以外のアイテムを輸送します");
 
+        add(Items.POUCH, "ポーチ");
+        add(Text.pouchConfig, "コンフィグ");
+        add(Text.pouchConfigStorageBox, "有効にすると、コンテナはこのポーチからも収集します");
+        add(Text.pouchConfigHotBar, "有効にすると、このポーチはスニークしながら使用した時にホットバーから登録されたアイテムを収集します");
+        add(Text.pouchConfigAutoCollect, "有効にすると、このポーチは登録されたアイテムを拾った時に自動収集します");
     }
 }
