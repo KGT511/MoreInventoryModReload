@@ -3,6 +3,8 @@ package moreinventory.inventory;
 import java.util.List;
 
 import moreinventory.item.Items;
+import moreinventory.tileentity.BaseStorageBoxTileEntity;
+import moreinventory.tileentity.storagebox.network.StorageBoxNetworkManager;
 import moreinventory.util.MIMUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -11,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 
 public class PouchInventory implements IInventory {
@@ -139,12 +142,30 @@ public class PouchInventory implements IInventory {
         return this.slotItems.subList(slotSize, this.getContainerSize());
     }
 
+    public boolean canAutoCollect(ItemStack itemstack) {
+        return this.isAutoCollect && isCollectableItem(itemstack);
+    }
+
     public boolean isCollectableItem(ItemStack itemstack) {
         for (ItemStack colletctableItemStack : this.getCollectableSlotItems())
             if (itemstack.sameItem(colletctableItemStack))
                 return true;
 
         return false;
+    }
+
+    public void collectedByStorageBox(BaseStorageBoxTileEntity tile) {
+        for (int i = 0; i < slotSize; i++) {
+            tile.store(this.getItem(i));
+        }
+        this.setChanged();
+    }
+
+    public void storeToNetwork(StorageBoxNetworkManager sbnet, BlockPos originPos) {
+        for (int i = 0; i < slotSize; ++i) {
+            sbnet.storeToNetwork(this.getItem(i), false, originPos);
+        }
+        this.setChanged();
     }
 
     public void collectAllItemStack(IInventory inventory, boolean flag) {
@@ -242,7 +263,8 @@ public class PouchInventory implements IInventory {
         return 0;
     }
 
-    public static boolean mergeItemStack(ItemStack itemstack, IInventory inventory) {
+    //収集可能リストを含まずにマージする。ポーチ専用
+    public static boolean mergeItemStack(ItemStack itemstack, PouchInventory inventory) {
         if (itemstack == null) {
             return false;
         }

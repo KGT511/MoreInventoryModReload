@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import moreinventory.inventory.PouchInventory;
+import moreinventory.item.Items;
 import moreinventory.tileentity.BaseStorageBoxTileEntity;
 import moreinventory.tileentity.storagebox.StorageBoxType;
 import net.minecraft.inventory.IInventory;
@@ -57,8 +59,15 @@ public class StorageBoxNetworkManager {
     public void storeInventoryToNetwork(IInventory inventory, BlockPos originPos) {
         for (int i = 0; i < inventory.getContainerSize(); ++i) {
             ItemStack stack = inventory.getItem(i);
-            if (stack.getItem() != ItemStack.EMPTY.getItem()) {
-                storeToNetwork(stack, false, originPos);
+            if (!stack.isEmpty()) {
+                if (stack.getItem() == Items.POUCH) {
+                    PouchInventory pouch = new PouchInventory(stack);
+                    if (pouch.getIsStorageBox()) {
+                        pouch.storeToNetwork(this, originPos);
+                    }
+                } else {
+                    storeToNetwork(stack, false, originPos);
+                }
             }
         }
     }
