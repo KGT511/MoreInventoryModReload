@@ -101,11 +101,25 @@ public class RecipesGenerator extends RecipeProvider {
                 .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
                 .save(consumer);
 
-        //        ShapelessRecipeBuilder.shapeless(moreinventory.item.Items.POUCH)
-        //                .requires(moreinventory.item.Items.POUCH)
-        //                .requires(Tags.Items.DYES)
-        //                .unlockedBy("has_pouch", has(moreinventory.item.Items.POUCH))
-        //                .save(consumer);
+        ShapedRecipeBuilder.shaped(moreinventory.item.Items.LEATHER_PACK)
+                .pattern("LLL")
+                .pattern("LSL")
+                .pattern("LLL")
+                .define('S', Items.STRING)
+                .define('L', Items.LEATHER)
+                .unlockedBy("has_leather", has(Items.LEATHER))
+                .save(consumer);
+        ShapedRecipeBuilder.shaped(moreinventory.item.Items.POUCH)
+                .pattern("LLL")
+                .pattern("PDP")
+                .pattern("LPL")
+                .define('D', Items.DIAMOND)
+                .define('L', Items.LEATHER)
+                .define('P', moreinventory.item.Items.LEATHER_PACK)
+                .unlockedBy("has_leather", has(Items.LEATHER))
+                .unlockedBy("has_leather_pack", has(moreinventory.item.Items.LEATHER_PACK))
+                .save(consumer);
+
         CustomRecipeBuilder.special(Recipes.POUCH_RECIPE.get())
                 .save(consumer, "pouch_coloring");
     }

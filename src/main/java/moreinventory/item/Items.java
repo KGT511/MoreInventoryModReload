@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
+import net.minecraft.item.Item.Properties;
 import net.minecraft.item.ItemGroup;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -37,6 +38,7 @@ public class Items {
     public static PouchItem POUCH_GREEN = (PouchItem) register("pouch_green", new PouchItem(DyeColor.GREEN));
     public static PouchItem POUCH_RED = (PouchItem) register("pouch_red", new PouchItem(DyeColor.RED));
     public static PouchItem POUCH_BLACK = (PouchItem) register("pouch_black", new PouchItem(DyeColor.BLACK));
+    public static Item LEATHER_PACK = register("leather_pack", new Item(new Properties().tab(MoreInventoryMOD.itemGroup)));
 
     public static Item WOOD_STORAGE_BOX = register("storage_box_wood", Blocks.WOOD_STORAGE_BOX);
     public static Item IRON_STORAGE_BOX = register("storage_box_iron", Blocks.IRON_STORAGE_BOX);

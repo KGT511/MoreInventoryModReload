@@ -74,6 +74,7 @@ public class JaJpLanguageGenerator extends LanguageProvider {
         for (DyeColor color : DyeColor.values()) {
             add(PouchItem.byColor(color), colorMap.get(color) + "色のポーチ");
         }
+        add(Items.LEATHER_PACK, "革の詰め物");
 
         add(Text.pouchConfig, "コンフィグ");
         add(Text.pouchConfigStorageBox, "有効にすると、コンテナはこのポーチからも収集します");

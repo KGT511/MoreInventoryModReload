@@ -5,6 +5,7 @@ import java.util.Locale;
 import moreinventory.block.Blocks;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.item.Items;
+import moreinventory.item.PouchItem;
 import moreinventory.item.TransporterItem;
 import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
 import net.minecraft.block.Block;
@@ -102,10 +103,10 @@ public class ItemModelGenerator extends ItemModelProvider {
 
     public void registerPouch() {
         for (DyeColor color : DyeColor.values()) {
-            String name = "pouch_" + color.getName();
-            tool(name, prefix("item/" + name));
+            singleTexTool(PouchItem.byColor(color));
         }
-        tool("pouch", prefix("item/pouch"));
+        singleTexTool(Items.POUCH);
+        singleTexTool(Items.LEATHER_PACK);
     }
 
 }
