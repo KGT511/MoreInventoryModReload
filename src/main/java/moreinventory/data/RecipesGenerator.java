@@ -106,7 +106,7 @@ public class RecipesGenerator extends RecipeProvider {
         //                .requires(Tags.Items.DYES)
         //                .unlockedBy("has_pouch", has(moreinventory.item.Items.POUCH))
         //                .save(consumer);
-        CustomRecipeBuilder.special(Recipes.POUCH_COLORING.get())
+        CustomRecipeBuilder.special(Recipes.POUCH_RECIPE.get())
                 .save(consumer, "pouch_coloring");
     }
 

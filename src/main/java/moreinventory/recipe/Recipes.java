@@ -11,7 +11,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class Recipes {
     public static final DeferredRegister<IRecipeSerializer<?>> RECIPE = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MoreInventoryMOD.MODID);
 
-    public static final RegistryObject<SpecialRecipeSerializer<PouchColoringRecipe>> POUCH_COLORING = RECIPE.register("pouch_coloring", () -> new SpecialRecipeSerializer<>(PouchColoringRecipe::new));
+    public static final RegistryObject<SpecialRecipeSerializer<PouchRecipe>> POUCH_RECIPE = RECIPE.register("pouch_recipe", () -> new SpecialRecipeSerializer<>(PouchRecipe::new));
 
     public static void register(IEventBus eventBus) {
         RECIPE.register(eventBus);

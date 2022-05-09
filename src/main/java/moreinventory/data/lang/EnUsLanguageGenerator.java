@@ -1,14 +1,26 @@
 package moreinventory.data.lang;
 
+import java.util.HashMap;
+
 import moreinventory.block.Blocks;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.item.Items;
+import moreinventory.item.PouchItem;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.item.DyeColor;
 import net.minecraftforge.common.data.LanguageProvider;
 
 public class EnUsLanguageGenerator extends LanguageProvider {
     public EnUsLanguageGenerator(DataGenerator generator, String modid) {
         super(generator, modid, "en_us");
+    }
+
+    public static HashMap<DyeColor, String> colorMap = new HashMap<>();
+    static {
+        for (DyeColor color : DyeColor.values()) {
+            String name = color.getName();
+            colorMap.put(color, name.substring(0, 1).toUpperCase() + name.substring(1));
+        }
     }
 
     @Override
@@ -49,6 +61,9 @@ public class EnUsLanguageGenerator extends LanguageProvider {
         add(Text.importerMoveBlackDetail, "List is Black List");
 
         add(Items.POUCH, "Pouch");
+        for (DyeColor color : DyeColor.values()) {
+            add(PouchItem.byColor(color), colorMap.get(color) + " Pouch");
+        }
         add(Text.pouchConfig, "config");
         add(Text.pouchConfigStorageBox, "If enabled, container box can collect from this pouch.");
         add(Text.pouchConfigHotBar, "If enabled, this pouch can collect from your player hotbar when sneak and use.");

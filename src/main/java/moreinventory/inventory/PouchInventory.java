@@ -21,6 +21,7 @@ public class PouchInventory implements IInventory {
     public static final int slotSize = 9 * 6;
     public static final int collectableSlotSize = 18;
     private NonNullList<ItemStack> slotItems = NonNullList.withSize(slotSize + collectableSlotSize, ItemStack.EMPTY);
+    public static final int maxUpgradeNumCollectableSlot = 4;
 
     private ItemStack usingPouch;
 
@@ -133,6 +134,7 @@ public class PouchInventory implements IInventory {
     public void increaseGrade() {
         if (this.grade < 4)
             this.grade++;
+        this.setChanged();
     }
 
     public int getGrade() {
