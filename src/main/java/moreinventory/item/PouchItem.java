@@ -1,9 +1,10 @@
 package moreinventory.item;
 
+import java.util.TreeMap;
+
 import moreinventory.container.PouchContainerProvider;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.inventory.PouchInventory;
-import moreinventory.util.MIMLog;
 import moreinventory.util.MIMUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -26,12 +27,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class PouchItem extends Item {
+    private static final TreeMap<DyeColor, PouchItem> ITEM_BY_COLOR = new TreeMap<>();
     public static final int default_color = 0;
+    private DyeColor color;
 
-    public PouchItem() {
+    public PouchItem(DyeColor color) {
         super(new Properties()
                 .durability(0)
                 .tab(MoreInventoryMOD.itemGroup));
+        this.color = color;
+        if (color != null)
+            ITEM_BY_COLOR.put(color, this);
     }
 
     @Override
@@ -48,12 +54,14 @@ public class PouchItem extends Item {
         if (block == Blocks.CAULDRON) {
             int level = blockState.getValue(CauldronBlock.LEVEL);
             if (0 < level && getColor(stack) != default_color) {
-                resetColor(context);
+                ItemStack defaultColorPouch = resetColor(stack);
+                PlayerEntity player = context.getPlayer();
+                player.setItemInHand(player.getUsedItemHand(), defaultColorPouch);
                 BlockState newState = blockState.setValue(CauldronBlock.LEVEL, level - 1);
                 world.setBlockAndUpdate(blockPos, newState);
                 world.playSound(null, context.getClickedPos(), SoundEvents.AMBIENT_UNDERWATER_EXIT, SoundCategory.PLAYERS, 1.5F, 0.85F);
 
-                return ActionResultType.SUCCESS;
+                return ActionResultType.CONSUME;
             }
         }
         return ActionResultType.PASS;
@@ -62,13 +70,11 @@ public class PouchItem extends Item {
     @Override
     public ActionResultType useOn(ItemUseContext context) {
         World world = context.getLevel();
-
-        PlayerEntity player = context.getPlayer();
         BlockPos blockPos = context.getClickedPos();
+        PlayerEntity player = context.getPlayer();
         if (player.isShiftKeyDown()) {
             TileEntity tile = world.getBlockEntity(blockPos);
             ItemStack itemStack = player.getMainHandItem();
-            CompoundNBT tmp = itemStack.getOrCreateTag();
             PouchInventory inventory = new PouchInventory(itemStack);
 
             if (tile == null) {
@@ -77,9 +83,7 @@ public class PouchItem extends Item {
                 inventory.transferToChest((IInventory) tile);
             }
 
-            MIMLog.warning(tmp.toString());
-
-            return ActionResultType.SUCCESS;
+            return ActionResultType.sidedSuccess(world.isClientSide);
         }
 
         return ActionResultType.PASS;
@@ -87,7 +91,6 @@ public class PouchItem extends Item {
 
     @Override
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-
         ItemStack itemStack = player.getItemInHand(hand);
         if (player.isShiftKeyDown()) {
             PouchInventory inventory = new PouchInventory(itemStack);
@@ -97,26 +100,45 @@ public class PouchItem extends Item {
         if (!world.isClientSide) {
             player.openMenu(new PouchContainerProvider(hand));
         }
-        return super.use(world, player, hand);
+        return ActionResult.sidedSuccess(itemStack, world.isClientSide());
 
     }
 
-    public int getColor(ItemStack s) {
-        final String key = "CustomModelData";
-        CompoundNBT tag = s.getOrCreateTag();
-        int color = tag.getByte(key);
-        return color;
+    public DyeColor getColor() {
+        return this.color;
     }
 
-    public void resetColor(ItemUseContext context) {
-        setColor(context, default_color);
+    public static ItemStack resetColor(ItemStack itemStack) {
+        return setColor(itemStack, default_color);
     }
 
-    public void setColor(ItemUseContext context, DyeColor color) {
-        setColor(context, color.getId() + 1);
+    public static ItemStack setColor(ItemStack itemStack, DyeColor color) {
+        return setColor(itemStack, (color == null ? 0 : color.getId() + 1));
     }
 
-    public void setColor(ItemUseContext context, int color) {
-        MIMUtils.setIcon(context.getItemInHand(), (byte) color);
+    public static ItemStack setColor(ItemStack itemStack, int color) {
+        if (!(itemStack.getItem() instanceof PouchItem))
+            return itemStack;
+        CompoundNBT tag = itemStack.getOrCreateTag();
+        PouchItem newPouch = (color == 0 ? Items.POUCH : byColor(DyeColor.byId(color - 1)));
+        itemStack = new ItemStack(newPouch);
+        itemStack.setTag(tag);
+        MIMUtils.setIcon(itemStack, (byte) color);
+
+        return itemStack;
+    }
+
+    public static int getColor(ItemStack s) {
+        if (!(s.getItem() instanceof PouchItem)) {
+            return 0;
+
+        } else {
+            DyeColor color = ((PouchItem) s.getItem()).color;
+            return color == null ? 0 : color.getId();
+        }
+    }
+
+    public static PouchItem byColor(DyeColor color) {
+        return ITEM_BY_COLOR.get(color);
     }
 }

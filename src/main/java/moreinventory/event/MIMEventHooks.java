@@ -2,7 +2,7 @@ package moreinventory.event;
 
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.inventory.PouchInventory;
-import moreinventory.item.Items;
+import moreinventory.item.PouchItem;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = MoreInventoryMOD.MODID)
 public class MIMEventHooks {
+
     @SubscribeEvent
     public static void pickupItem(EntityItemPickupEvent event) {
         if (event.getPlayer() instanceof ServerPlayerEntity) {
@@ -23,9 +24,9 @@ public class MIMEventHooks {
                 ItemStack itemstack = inventory.getItem(i);
 
                 if (itemstack != null) {
-                    String uuid = player.getStringUUID();
+                    //                    String uuid = player.getStringUUID();
 
-                    if (itemstack.getItem() == Items.POUCH) {
+                    if (itemstack.getItem() instanceof PouchItem) {
                         PouchInventory pouch = new PouchInventory(itemstack);
 
                         if (pouch.canAutoCollect(item)) {
@@ -54,4 +55,5 @@ public class MIMEventHooks {
             }
         }
     }
+
 }

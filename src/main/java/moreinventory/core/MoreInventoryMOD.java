@@ -14,6 +14,7 @@ import moreinventory.container.Containers;
 import moreinventory.item.TransporterItem;
 import moreinventory.network.ServerboundImporterUpdatePacket;
 import moreinventory.network.ServerboundPouchUpdatePacket;
+import moreinventory.recipe.Recipes;
 import moreinventory.tileentity.TileEntities;
 import moreinventory.tileentity.storagebox.StorageBoxInventorySize;
 import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
@@ -23,6 +24,7 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -56,6 +58,9 @@ public class MoreInventoryMOD {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 
+        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        Recipes.register(eventBus);
+
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -71,7 +76,6 @@ public class MoreInventoryMOD {
         TransporterItem.setTransportableBlocks();
         StorageBoxInventorySize.init();
         StorageBoxTypeTileEntity.init();
-
     }
 
     public static void initNetwork() {

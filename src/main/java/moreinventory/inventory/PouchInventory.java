@@ -2,7 +2,7 @@ package moreinventory.inventory;
 
 import java.util.List;
 
-import moreinventory.item.Items;
+import moreinventory.item.PouchItem;
 import moreinventory.tileentity.BaseStorageBoxTileEntity;
 import moreinventory.tileentity.storagebox.network.StorageBoxNetworkManager;
 import moreinventory.util.MIMUtils;
@@ -130,6 +130,11 @@ public class PouchInventory implements IInventory {
         return this.usingPouch.sameItem(player.getItemInHand(player.getUsedItemHand()));
     }
 
+    public void increaseGrade() {
+        if (this.grade < 4)
+            this.grade++;
+    }
+
     public int getGrade() {
         return this.grade;
     }
@@ -178,7 +183,7 @@ public class PouchInventory implements IInventory {
             if (itemStack.isEmpty())
                 continue;
 
-            if (itemStack.getItem() == Items.POUCH) {
+            if (itemStack.getItem() instanceof PouchItem) {
                 PouchInventory pouch = new PouchInventory(itemStack);
                 if (pouch.isAutoCollect && flag && itemStack != this.usingPouch) {
                     pouch.collectAllItemStack(inventory, false);

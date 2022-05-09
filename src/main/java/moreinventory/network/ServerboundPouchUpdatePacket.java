@@ -3,7 +3,7 @@ package moreinventory.network;
 import java.util.function.Supplier;
 
 import moreinventory.inventory.PouchInventory;
-import moreinventory.item.Items;
+import moreinventory.item.PouchItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -39,7 +39,7 @@ public class ServerboundPouchUpdatePacket {
         ctx.get().enqueueWork(() -> {
             PlayerEntity player = ctx.get().getSender();
             ItemStack itemStack = player.getItemInHand(player.getUsedItemHand());
-            if (itemStack != null && itemStack.getItem() == Items.POUCH) {
+            if (itemStack != null && itemStack.getItem() instanceof PouchItem) {
                 PouchInventory pouch_ = new PouchInventory(player, itemStack);
                 pouch_.setValByID(msg.id, msg.val);
             }

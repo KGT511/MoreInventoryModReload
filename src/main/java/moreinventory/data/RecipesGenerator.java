@@ -3,7 +3,9 @@ package moreinventory.data;
 import java.util.function.Consumer;
 
 import moreinventory.block.Blocks;
+import moreinventory.recipe.Recipes;
 import net.minecraft.block.Block;
+import net.minecraft.data.CustomRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
@@ -98,6 +100,14 @@ public class RecipesGenerator extends RecipeProvider {
                 .unlockedBy("has_stone", has(Items.STONE))
                 .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
                 .save(consumer);
+
+        //        ShapelessRecipeBuilder.shapeless(moreinventory.item.Items.POUCH)
+        //                .requires(moreinventory.item.Items.POUCH)
+        //                .requires(Tags.Items.DYES)
+        //                .unlockedBy("has_pouch", has(moreinventory.item.Items.POUCH))
+        //                .save(consumer);
+        CustomRecipeBuilder.special(Recipes.POUCH_COLORING.get())
+                .save(consumer, "pouch_coloring");
     }
 
     private void registerStorageBoxRecipe(Consumer<IFinishedRecipe> consumer, Block block, IOptionalNamedTag<Item> ingotsIron) {

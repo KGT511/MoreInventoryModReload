@@ -1,7 +1,7 @@
 package moreinventory.container;
 
 import moreinventory.inventory.PouchInventory;
-import moreinventory.item.Items;
+import moreinventory.item.PouchItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ClickType;
@@ -73,7 +73,7 @@ public class PouchContainer extends Container {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
-            if (itemstack1 != null && itemstack1.getItem() == Items.POUCH) {
+            if (itemstack1 != null && itemstack1.getItem() instanceof PouchItem) {
                 return ItemStack.EMPTY;
             }
 

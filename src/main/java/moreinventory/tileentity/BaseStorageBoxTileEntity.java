@@ -2,7 +2,7 @@ package moreinventory.tileentity;
 
 import moreinventory.block.StorageBoxBlock;
 import moreinventory.inventory.PouchInventory;
-import moreinventory.item.Items;
+import moreinventory.item.PouchItem;
 import moreinventory.tileentity.storagebox.StorageBoxInventorySize;
 import moreinventory.tileentity.storagebox.StorageBoxType;
 import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
@@ -292,7 +292,7 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
         for (int i = 0; i < inventory.getContainerSize(); ++i) {
             ItemStack stack = inventory.getItem(i);
             if (!stack.isEmpty()) {
-                if (stack.getItem() == Items.POUCH) {
+                if (stack.getItem() instanceof PouchItem) {
                     PouchInventory pouch = new PouchInventory(stack);
                     if (pouch.getIsStorageBox()) {
                         pouch.collectedByStorageBox(this);
