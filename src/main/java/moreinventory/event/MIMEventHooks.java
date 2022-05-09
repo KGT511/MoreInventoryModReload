@@ -10,7 +10,7 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MODID)
+@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MOD_ID)
 public class MIMEventHooks {
 
     @SubscribeEvent

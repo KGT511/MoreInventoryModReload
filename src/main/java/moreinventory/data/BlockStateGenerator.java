@@ -27,7 +27,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 public class BlockStateGenerator extends BlockStateProvider {
 
     public BlockStateGenerator(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, MoreInventoryMOD.MODID, exFileHelper);
+        super(gen, MoreInventoryMOD.MOD_ID, exFileHelper);
     }
 
     @Nonnull
@@ -235,7 +235,7 @@ public class BlockStateGenerator extends BlockStateProvider {
         String exporterName = name(Blocks.EXPORTER);
         Function<String, BlockModelBuilder> makeExporterBuilder = (Function<String, BlockModelBuilder>) (str) -> {
             return models().withExistingParent("block/" + exporterName + "/" + exporterName + str,
-                    new ResourceLocation(MoreInventoryMOD.MODID, "block/" + importerName + "/" + importerName + str))
+                    new ResourceLocation(MoreInventoryMOD.MOD_ID, "block/" + importerName + "/" + importerName + str))
                     .texture("all", texture(exporterName + "_black"))
                     .texture("blue", texture(exporterName))
                     .texture("black", black_texture);

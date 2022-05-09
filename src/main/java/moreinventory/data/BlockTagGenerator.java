@@ -7,7 +7,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class BlockTagGenerator extends BlockTagsProvider {
     public BlockTagGenerator(DataGenerator generator, ExistingFileHelper helper) {
-        super(generator, MoreInventoryMOD.MODID, helper);
+        super(generator, MoreInventoryMOD.MOD_ID, helper);
     }
 
     @Override

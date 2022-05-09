@@ -15,7 +15,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Items {
     public static final List<Item> itemList = new ArrayList<Item>();
     public static final Item CATCHALL = register("catchall", Blocks.CATCHALL);
@@ -58,7 +58,7 @@ public class Items {
 
     private static Item register(String key, Item itemIn) {
         itemList.add(itemIn);
-        return itemIn.setRegistryName(MoreInventoryMOD.MODID, key);
+        return itemIn.setRegistryName(MoreInventoryMOD.MOD_ID, key);
     }
 
     private static Item register(String key, Block blockIn) {

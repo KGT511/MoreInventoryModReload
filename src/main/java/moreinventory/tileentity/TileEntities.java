@@ -22,7 +22,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TileEntities {
     public static final List<TileEntityType<?>> tileList = new ArrayList<>();
 
@@ -59,7 +59,7 @@ public class TileEntities {
 
     private static <T extends TileEntity> ForgeRegistryEntry<TileEntityType<?>> register(String key, TileEntityType<?> itemIn) {
         tileList.add(itemIn);
-        return itemIn.setRegistryName(MoreInventoryMOD.MODID, key);
+        return itemIn.setRegistryName(MoreInventoryMOD.MOD_ID, key);
     }
 
     @SubscribeEvent

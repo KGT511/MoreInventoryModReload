@@ -37,15 +37,15 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
-@Mod(MoreInventoryMOD.MODID)
+@Mod(MoreInventoryMOD.MOD_ID)
 public class MoreInventoryMOD {
-    public static final String MODID = "moreinventorymod";
+    public static final String MOD_ID = "moreinventorymod";
     private static final Logger LOGGER = LogManager.getLogger();
     public static final ItemGroup itemGroup = new MoreInventoryMODItemGroup();
     //    public static final SimpleNetworkWrapper network = new SimpleNetworkWrapper(MOD_ID);
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
-            .named(new ResourceLocation(MODID, "main"))
+            .named(new ResourceLocation(MOD_ID, "main"))
             .networkProtocolVersion(() -> PROTOCOL_VERSION)
             .clientAcceptedVersions(PROTOCOL_VERSION::equals)
             .serverAcceptedVersions(PROTOCOL_VERSION::equals)

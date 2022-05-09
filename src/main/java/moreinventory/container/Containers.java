@@ -12,7 +12,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Containers {
     public static final List<ContainerType<?>> containerList = new ArrayList<>();
 
@@ -25,7 +25,7 @@ public class Containers {
 
     private static <T extends Container> ForgeRegistryEntry<ContainerType<?>> register(String key, ContainerType<T> itemIn) {
         containerList.add(itemIn);
-        return itemIn.setRegistryName(MoreInventoryMOD.MODID, key);
+        return itemIn.setRegistryName(MoreInventoryMOD.MOD_ID, key);
     }
 
     @SubscribeEvent

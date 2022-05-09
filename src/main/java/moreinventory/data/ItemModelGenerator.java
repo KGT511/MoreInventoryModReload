@@ -19,7 +19,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ItemModelGenerator extends ItemModelProvider {
     public ItemModelGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, MoreInventoryMOD.MODID, existingFileHelper);
+        super(generator, MoreInventoryMOD.MOD_ID, existingFileHelper);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ItemModelGenerator extends ItemModelProvider {
     }
 
     public static ResourceLocation prefix(String name) {
-        return new ResourceLocation(MoreInventoryMOD.MODID, name.toLowerCase(Locale.ROOT));
+        return new ResourceLocation(MoreInventoryMOD.MOD_ID, name.toLowerCase(Locale.ROOT));
     }
 
     private ItemModelBuilder singleTexTool(Item item) {

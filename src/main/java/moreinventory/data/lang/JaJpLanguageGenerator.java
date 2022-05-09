@@ -37,7 +37,7 @@ public class JaJpLanguageGenerator extends LanguageProvider {
 
     @Override
     public String getName() {
-        return MoreInventoryMOD.MODID + " " + super.getName();
+        return MoreInventoryMOD.MOD_ID + " " + super.getName();
     }
 
     @Override

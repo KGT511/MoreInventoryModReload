@@ -9,7 +9,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class Recipes {
-    public static final DeferredRegister<IRecipeSerializer<?>> RECIPE = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MoreInventoryMOD.MODID);
+    public static final DeferredRegister<IRecipeSerializer<?>> RECIPE = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MoreInventoryMOD.MOD_ID);
 
     public static final RegistryObject<SpecialRecipeSerializer<PouchRecipe>> POUCH_RECIPE = RECIPE.register("pouch_recipe", () -> new SpecialRecipeSerializer<>(PouchRecipe::new));
 

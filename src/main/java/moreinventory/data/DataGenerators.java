@@ -8,7 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 
-@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DataGenerators {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
@@ -25,8 +25,8 @@ public class DataGenerators {
         if (event.includeClient()) {
             generator.addProvider(new BlockStateGenerator(generator, event.getExistingFileHelper()));
             generator.addProvider(new ItemModelGenerator(generator, event.getExistingFileHelper()));
-            generator.addProvider(new EnUsLanguageGenerator(generator, MoreInventoryMOD.MODID));
-            generator.addProvider(new JaJpLanguageGenerator(generator, MoreInventoryMOD.MODID));
+            generator.addProvider(new EnUsLanguageGenerator(generator, MoreInventoryMOD.MOD_ID));
+            generator.addProvider(new JaJpLanguageGenerator(generator, MoreInventoryMOD.MOD_ID));
         }
 
     }

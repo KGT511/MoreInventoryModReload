@@ -17,10 +17,10 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 
 public class TransportRenderer extends TileEntityRenderer<BaseTransportTileEntity> {
-    private static final ResourceLocation IMPORTER_LIGHT_TEXTURE = new ResourceLocation(MoreInventoryMOD.MODID, "textures/block/importer.png");
-    private static final ResourceLocation IMPORTER_DARK_TEXTURE = new ResourceLocation(MoreInventoryMOD.MODID, "textures/block/importer_black.png");
-    private static final ResourceLocation EXPORTER_LIGHT_TEXTURE = new ResourceLocation(MoreInventoryMOD.MODID, "textures/block/exporter.png");
-    private static final ResourceLocation EXPORTER_DARK_TEXTURE = new ResourceLocation(MoreInventoryMOD.MODID, "textures/block/exporter_black.png");
+    private static final ResourceLocation IMPORTER_LIGHT_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/importer.png");
+    private static final ResourceLocation IMPORTER_DARK_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/importer_black.png");
+    private static final ResourceLocation EXPORTER_LIGHT_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/exporter.png");
+    private static final ResourceLocation EXPORTER_DARK_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/exporter_black.png");
 
     private final ModelRenderer in1;
     private final ModelRenderer in2;

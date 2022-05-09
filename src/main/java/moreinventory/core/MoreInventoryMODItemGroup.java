@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class MoreInventoryMODItemGroup extends ItemGroup {
     public MoreInventoryMODItemGroup() {
-        super(MoreInventoryMOD.MODID);
+        super(MoreInventoryMOD.MOD_ID);
     }
 
     @Override

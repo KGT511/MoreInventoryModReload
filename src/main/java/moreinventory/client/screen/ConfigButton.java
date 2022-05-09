@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
 public class ConfigButton extends Widget {
-    public static final ResourceLocation POUCH_GUI_TEXTURE = new ResourceLocation(MoreInventoryMOD.MODID, "textures/gui/pouch.png");;
+    public static final ResourceLocation POUCH_GUI_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/gui/pouch.png");;
 
     private int iconIndexX, iconIndexY;
     private boolean val;
