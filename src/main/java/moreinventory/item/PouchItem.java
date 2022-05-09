@@ -5,7 +5,6 @@ import java.util.TreeMap;
 import moreinventory.container.PouchContainerProvider;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.inventory.PouchInventory;
-import moreinventory.util.MIMUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -123,7 +122,6 @@ public class PouchItem extends Item {
         PouchItem newPouch = (color == 0 ? Items.POUCH : byColor(DyeColor.byId(color - 1)));
         itemStack = new ItemStack(newPouch);
         itemStack.setTag(tag);
-        MIMUtils.setIcon(itemStack, (byte) color);
 
         return itemStack;
     }

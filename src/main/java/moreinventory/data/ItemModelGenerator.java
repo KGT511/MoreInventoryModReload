@@ -5,7 +5,6 @@ import java.util.Locale;
 import moreinventory.block.Blocks;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.item.Items;
-import moreinventory.item.PouchItem;
 import moreinventory.item.TransporterItem;
 import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
 import net.minecraft.block.Block;
@@ -106,14 +105,7 @@ public class ItemModelGenerator extends ItemModelProvider {
             String name = "pouch_" + color.getName();
             tool(name, prefix("item/" + name));
         }
-        String name = "item/" + name(Items.POUCH);
-        ItemModelBuilder builder = tool(name(Items.POUCH), prefix(name));
-        ResourceLocation predicateName = new ResourceLocation("custom_model_data");
-        builder.override().predicate(predicateName, PouchItem.default_color).model(getBuilder(name));
-        for (DyeColor color : DyeColor.values()) {
-            builder.override().predicate(predicateName, color.getId() + 1).model(getBuilder(name + "_" + color.getName()));
-        }
-
+        tool("pouch", prefix("item/pouch"));
     }
 
 }
