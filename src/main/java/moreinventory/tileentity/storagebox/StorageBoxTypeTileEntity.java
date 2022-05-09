@@ -9,9 +9,9 @@ import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntityType;
 
 public class StorageBoxTypeTileEntity {
-    public static TreeMap<StorageBoxType, TileEntityType<BaseStorageBoxTileEntity>> map = new TreeMap<>();
-    public static TreeMap<StorageBoxType, Class<? extends BaseStorageBoxTileEntity>> classMap = new TreeMap<>();
-    public static TreeMap<StorageBoxType, Block> blockMap = new TreeMap<>();
+    public static final TreeMap<StorageBoxType, TileEntityType<BaseStorageBoxTileEntity>> map = new TreeMap<>();
+    public static final TreeMap<StorageBoxType, Class<? extends BaseStorageBoxTileEntity>> classMap = new TreeMap<>();
+    public static final TreeMap<StorageBoxType, Block> blockMap = new TreeMap<>();
 
     public static void init() {
         map.put(StorageBoxType.WOOD, TileEntities.STORAGE_BOX_WOOD_TILE_TYPE);

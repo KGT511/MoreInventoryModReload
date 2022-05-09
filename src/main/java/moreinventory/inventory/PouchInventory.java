@@ -29,7 +29,7 @@ public class PouchInventory implements IInventory {
         STORAGE_BOX, HOT_BAR, AUTO_COLLECT
     };
 
-    private boolean isStorageBox = true;
+    private boolean isStorageBox = false;
     private boolean isHotBar = true;
     private boolean isAutoCollect = true;
     private static final String isStorageBoxTagKey = "isStorageBox";

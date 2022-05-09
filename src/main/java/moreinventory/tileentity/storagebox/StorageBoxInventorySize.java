@@ -3,7 +3,7 @@ package moreinventory.tileentity.storagebox;
 import java.util.HashMap;
 
 public class StorageBoxInventorySize {
-    public static HashMap<StorageBoxType, StorageBoxInventorySize> map = new HashMap<>();
+    public static final HashMap<StorageBoxType, StorageBoxInventorySize> map = new HashMap<>();
 
     private int inventorySize;
 

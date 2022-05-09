@@ -21,7 +21,7 @@ public class TransportContainer extends Container {
         return new TransportContainer(windowID, playerInventory, tile);
     }
 
-    public final int slotSize = BaseTransportTileEntity.inventorySize;
+    public static final int slotSize = BaseTransportTileEntity.inventorySize;
 
     private BaseTransportTileEntity transportManager;
 

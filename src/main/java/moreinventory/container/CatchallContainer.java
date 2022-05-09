@@ -14,7 +14,7 @@ public class CatchallContainer extends Container {
         return new CatchallContainer(windowID, playerInventory, tile);
     }
 
-    public final int slotSize = CatchallTileEntity.inventorySize;
+    public static final int slotSize = CatchallTileEntity.inventorySize;
 
     private CatchallTileEntity catchall;
 

@@ -15,7 +15,7 @@ public class JaJpLanguageGenerator extends LanguageProvider {
         super(generator, modid, "ja_jp");
     }
 
-    public static HashMap<DyeColor, String> colorMap = new HashMap<>();
+    public static final HashMap<DyeColor, String> colorMap = new HashMap<>();
     static {
         colorMap.put(DyeColor.WHITE, "白");
         colorMap.put(DyeColor.ORANGE, "橙");

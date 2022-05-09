@@ -15,7 +15,7 @@ public class EnUsLanguageGenerator extends LanguageProvider {
         super(generator, modid, "en_us");
     }
 
-    public static HashMap<DyeColor, String> colorMap = new HashMap<>();
+    public static final HashMap<DyeColor, String> colorMap = new HashMap<>();
     static {
         for (DyeColor color : DyeColor.values()) {
             String name = color.getName();

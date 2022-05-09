@@ -23,7 +23,7 @@ import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 @OnlyIn(Dist.CLIENT)
 public class TransportContainerScreen extends ContainerScreen<TransportContainer> {
 
-    private static ResourceLocation DISPENSER_GUI_TEXTURE = new ResourceLocation("textures/gui/container/dispenser.png");
+    private static final ResourceLocation DISPENSER_GUI_TEXTURE = new ResourceLocation("textures/gui/container/dispenser.png");
     private Button isWhiteButton;
     private Button isRegisterButton;
 

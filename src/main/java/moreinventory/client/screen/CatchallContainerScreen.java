@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class CatchallContainerScreen extends ContainerScreen<CatchallContainer> {
-    private static ResourceLocation CATCHALL_GUI_TEXTURE = new ResourceLocation(MoreInventoryMOD.MODID, "textures/gui/catchall.png");
+    private static final ResourceLocation CATCHALL_GUI_TEXTURE = new ResourceLocation(MoreInventoryMOD.MODID, "textures/gui/catchall.png");
 
     public CatchallContainerScreen(CatchallContainer catchallContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(catchallContainer, inv, titleIn);

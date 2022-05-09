@@ -63,6 +63,7 @@ public class BlockStateGenerator extends BlockStateProvider {
                     { { 1, 0, 1 }, { 15, 0, 15 } },
             };
             for (int[][] fromTo : fromToArr) {
+                @SuppressWarnings("rawtypes")
                 ElementBuilder element = builder.element().from(fromTo[0][0], fromTo[0][1], fromTo[0][2]).to(fromTo[1][0], fromTo[1][1], fromTo[1][2]);
                 for (Direction direction : Direction.values()) {
                     element.face(direction).texture("#all").rotation(FaceRotation.UPSIDE_DOWN);
@@ -108,6 +109,7 @@ public class BlockStateGenerator extends BlockStateProvider {
 
     }
 
+    @SuppressWarnings("rawtypes")
     private void registerTransportBlocks() {
         String importerName = name(Blocks.IMPORTER);
         ResourceLocation black_texture = mcLoc("block/" + name(net.minecraft.block.Blocks.ANVIL));

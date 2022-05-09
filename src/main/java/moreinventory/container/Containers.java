@@ -14,13 +14,13 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 @Mod.EventBusSubscriber(modid = MoreInventoryMOD.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Containers {
-    public static List<ContainerType<?>> containerList = new ArrayList<>();
+    public static final List<ContainerType<?>> containerList = new ArrayList<>();
 
-    public static ContainerType<CatchallContainer> CATCHALL_CONTAINER_TYPE = (ContainerType<CatchallContainer>) register("catchall_container",
+    public static final ContainerType<CatchallContainer> CATCHALL_CONTAINER_TYPE = (ContainerType<CatchallContainer>) register("catchall_container",
             IForgeContainerType.create(CatchallContainer::createContainerClientSide));
-    public static ContainerType<TransportContainer> TRANSPORT_MANAGER_CONTAINER_TYPE = (ContainerType<TransportContainer>) register("importer_container",
+    public static final ContainerType<TransportContainer> TRANSPORT_MANAGER_CONTAINER_TYPE = (ContainerType<TransportContainer>) register("importer_container",
             IForgeContainerType.create(TransportContainer::createContainerClientSide));
-    public static ContainerType<PouchContainer> POUCH_CONTAINER_TYPE = (ContainerType<PouchContainer>) register("pouch_container",
+    public static final ContainerType<PouchContainer> POUCH_CONTAINER_TYPE = (ContainerType<PouchContainer>) register("pouch_container",
             IForgeContainerType.create(PouchContainer::createContainerClientSide));
 
     private static <T extends Container> ForgeRegistryEntry<ContainerType<?>> register(String key, ContainerType<T> itemIn) {
