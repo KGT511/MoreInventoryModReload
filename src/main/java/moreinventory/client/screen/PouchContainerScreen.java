@@ -121,9 +121,4 @@ public class PouchContainerScreen extends ContainerScreen<PouchContainer> {
         MIMUtils.drawStringWithoutShadow(matrixStack, this.font, new TranslationTextComponent(Text.pouchConfig), this.imageWidth + 18, 10, 4210752);
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-
-    }
 }

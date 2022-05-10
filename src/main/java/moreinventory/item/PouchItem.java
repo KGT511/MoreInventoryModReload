@@ -132,7 +132,7 @@ public class PouchItem extends Item {
 
         } else {
             DyeColor color = ((PouchItem) s.getItem()).color;
-            return color == null ? 0 : color.getId();
+            return color == null ? 0 : color.getId() + 1;
         }
     }
 
