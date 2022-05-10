@@ -6,6 +6,8 @@ import moreinventory.blockentity.storagebox.StorageBoxType;
 import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
 import moreinventory.blockentity.storagebox.network.IStorageBoxNetwork;
 import moreinventory.blockentity.storagebox.network.StorageBoxNetworkManager;
+import moreinventory.inventory.PouchInventory;
+import moreinventory.item.PouchItem;
 import moreinventory.util.MIMUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -277,8 +279,15 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
 
         for (int i = 0; i < inventory.getContainerSize(); ++i) {
             var stack = inventory.getItem(i);
-            if (stack.getItem() != ItemStack.EMPTY.getItem()) {
-                store(stack);
+            if (!stack.isEmpty()) {
+                if (stack.getItem() instanceof PouchItem) {
+                    var pouch = new PouchInventory(stack);
+                    if (pouch.getIsStorageBox()) {
+                        pouch.collectedByStorageBox(this);
+                    }
+                } else {
+                    store(stack);
+                }
             }
         }
 

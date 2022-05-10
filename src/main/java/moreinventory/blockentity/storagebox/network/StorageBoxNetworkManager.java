@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 
 import moreinventory.blockentity.BaseStorageBoxBlockEntity;
 import moreinventory.blockentity.storagebox.StorageBoxType;
+import moreinventory.inventory.PouchInventory;
+import moreinventory.item.PouchItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Container;
@@ -55,8 +57,15 @@ public class StorageBoxNetworkManager {
     public void storeInventoryToNetwork(Container inventory, BlockPos originPos) {
         for (int i = 0; i < inventory.getContainerSize(); ++i) {
             var stack = inventory.getItem(i);
-            if (stack.getItem() != ItemStack.EMPTY.getItem()) {
-                storeToNetwork(stack, false, originPos);
+            if (!stack.isEmpty()) {
+                if (stack.getItem() instanceof PouchItem) {
+                    var pouch = new PouchInventory(stack);
+                    if (pouch.getIsStorageBox()) {
+                        pouch.storeToNetwork(this, originPos);
+                    }
+                } else {
+                    storeToNetwork(stack, false, originPos);
+                }
             }
         }
     }

@@ -2,8 +2,6 @@ package moreinventory.client.screen;
 
 import java.util.function.BiConsumer;
 
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -39,7 +37,7 @@ public class ConfigButton extends AbstractWidget {
             var minecraft = Minecraft.getInstance();
 
             RenderSystem.setShaderTexture(0, POUCH_GUI_TEXTURE);
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            //            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
             this.setFocused(mouseX >= this.x && mouseY >= this.y && mouseX < this.x + width && mouseY < this.y + this.height);
 

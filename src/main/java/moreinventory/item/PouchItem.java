@@ -45,7 +45,7 @@ public class PouchItem extends Item {
         var blockState = level.getBlockState(blockPos);
         var block = blockState.getBlock();
 
-        if (block == Blocks.CAULDRON) {
+        if (block == Blocks.WATER_CAULDRON) {
             int waterLevel = blockState.getValue(LayeredCauldronBlock.LEVEL);
             if (0 < waterLevel && getColor(stack) != default_color) {
                 var defaultColorPouch = resetColor(stack);
@@ -126,8 +126,8 @@ public class PouchItem extends Item {
             return 0;
 
         } else {
-            DyeColor color = ((PouchItem) s.getItem()).color;
-            return color == null ? 0 : color.getId();
+            var color = ((PouchItem) s.getItem()).color;
+            return color == null ? 0 : color.getId() + 1;
         }
     }
 

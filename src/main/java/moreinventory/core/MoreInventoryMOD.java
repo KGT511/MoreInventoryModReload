@@ -17,6 +17,7 @@ import moreinventory.client.screen.TransportContainerScreen;
 import moreinventory.container.Containers;
 import moreinventory.item.TransporterItem;
 import moreinventory.network.ServerboundImporterUpdatePacket;
+import moreinventory.network.ServerboundPouchUpdatePacket;
 import moreinventory.recipe.Recipes;
 import moreinventory.util.MIMLog;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -83,8 +84,14 @@ public class MoreInventoryMOD {
     public static void initNetwork() {
         var id = 0;
         CHANNEL.messageBuilder(ServerboundImporterUpdatePacket.class, id++)
-                .encoder(ServerboundImporterUpdatePacket::encode).decoder(ServerboundImporterUpdatePacket::decode)
+                .encoder(ServerboundImporterUpdatePacket::encode)
+                .decoder(ServerboundImporterUpdatePacket::decode)
                 .consumer(ServerboundImporterUpdatePacket::handle)
+                .add();
+        CHANNEL.messageBuilder(ServerboundPouchUpdatePacket.class, id++)
+                .encoder(ServerboundPouchUpdatePacket::encode)
+                .decoder(ServerboundPouchUpdatePacket::decode)
+                .consumer(ServerboundPouchUpdatePacket::handle)
                 .add();
     }
 
