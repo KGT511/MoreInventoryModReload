@@ -17,18 +17,18 @@ public class SpannerItem extends Item {
 
     @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
-        var world = context.getLevel();
-        if (world.isClientSide) {
+        var level = context.getLevel();
+        if (level.isClientSide) {
             return InteractionResult.PASS;
         }
 
         var player = context.getPlayer();
         var pos = context.getClickedPos();
         if (!player.isShiftKeyDown()) {
-            var state = world.getBlockState(pos);
+            var state = level.getBlockState(pos);
             var block = state.getBlock();
             if (Blocks.blockList.contains(block)) {
-                world.setBlockAndUpdate(pos, block.rotate(world.getBlockState(pos), world, pos, Rotation.CLOCKWISE_90));
+                level.setBlockAndUpdate(pos, block.rotate(level.getBlockState(pos), level, pos, Rotation.CLOCKWISE_90));
                 return InteractionResult.SUCCESS;
             }
         }

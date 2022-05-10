@@ -20,6 +20,8 @@ public class Containers {
             "catchall_container", IForgeContainerType.create(CatchallContainer::createContainerClientSide));
     public static MenuType<TransportContainer> TRANSPORT_CONTAINER_TYPE = (MenuType<TransportContainer>) register("importer_container",
             IForgeContainerType.create(TransportContainer::createContainerClientSide));
+    public static final MenuType<PouchContainer> POUCH_CONTAINER_TYPE = (MenuType<PouchContainer>) register("pouch_container",
+            IForgeContainerType.create(PouchContainer::createContainerClientSide));
 
     private static <T extends AbstractContainerMenu> ForgeRegistryEntry<MenuType<?>> register(String key, MenuType<T> itemIn) {
         containerList.add(itemIn);

@@ -6,9 +6,11 @@ import moreinventory.block.Blocks;
 import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.item.Items;
+import moreinventory.item.PouchItem;
 import moreinventory.item.TransporterItem;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -35,6 +37,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         singleTexTool(Items.IMPORTER);
         singleTexTool(Items.EXPORTER);
         singleTexTool(Items.SPANNER);
+        registerPouch();
     }
 
     public static String name(Block block) {
@@ -97,4 +100,11 @@ public class ItemModelGenerator extends ItemModelProvider {
         builder.override().predicate(predicateName, 99).model(getBuilder(name + "_furnace_lit"));
     }
 
+    public void registerPouch() {
+        for (var color : DyeColor.values()) {
+            singleTexTool(PouchItem.byColor(color));
+        }
+        singleTexTool(Items.POUCH);
+        singleTexTool(Items.LEATHER_PACK);
+    }
 }

@@ -1,14 +1,38 @@
 package moreinventory.data.lang;
 
+import java.util.HashMap;
+
 import moreinventory.block.Blocks;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.item.Items;
+import moreinventory.item.PouchItem;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.common.data.LanguageProvider;
 
 public class JaJpLanguageGenerator extends LanguageProvider {
     public JaJpLanguageGenerator(DataGenerator generator, String modid) {
         super(generator, modid, "ja_jp");
+    }
+
+    public static final HashMap<DyeColor, String> colorMap = new HashMap<>();
+    static {
+        colorMap.put(DyeColor.WHITE, "白");
+        colorMap.put(DyeColor.ORANGE, "橙");
+        colorMap.put(DyeColor.MAGENTA, "赤紫");
+        colorMap.put(DyeColor.LIGHT_BLUE, "空");
+        colorMap.put(DyeColor.YELLOW, "黄");
+        colorMap.put(DyeColor.LIME, "黄緑");
+        colorMap.put(DyeColor.PINK, "桃");
+        colorMap.put(DyeColor.GRAY, "灰");
+        colorMap.put(DyeColor.LIGHT_GRAY, "薄灰");
+        colorMap.put(DyeColor.CYAN, "青緑");
+        colorMap.put(DyeColor.PURPLE, "紫");
+        colorMap.put(DyeColor.BLUE, "青");
+        colorMap.put(DyeColor.BROWN, "茶");
+        colorMap.put(DyeColor.GREEN, "緑");
+        colorMap.put(DyeColor.RED, "赤");
+        colorMap.put(DyeColor.BLACK, "黒");
     }
 
     @Override
@@ -46,5 +70,15 @@ public class JaJpLanguageGenerator extends LanguageProvider {
         add(Text.importerMoveWhiteDetail, "リストのアイテムのみ輸送します");
         add(Text.importerMoveBlackDetail, "リスト以外のアイテムを輸送します");
 
+        add(Items.POUCH, "ポーチ");
+        for (DyeColor color : DyeColor.values()) {
+            add(PouchItem.byColor(color), colorMap.get(color) + "色のポーチ");
+        }
+        add(Items.LEATHER_PACK, "革の詰め物");
+
+        add(Text.pouchConfig, "コンフィグ");
+        add(Text.pouchConfigStorageBox, "有効にすると、コンテナはこのポーチからも収集します");
+        add(Text.pouchConfigHotBar, "有効にすると、このポーチはスニークしながら使用した時にホットバーから登録されたアイテムを収集します");
+        add(Text.pouchConfigAutoCollect, "有効にすると、このポーチは登録されたアイテムを拾った時に自動収集します");
     }
 }

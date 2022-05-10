@@ -12,10 +12,12 @@ import moreinventory.client.renderer.CatchallRenderer;
 import moreinventory.client.renderer.StorageBoxRenderer;
 import moreinventory.client.renderer.TransportRenderer;
 import moreinventory.client.screen.CatchallContainerScreen;
+import moreinventory.client.screen.PouchContainerScreen;
 import moreinventory.client.screen.TransportContainerScreen;
 import moreinventory.container.Containers;
 import moreinventory.item.TransporterItem;
 import moreinventory.network.ServerboundImporterUpdatePacket;
+import moreinventory.recipe.Recipes;
 import moreinventory.util.MIMLog;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -26,6 +28,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -57,6 +60,9 @@ public class MoreInventoryMOD {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+
+        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        Recipes.register(eventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -105,6 +111,7 @@ public class MoreInventoryMOD {
 
         MenuScreens.register(Containers.CATCHALL_CONTAINER_TYPE, CatchallContainerScreen::new);
         MenuScreens.register(Containers.TRANSPORT_CONTAINER_TYPE, TransportContainerScreen::new);
+        MenuScreens.register(Containers.POUCH_CONTAINER_TYPE, PouchContainerScreen::new);
 
         ForgeHooksClient.registerLayerDefinition(ModelLayers.TRANPORT, TransportRenderer::createBodyLayer);
     }

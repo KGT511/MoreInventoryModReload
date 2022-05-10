@@ -3,11 +3,10 @@ package moreinventory.blockentity;
 import moreinventory.block.Blocks;
 import moreinventory.block.TransportBlock;
 import moreinventory.container.TransportContainer;
+import moreinventory.util.MIMUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
@@ -54,7 +53,7 @@ public class ExporterBlockEntity extends BaseTransportBlockEntity {
                     for (int j = 0; j < blockEntity.getContainerSize(); j++) {
                         var itemstack1 = blockEntity.getItem(j);
 
-                        if (mergeItemStack(itemstack1, inventory, out.getOpposite())) {
+                        if (MIMUtils.mergeItemStack(itemstack1, inventory, out.getOpposite())) {
                             break extract;
                         }
                     }
@@ -87,55 +86,4 @@ public class ExporterBlockEntity extends BaseTransportBlockEntity {
         return false;
     }
 
-    public static boolean mergeItemStack(ItemStack itemstack, Container inventory, Direction side) {
-        if (itemstack.getItem() == ItemStack.EMPTY.getItem()) {
-            return false;
-        }
-
-        boolean success = false;
-        int size = inventory.getContainerSize();
-
-        if (itemstack.isStackable()) {
-            for (int i = 0; i < size; ++i) {
-                var item = inventory.getItem(i);
-
-                if (item != null && item.getItem() == itemstack.getItem() && itemstack.getDamageValue() == item.getDamageValue() && ItemStack.isSameItemSameTags(itemstack, item)) {
-                    if (canAccessFromSide(inventory, i, side) && canInsertFromSide(inventory, itemstack, i, side)) {
-                        int sum = item.getCount() + itemstack.getCount();
-
-                        if (sum <= itemstack.getMaxStackSize()) {
-                            itemstack.setCount(0);
-                            item.setCount(sum);
-                            inventory.setItem(i, item.copy());
-                            success = true;
-                        } else if (item.getCount() < itemstack.getMaxStackSize()) {
-                            itemstack.shrink(itemstack.getMaxStackSize() - item.getCount());
-                            item.setCount(itemstack.getMaxStackSize());
-                            inventory.setItem(i, item.copy());
-                            success = true;
-                        }
-                    }
-                }
-
-                if (itemstack.getCount() <= 0) {
-                    return success;
-                }
-            }
-        }
-
-        if (itemstack.getCount() > 0) {
-            for (int i = 0; i < size; ++i) {
-                var item = inventory.getItem(i);
-
-                if (item.getItem() == ItemStack.EMPTY.getItem() && canAccessFromSide(inventory, i, side) && canInsertFromSide(inventory, itemstack, i, side)) {
-                    inventory.setItem(i, itemstack.copy());
-                    itemstack.setCount(0);
-                    success = true;
-                    break;
-                }
-            }
-        }
-
-        return success;
-    }
 }
