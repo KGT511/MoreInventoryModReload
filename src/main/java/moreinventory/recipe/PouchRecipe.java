@@ -36,6 +36,8 @@ public class PouchRecipe extends SpecialRecipe {
                     ++dyeCnt;
                 } else if (itemStack.getItem() == Items.ENDER_PEARL) {
                     ++enderPearlCnt;
+                } else {
+                    return false;
                 }
             }
         }

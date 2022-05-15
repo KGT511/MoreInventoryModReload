@@ -42,15 +42,16 @@ public class PouchItem extends Item {
     @Override
     public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
         World world = context.getLevel();
-        if (world.isClientSide) {
-            return ActionResultType.PASS;
-        }
 
         BlockPos blockPos = context.getClickedPos();
         BlockState blockState = world.getBlockState(blockPos);
         Block block = blockState.getBlock();
 
         if (block == Blocks.CAULDRON) {
+            if (world.isClientSide) {
+                return ActionResultType.SUCCESS;
+            }
+
             int level = blockState.getValue(CauldronBlock.LEVEL);
             if (0 < level && getColor(stack) != default_color) {
                 ItemStack defaultColorPouch = resetColor(stack);
@@ -60,7 +61,7 @@ public class PouchItem extends Item {
                 world.setBlockAndUpdate(blockPos, newState);
                 world.playSound(null, context.getClickedPos(), SoundEvents.AMBIENT_UNDERWATER_EXIT, SoundCategory.PLAYERS, 1.5F, 0.85F);
 
-                return ActionResultType.CONSUME;
+                return ActionResultType.SUCCESS;
             }
         }
         return ActionResultType.PASS;
@@ -91,11 +92,6 @@ public class PouchItem extends Item {
     @Override
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-        if (player.isShiftKeyDown()) {
-            PouchInventory inventory = new PouchInventory(itemStack);
-            inventory.collectAllItemStack(player.inventory, true);
-            player.swing(hand);
-        }
         if (!world.isClientSide) {
             player.openMenu(new PouchContainerProvider(hand));
         }
