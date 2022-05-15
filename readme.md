@@ -25,6 +25,9 @@ MoreInventoryModReloadedをリリース
 * トランスポーター
 * スパナ
 
+## v0.2.0
+ポーチを追加
+
 # Scheduled to be updated
 未実装の内、更新予定のもの一覧
 * はけ、めっき
