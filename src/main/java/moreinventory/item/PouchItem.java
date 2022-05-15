@@ -36,26 +36,27 @@ public class PouchItem extends Item {
 
     @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
-        var level = context.getLevel();
-        if (level.isClientSide) {
-            return InteractionResult.PASS;
-        }
 
+        var level = context.getLevel();
         var blockPos = context.getClickedPos();
         var blockState = level.getBlockState(blockPos);
         var block = blockState.getBlock();
 
         if (block == Blocks.WATER_CAULDRON) {
+
+            if (level.isClientSide) {
+                return InteractionResult.SUCCESS;
+            }
+
             int waterLevel = blockState.getValue(LayeredCauldronBlock.LEVEL);
             if (0 < waterLevel && getColor(stack) != default_color) {
                 var defaultColorPouch = resetColor(stack);
                 var player = context.getPlayer();
                 player.setItemInHand(player.getUsedItemHand(), defaultColorPouch);
-                var newState = blockState.setValue(LayeredCauldronBlock.LEVEL, waterLevel - 1);
-                level.setBlockAndUpdate(blockPos, newState);
+                LayeredCauldronBlock.lowerFillLevel(blockState, level, blockPos);
                 level.playSound(null, context.getClickedPos(), SoundEvents.AMBIENT_UNDERWATER_EXIT, SoundSource.PLAYERS, 1.5F, 0.85F);
 
-                return InteractionResult.CONSUME;
+                return InteractionResult.SUCCESS;
             }
         }
         return InteractionResult.PASS;
@@ -64,8 +65,11 @@ public class PouchItem extends Item {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         var level = context.getLevel();
+        //
         var blockPos = context.getClickedPos();
         var player = context.getPlayer();
+        var blockState = level.getBlockState(blockPos);
+
         if (player.isShiftKeyDown()) {
             var tile = level.getBlockEntity(blockPos);
             var itemStack = player.getMainHandItem();
@@ -84,17 +88,12 @@ public class PouchItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         var itemStack = player.getItemInHand(hand);
-        if (player.isShiftKeyDown()) {
-            var inventory = new PouchInventory(itemStack);
-            inventory.collectAllItemStack(player.getInventory(), true);
-            player.swing(hand);
-        }
-        if (!world.isClientSide) {
+
+        if (!level.isClientSide && !player.isShiftKeyDown())
             player.openMenu(new PouchContainerProvider(hand));
-        }
-        return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
+        return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
 
     }
 

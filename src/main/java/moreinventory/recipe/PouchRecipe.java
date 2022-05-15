@@ -20,7 +20,7 @@ public class PouchRecipe extends CustomRecipe {
 
     //染料と色変え可能なアイテムが1つずつあるかチェック
     @Override
-    public boolean matches(CraftingContainer inventory, Level world) {
+    public boolean matches(CraftingContainer inventory, Level level) {
         int pouchCnt = 0;
         int dyeCnt = 0;
         int enderPearlCnt = 0;
@@ -36,6 +36,8 @@ public class PouchRecipe extends CustomRecipe {
                     ++dyeCnt;
                 } else if (itemStack.getItem() == Items.ENDER_PEARL) {
                     ++enderPearlCnt;
+                } else {
+                    return false;
                 }
             }
         }
