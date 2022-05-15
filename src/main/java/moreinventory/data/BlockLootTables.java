@@ -5,13 +5,8 @@ import java.util.Set;
 
 import moreinventory.block.Blocks;
 import net.minecraft.data.loot.BlockLoot;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 public class BlockLootTables extends BlockLoot {
     private final Set<Block> knownBlocks = new HashSet<>();
@@ -43,11 +38,6 @@ public class BlockLootTables extends BlockLoot {
         dropSelf(Blocks.IMPORTER);
         dropSelf(Blocks.EXPORTER);
 
-    }
-
-    private void registerMultiEnderChest(Block origin, Item alter) {
-        LootPoolEntryContainer.Builder<?> sticks = applyExplosionDecay(origin, LootItem.lootTableItem(alter).apply(SetItemCountFunction.setCount(ConstantValue.exactly(22))));
-        this.add(origin, createSilkTouchDispatchTable(origin, sticks));
     }
 
 }

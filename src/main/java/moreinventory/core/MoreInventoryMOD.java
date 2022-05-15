@@ -19,7 +19,6 @@ import moreinventory.item.TransporterItem;
 import moreinventory.network.ServerboundImporterUpdatePacket;
 import moreinventory.network.ServerboundPouchUpdatePacket;
 import moreinventory.recipe.Recipes;
-import moreinventory.util.MIMLog;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -97,12 +96,10 @@ public class MoreInventoryMOD {
 
     private void enqueueIMC(final InterModEnqueueEvent event) {
         // some example code to dispatch IMC to another mod
-        MIMLog.warning("enqueueIMC");
     }
 
     private void processIMC(final InterModProcessEvent event) {
         // some example code to receive and process InterModComms from other mods
-        MIMLog.warning("processIMC");
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
@@ -125,7 +122,6 @@ public class MoreInventoryMOD {
 
     @SubscribeEvent
     public static void registerLayerDefinition(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        MIMLog.warning("render\n\n");
 
     }
 

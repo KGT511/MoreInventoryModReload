@@ -65,10 +65,8 @@ public class PouchItem extends Item {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         var level = context.getLevel();
-        //
         var blockPos = context.getClickedPos();
         var player = context.getPlayer();
-        var blockState = level.getBlockState(blockPos);
 
         if (player.isShiftKeyDown()) {
             var tile = level.getBlockEntity(blockPos);
