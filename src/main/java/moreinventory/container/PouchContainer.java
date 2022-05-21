@@ -4,6 +4,7 @@ import moreinventory.inventory.PouchInventory;
 import moreinventory.item.PouchItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
@@ -33,17 +34,18 @@ public class PouchContainer extends Container {
         int grade = pouchInventory.getGrade() + 2;
         for (int i = 0; i < grade; i++) {
             for (int j = 0; j < 3; j++) {
-                this.addSlot(new Slot(pouchInventory, j + i * 3 + PouchInventory.slotSize, 182 + j * 18, 24 + i * 18));
+                this.addSlot(new CollectableSlots(pouchInventory, j + i * 3 + PouchInventory.slotSize, 182 + j * 18, 24 + i * 18));
             }
         }
 
         for (int i = grade; i < 6; i++) {
             for (int j = 0; j < 3; j++) {
-                this.addSlot(new Slot(pouchInventory, j + i * 3, -20000, -20000));
+                this.addSlot(new Slot(pouchInventory, j + i * 3 + PouchInventory.slotSize, -20000, -20000));
             }
         }
 
         this.bindPlayerInventory(inventory);
+        this.trackAllIntFields(pouchInventory, PouchInventory.Val.values().length);
     }
 
     protected void bindPlayerInventory(PlayerInventory inventory) {
@@ -97,7 +99,6 @@ public class PouchContainer extends Container {
 
     @Override
     public ItemStack clicked(int slotId, int dragType, ClickType clickTypeIn, PlayerEntity player) {
-
         if (PouchInventory.slotSize <= slotId && slotId < PouchInventory.slotSize + PouchInventory.collectableSlotSize) {
             if (dragType == 0) {
                 ItemStack setItem = player.inventory.getCarried().copy();
@@ -117,12 +118,12 @@ public class PouchContainer extends Container {
 
     protected void trackAllIntFields(PouchInventory inventory, int valCount) {
         for (int f = 0; f < valCount; f++) {
-            trackIntField(inventory, f);
+            this.trackIntField(inventory, f);
         }
     }
 
     protected void trackIntField(PouchInventory inventory, int id) {
-        addDataSlot(new IntReferenceHolder() {
+        this.addDataSlot(new IntReferenceHolder() {
 
             @Override
             public int get() {
@@ -134,5 +135,21 @@ public class PouchContainer extends Container {
                 inventory.setValByID(id, value);
             }
         });
+    }
+
+    class CollectableSlots extends Slot {
+
+        public CollectableSlots(IInventory inventory, int slot, int x, int y) {
+            super(inventory, slot, x, y);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            int index = this.getSlotIndex();
+            if (PouchInventory.slotSize <= index && index < PouchInventory.slotSize + PouchInventory.collectableSlotSize) {
+                return false;
+            }
+            return true;
+        }
     }
 }

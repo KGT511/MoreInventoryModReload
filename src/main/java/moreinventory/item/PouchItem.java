@@ -92,8 +92,8 @@ public class PouchItem extends Item {
     @Override
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-        if (!world.isClientSide) {
-            player.openMenu(new PouchContainerProvider(hand));
+        if (!world.isClientSide && !player.isShiftKeyDown() && hand.equals(Hand.MAIN_HAND)) {
+            player.openMenu(new PouchContainerProvider());
         }
         return ActionResult.sidedSuccess(itemStack, world.isClientSide());
 
