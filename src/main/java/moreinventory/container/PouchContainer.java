@@ -136,12 +136,6 @@ public class PouchContainer extends AbstractContainerMenu {
         });
     }
 
-    @Override
-    public boolean canTakeItemForPickAll(ItemStack itemStack, Slot slot) {
-
-        return true;
-    }
-
     class CollectableSlots extends Slot {
 
         public CollectableSlots(Container container, int slot, int x, int y) {
