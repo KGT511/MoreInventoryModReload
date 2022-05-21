@@ -66,8 +66,26 @@ public class PouchInventory implements Container {
     }
 
     public void writeToNBT(CompoundTag nbt) {
+        this.writeItemsToNBT(nbt);
+        this.writeValsToNBT(nbt);
+    }
+
+    public void writeItemsToNBT() {
+        this.writeItemsToNBT(this.usingPouch.getOrCreateTag());
+    }
+
+    public void writeItemsToNBT(CompoundTag nbt) {
         if (this.usingPouch != null) {
             ContainerHelper.saveAllItems(nbt, this.slotItems);
+        }
+    }
+
+    public void writeValsToNBT() {
+        this.writeValsToNBT(this.usingPouch.getOrCreateTag());
+    }
+
+    public void writeValsToNBT(CompoundTag nbt) {
+        if (this.usingPouch != null) {
             nbt.putBoolean(isStorageBoxTagKey, this.isStorageBox);
             nbt.putBoolean(isHotBarTagKey, this.isHotBar);
             nbt.putBoolean(isAutoCollectTagKey, this.isAutoCollect);
@@ -118,23 +136,22 @@ public class PouchInventory implements Container {
 
     @Override
     public void stopOpen(Player player) {
-        this.writeToNBT(this.usingPouch.getOrCreateTag());
     }
 
     @Override
     public void setChanged() {
-        this.writeToNBT(this.usingPouch.getOrCreateTag());
+        this.writeItemsToNBT();
     }
 
     @Override
     public boolean stillValid(Player player) {
-        return this.usingPouch.sameItem(player.getItemInHand(player.getUsedItemHand()));
+        return this.usingPouch.sameItem(player.getMainHandItem());
     }
 
     public void increaseGrade() {
         if (this.grade < 4)
             this.grade++;
-        this.setChanged();
+        this.writeValsToNBT();
     }
 
     public int getGrade() {
@@ -249,8 +266,7 @@ public class PouchInventory implements Container {
             setIsAutoCollect(MIMUtils.intToBool(val));
             break;
         }
-        this.writeToNBT(this.usingPouch.getOrCreateTag());
-
+        this.writeValsToNBT();
     }
 
     public int getValByID(int id) {

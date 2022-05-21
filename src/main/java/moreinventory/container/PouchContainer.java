@@ -45,6 +45,7 @@ public class PouchContainer extends AbstractContainerMenu {
         }
 
         this.bindPlayerInventory(inventory);
+        this.trackAllIntFields(pouchInventory, PouchInventory.Val.values().length);
     }
 
     protected void bindPlayerInventory(Inventory inventory) {
@@ -98,7 +99,6 @@ public class PouchContainer extends AbstractContainerMenu {
 
     @Override
     public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
-
         if (PouchInventory.slotSize <= slotId && slotId < PouchInventory.slotSize + PouchInventory.collectableSlotSize) {
             if (dragType == 0) {
                 var setItem = player.getInventory().player.containerMenu.getCarried().copy();
@@ -118,13 +118,12 @@ public class PouchContainer extends AbstractContainerMenu {
 
     protected void trackAllIntFields(PouchInventory inventory, int valCount) {
         for (int f = 0; f < valCount; f++) {
-            trackIntField(inventory, f);
+            this.trackIntField(inventory, f);
         }
     }
 
     protected void trackIntField(PouchInventory inventory, int id) {
-        addDataSlot(new DataSlot() {
-
+        this.addDataSlot(new DataSlot() {
             @Override
             public int get() {
                 return inventory.getValByID(id);

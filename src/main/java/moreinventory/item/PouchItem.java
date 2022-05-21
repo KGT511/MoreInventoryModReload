@@ -89,8 +89,8 @@ public class PouchItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         var itemStack = player.getItemInHand(hand);
 
-        if (!level.isClientSide && !player.isShiftKeyDown())
-            player.openMenu(new PouchContainerProvider(hand));
+        if (!level.isClientSide && !player.isShiftKeyDown() && hand.equals(InteractionHand.MAIN_HAND))
+            player.openMenu(new PouchContainerProvider());
         return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
 
     }

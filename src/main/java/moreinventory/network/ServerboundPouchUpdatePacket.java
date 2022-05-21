@@ -36,7 +36,7 @@ public class ServerboundPouchUpdatePacket {
     public static void handle(ServerboundPouchUpdatePacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             var player = ctx.get().getSender();
-            var itemStack = player.getItemInHand(player.getUsedItemHand());
+            var itemStack = player.getMainHandItem();
             if (itemStack != null && itemStack.getItem() instanceof PouchItem) {
                 var pouch_ = new PouchInventory(player, itemStack);
                 pouch_.setValByID(msg.id, msg.val);
