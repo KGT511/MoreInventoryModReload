@@ -3,6 +3,7 @@ package moreinventory.container;
 import moreinventory.inventory.PouchInventory;
 import moreinventory.item.PouchItem;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -33,13 +34,13 @@ public class PouchContainer extends AbstractContainerMenu {
         int grade = pouchInventory.getGrade() + 2;
         for (int i = 0; i < grade; i++) {
             for (int j = 0; j < 3; j++) {
-                this.addSlot(new Slot(pouchInventory, j + i * 3 + PouchInventory.slotSize, 182 + j * 18, 24 + i * 18));
+                this.addSlot(new CollectableSlots(pouchInventory, j + i * 3 + PouchInventory.slotSize, 182 + j * 18, 24 + i * 18));
             }
         }
 
         for (int i = grade; i < 6; i++) {
             for (int j = 0; j < 3; j++) {
-                this.addSlot(new Slot(pouchInventory, j + i * 3, -20000, -20000));
+                this.addSlot(new Slot(pouchInventory, j + i * 3 + PouchInventory.slotSize, -20000, -20000));
             }
         }
 
@@ -134,5 +135,27 @@ public class PouchContainer extends AbstractContainerMenu {
                 inventory.setValByID(id, value);
             }
         });
+    }
+
+    @Override
+    public boolean canTakeItemForPickAll(ItemStack itemStack, Slot slot) {
+
+        return true;
+    }
+
+    class CollectableSlots extends Slot {
+
+        public CollectableSlots(Container container, int slot, int x, int y) {
+            super(container, slot, x, y);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack p_40231_) {
+            var index = this.getSlotIndex();
+            if (PouchInventory.slotSize <= index && index < PouchInventory.slotSize + PouchInventory.collectableSlotSize) {
+                return false;
+            }
+            return true;
+        }
     }
 }
