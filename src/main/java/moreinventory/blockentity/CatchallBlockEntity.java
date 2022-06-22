@@ -58,13 +58,11 @@ public class CatchallBlockEntity extends RandomizableContainerBlockEntity {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    protected void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         if (!this.trySaveLootTable(compound)) {
             ContainerHelper.saveAllItems(compound, this.storage);
         }
-
-        return compound;
     }
 
     @Override
@@ -73,12 +71,12 @@ public class CatchallBlockEntity extends RandomizableContainerBlockEntity {
     }
 
     @Override
-    public void setItems(NonNullList<ItemStack> itemsIn) {
+    protected void setItems(NonNullList<ItemStack> itemsIn) {
         this.storage = itemsIn;
     }
 
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory player) {
+    protected AbstractContainerMenu createMenu(int id, Inventory player) {
         return new CatchallContainer(id, player, this);
     }
 
@@ -111,7 +109,7 @@ public class CatchallBlockEntity extends RandomizableContainerBlockEntity {
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(this.getBlockPos(), 0, this.save(new CompoundTag()));
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
@@ -121,7 +119,9 @@ public class CatchallBlockEntity extends RandomizableContainerBlockEntity {
 
     @Override
     public CompoundTag getUpdateTag() {
-        return this.save(super.getUpdateTag());
+        var compound = new CompoundTag();
+        ContainerHelper.saveAllItems(compound, this.storage);
+        return compound;
     }
 
     @Override

@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fmlclient.gui.widget.ExtendedButton;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 @OnlyIn(Dist.CLIENT)
 public class TransportContainerScreen extends AbstractContainerScreen<TransportContainer> {
@@ -131,7 +131,7 @@ public class TransportContainerScreen extends AbstractContainerScreen<TransportC
         @Override
         public void renderToolTip(PoseStack poseStack, int x, int y) {
             super.renderToolTip(poseStack, x, y);
-            if (this.isHovered()) {
+            if (this.isHoveredOrFocused()) {
                 var txt = val ? trueTxt : falseTxt;
                 TransportContainerScreen.this.renderTooltip(poseStack, txt, x - this.x, y / 2);
             }

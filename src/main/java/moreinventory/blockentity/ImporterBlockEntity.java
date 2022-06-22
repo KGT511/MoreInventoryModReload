@@ -41,13 +41,12 @@ public class ImporterBlockEntity extends BaseTransportBlockEntity {
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    protected void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         if (!this.trySaveLootTable(compound)) {
             compound.putBoolean(registerKey, this.register);
             compound.putBoolean(isWhiteKey, this.isWhite);
         }
-        return compound;
     }
 
     @Override

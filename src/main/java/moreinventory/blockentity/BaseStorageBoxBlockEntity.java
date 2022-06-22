@@ -83,8 +83,8 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    protected void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
 
         if (!this.trySaveLootTable(compound)) {
             compound.putString(tagKeyTypeName, this.type.name());
@@ -93,12 +93,10 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
             contents.save(nbt);
             compound.put(tagKeyContents, nbt);
         }
-
-        return compound;
     }
 
     @Override
-    public NonNullList<ItemStack> getItems() {
+    protected NonNullList<ItemStack> getItems() {
         return this.storageItems;
     }
 
@@ -132,7 +130,7 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(this.getBlockPos(), 0, this.save(new CompoundTag()));
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
@@ -142,7 +140,9 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
 
     @Override
     public CompoundTag getUpdateTag() {
-        return this.save(super.getUpdateTag());
+        CompoundTag compoundtag = new CompoundTag();
+        MIMUtils.writeNonNullListShort(compoundtag, this.storageItems, true);
+        return compoundtag;
     }
 
     @Override

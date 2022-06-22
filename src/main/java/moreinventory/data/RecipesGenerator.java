@@ -10,7 +10,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -125,7 +125,7 @@ public class RecipesGenerator extends RecipeProvider {
                 .save(consumer, Recipes.POUCH_RECIPE.getId().getPath());
     }
 
-    private void registerStorageBoxRecipe(Consumer<FinishedRecipe> consumer, Block block, Tag<Item> material) {
+    private void registerStorageBoxRecipe(Consumer<FinishedRecipe> consumer, Block block, TagKey<Item> material) {
         registerStorageBoxRecipe(consumer, block, Ingredient.of(material));
     }
 

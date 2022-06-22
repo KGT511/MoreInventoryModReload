@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 import moreinventory.inventory.PouchInventory;
 import moreinventory.item.PouchItem;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 public class ServerboundPouchUpdatePacket {
     private int id;
