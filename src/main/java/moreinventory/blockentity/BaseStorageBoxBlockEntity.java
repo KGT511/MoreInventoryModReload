@@ -61,7 +61,7 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent("block.moreinventorymod.storage_box");
+        return new TranslatableComponent(StorageBoxTypeBlockEntity.blockMap.get(this.type).getDescriptionId());
     }
 
     @Override

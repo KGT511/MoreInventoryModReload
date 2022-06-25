@@ -9,7 +9,6 @@ import moreinventory.block.StorageBoxBlock;
 import moreinventory.blockentity.BaseStorageBoxBlockEntity;
 import moreinventory.blockentity.storagebox.StorageBoxType;
 import moreinventory.core.MoreInventoryMOD;
-import moreinventory.util.MIMLog;
 import moreinventory.util.MIMUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -201,9 +200,6 @@ public class TransporterItem extends Item {
         if (blockEntity == null || !(blockEntity instanceof Container) || itemStack.getTag().contains(tagKey)) {
             return false;
         }
-        MIMLog.warning(blockState.toString());
-        MIMLog.warning(blockEntity.toString());
-        MIMLog.warning(blockEntity.getUpdateTag().toString());
 
         if (blockEntity != null && checkMatryoshka((Container) blockEntity)) {
             var nbt = itemStack.getOrCreateTag();
