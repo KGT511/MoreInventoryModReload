@@ -16,9 +16,9 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 
 
-version = '0.1.0'
+version = '0.2.1'
 group = 'moreinventorymod' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'MoreInventoryModReloaded-1.18.1'
+archivesBaseName = 'MoreInventoryModReloaded-1.18.2'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
