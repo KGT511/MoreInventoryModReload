@@ -25,7 +25,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class CatchallBlockEntity extends RandomizableContainerBlockEntity {
     public CatchallBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntities.CATCHALL_BLOCK_ENTITY_TYPE, pos, state);
+        super(BlockEntities.CATCHALL_BLOCK_ENTITY_TYPE.get(), pos, state);
     }
 
     public static final int mainInventorySize = 36;

@@ -28,7 +28,7 @@ public class ImporterBlockEntity extends BaseTransportBlockEntity {
     public static final String isWhiteKey = "is_white";
 
     public ImporterBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntities.IMPORTER_BLOCK_ENTITY_TYPE, pos, state);
+        super(BlockEntities.IMPORTER_BLOCK_ENTITY_TYPE.get(), pos, state);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ImporterBlockEntity extends BaseTransportBlockEntity {
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent(Blocks.IMPORTER.getDescriptionId());
+        return new TranslatableComponent(Blocks.IMPORTER.get().getDescriptionId());
     }
 
     @Override

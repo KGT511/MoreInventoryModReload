@@ -1,11 +1,15 @@
 package moreinventory.item;
 
+import java.util.ArrayList;
+
 import moreinventory.block.Blocks;
+import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
 import moreinventory.core.MoreInventoryMOD;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 
 public class SpannerItem extends Item {
@@ -13,6 +17,18 @@ public class SpannerItem extends Item {
         super(new Properties()
                 .durability(0)
                 .tab(MoreInventoryMOD.creativeModeTab));
+    }
+
+    public static final ArrayList<Block> rotatableBlockList = new ArrayList<>();
+
+    public static final void setTransportableBlocks() {
+        rotatableBlockList.clear();
+        rotatableBlockList.add(Blocks.CATCHALL.get());
+        for (var block : StorageBoxTypeBlockEntity.blockMap.values()) {
+            rotatableBlockList.add(block);
+        }
+        rotatableBlockList.add(Blocks.IMPORTER.get());
+        rotatableBlockList.add(Blocks.EXPORTER.get());
     }
 
     @Override
@@ -27,7 +43,7 @@ public class SpannerItem extends Item {
         if (!player.isShiftKeyDown()) {
             var state = level.getBlockState(pos);
             var block = state.getBlock();
-            if (Blocks.blockList.contains(block)) {
+            if (rotatableBlockList.contains(block)) {
                 level.setBlockAndUpdate(pos, block.rotate(level.getBlockState(pos), level, pos, Rotation.CLOCKWISE_90));
                 return InteractionResult.SUCCESS;
             }

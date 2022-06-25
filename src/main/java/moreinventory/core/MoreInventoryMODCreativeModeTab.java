@@ -1,11 +1,8 @@
 package moreinventory.core;
 
-import moreinventory.item.Items;
-import net.minecraft.core.NonNullList;
+import moreinventory.block.Blocks;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class MoreInventoryMODCreativeModeTab extends CreativeModeTab {
     public MoreInventoryMODCreativeModeTab() {
@@ -14,14 +11,7 @@ public class MoreInventoryMODCreativeModeTab extends CreativeModeTab {
 
     @Override
     public ItemStack makeIcon() {
-        return new ItemStack(Items.CATCHALL);
+        return new ItemStack(Blocks.CATCHALL.get());
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void fillItemList(NonNullList<ItemStack> items) {
-        for (var item : Items.itemList) {
-            item.fillItemCategory(this, items);
-        }
-    }
 }

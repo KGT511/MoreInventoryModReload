@@ -15,6 +15,7 @@ import moreinventory.client.screen.CatchallContainerScreen;
 import moreinventory.client.screen.PouchContainerScreen;
 import moreinventory.client.screen.TransportContainerScreen;
 import moreinventory.container.Containers;
+import moreinventory.item.Items;
 import moreinventory.item.TransporterItem;
 import moreinventory.network.ServerboundImporterUpdatePacket;
 import moreinventory.network.ServerboundPouchUpdatePacket;
@@ -29,7 +30,6 @@ import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -56,12 +56,16 @@ public class MoreInventoryMOD {
 
     public MoreInventoryMOD() {
         initNetwork();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+        var eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        eventBus.addListener(this::setup);
+        eventBus.addListener(this::enqueueIMC);
+        eventBus.addListener(this::processIMC);
+        eventBus.addListener(this::doClientStuff);
 
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        Items.register(eventBus);
+        Blocks.register(eventBus);
+        BlockEntities.register(eventBus);
+
         Recipes.register(eventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -105,13 +109,13 @@ public class MoreInventoryMOD {
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
         //bind renderers and gui factories
-        BlockEntityRenderers.register(BlockEntities.CATCHALL_BLOCK_ENTITY_TYPE, CatchallRenderer::new);
+        BlockEntityRenderers.register(BlockEntities.CATCHALL_BLOCK_ENTITY_TYPE.get(), CatchallRenderer::new);
         StorageBoxTypeBlockEntity.map.forEach((key, val) -> {
             BlockEntityRenderers.register(val, StorageBoxRenderer::new);
         });
-        ItemBlockRenderTypes.setRenderLayer(Blocks.GLASS_STORAGE_BOX, RenderType.translucent());
-        BlockEntityRenderers.register(BlockEntities.IMPORTER_BLOCK_ENTITY_TYPE, TransportRenderer::new);
-        BlockEntityRenderers.register(BlockEntities.EXPORTER_BLOCK_ENTITY_TYPE, TransportRenderer::new);
+        ItemBlockRenderTypes.setRenderLayer(Blocks.GLASS_STORAGE_BOX.get(), RenderType.translucent());
+        BlockEntityRenderers.register(BlockEntities.IMPORTER_BLOCK_ENTITY_TYPE.get(), TransportRenderer::new);
+        BlockEntityRenderers.register(BlockEntities.EXPORTER_BLOCK_ENTITY_TYPE.get(), TransportRenderer::new);
 
         MenuScreens.register(Containers.CATCHALL_CONTAINER_TYPE, CatchallContainerScreen::new);
         MenuScreens.register(Containers.TRANSPORT_CONTAINER_TYPE, TransportContainerScreen::new);

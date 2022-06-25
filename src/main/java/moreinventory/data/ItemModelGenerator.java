@@ -29,14 +29,14 @@ public class ItemModelGenerator extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        toBlock(Blocks.CATCHALL);
+        toBlock(Blocks.CATCHALL.get());
         for (var storageBox : StorageBoxTypeBlockEntity.blockMap.values()) {
             toBlock(storageBox);
         }
         registerTransporter();
-        singleTexTool(Items.IMPORTER);
-        singleTexTool(Items.EXPORTER);
-        singleTexTool(Items.SPANNER);
+        singleTexTool(Blocks.IMPORTER.get());
+        singleTexTool(Blocks.EXPORTER.get());
+        singleTexTool(Items.SPANNER.get());
         registerPouch();
     }
 
@@ -68,6 +68,10 @@ public class ItemModelGenerator extends ItemModelProvider {
         return tool(name(item), prefix("item/" + name(item)));
     }
 
+    private ItemModelBuilder singleTexTool(Block item) {
+        return tool(name(item), prefix("item/" + name(item)));
+    }
+
     private ItemModelBuilder tool(String name, ResourceLocation... layers) {
         var builder = withExistingParent(name, "item/generated");
         for (int i = 0; i < layers.length; ++i) {
@@ -88,8 +92,8 @@ public class ItemModelGenerator extends ItemModelProvider {
         var litName = "transporter_furnace_lit";
         tool(litName, prefix("item/" + litName));
 
-        var name = "item/" + name(Items.TRANSPORTER);
-        var builder = tool(name(Items.TRANSPORTER), prefix(name));
+        var name = "item/" + name(Items.TRANSPORTER.get());
+        var builder = tool(name(Items.TRANSPORTER.get()), prefix(name));
         var predicateName = new ResourceLocation("custom_model_data");
         for (var transportableBlock : TransporterItem.transportableBlocks) {
             var transportableBlockName = BlockStateGenerator.name(transportableBlock);
@@ -104,7 +108,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         for (var color : DyeColor.values()) {
             singleTexTool(PouchItem.byColor(color));
         }
-        singleTexTool(Items.POUCH);
-        singleTexTool(Items.LEATHER_PACK);
+        singleTexTool(Items.POUCH.get());
+        singleTexTool(Items.LEATHER_PACK.get());
     }
 }

@@ -32,23 +32,23 @@ public class EnUsLanguageGenerator extends LanguageProvider {
     protected void addTranslations() {
         add(MoreInventoryMOD.creativeModeTab.getDisplayName().getString(), "MoreInventoryMOD");
 
-        add(Blocks.CATCHALL, "catchall");
-        add(Items.TRANSPORTER, "transporter");
-        add(Items.SPANNER, "spanner");
+        add(Blocks.CATCHALL.get(), "catchall");
+        add(Items.TRANSPORTER.get(), "transporter");
+        add(Items.SPANNER.get(), "spanner");
 
-        add(Blocks.WOOD_STORAGE_BOX, "Wood Container Box");
-        add(Blocks.IRON_STORAGE_BOX, "Iron Container Box");
-        add(Blocks.GOLD_STORAGE_BOX, "Gold Container Box");
-        add(Blocks.DIAMOND_STORAGE_BOX, "Diamond Container Box");
-        add(Blocks.EMERALD_STORAGE_BOX, "Emerald Container Box");
-        add(Blocks.COPPER_STORAGE_BOX, "Copper Container Box");
-        add(Blocks.TIN_STORAGE_BOX, "Tin Container Box");
-        add(Blocks.BRONZE_STORAGE_BOX, "Bronze Container Box");
-        add(Blocks.SILVER_STORAGE_BOX, "Silver Container Box");
-        add(Blocks.GLASS_STORAGE_BOX, "Glass Container Box");
+        add(Blocks.WOOD_STORAGE_BOX.get(), "Wood Container Box");
+        add(Blocks.IRON_STORAGE_BOX.get(), "Iron Container Box");
+        add(Blocks.GOLD_STORAGE_BOX.get(), "Gold Container Box");
+        add(Blocks.DIAMOND_STORAGE_BOX.get(), "Diamond Container Box");
+        add(Blocks.EMERALD_STORAGE_BOX.get(), "Emerald Container Box");
+        add(Blocks.COPPER_STORAGE_BOX.get(), "Copper Container Box");
+        add(Blocks.TIN_STORAGE_BOX.get(), "Tin Container Box");
+        add(Blocks.BRONZE_STORAGE_BOX.get(), "Bronze Container Box");
+        add(Blocks.SILVER_STORAGE_BOX.get(), "Silver Container Box");
+        add(Blocks.GLASS_STORAGE_BOX.get(), "Glass Container Box");
 
-        add(Blocks.IMPORTER, "Importer");
-        add(Blocks.EXPORTER, "Exporter");
+        add(Blocks.IMPORTER.get(), "Importer");
+        add(Blocks.EXPORTER.get(), "Exporter");
         add(Text.importerRegister, "Register");
         add(Text.importerRegisterOn, "ON");
         add(Text.importerRegisterOff, "OFF");
@@ -60,11 +60,11 @@ public class EnUsLanguageGenerator extends LanguageProvider {
         add(Text.importerMoveWhiteDetail, "List is White List");
         add(Text.importerMoveBlackDetail, "List is Black List");
 
-        add(Items.POUCH, "Pouch");
+        add(Items.POUCH.get(), "Pouch");
         for (DyeColor color : DyeColor.values()) {
             add(PouchItem.byColor(color), colorMap.get(color) + " Pouch");
         }
-        add(Items.LEATHER_PACK, "Leather Pack");
+        add(Items.LEATHER_PACK.get(), "Leather Pack");
 
         add(Text.pouchConfig, "config");
         add(Text.pouchConfigStorageBox, "If enabled, container box can collect from this pouch.");

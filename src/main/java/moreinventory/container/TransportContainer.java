@@ -55,7 +55,7 @@ public class TransportContainer extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player playerIn) {
         var block = (transportBlockEntity instanceof ImporterBlockEntity ? Blocks.IMPORTER : Blocks.EXPORTER);
-        return stillValid(ContainerLevelAccess.create(transportBlockEntity.getLevel(), transportBlockEntity.getBlockPos()), playerIn, block);
+        return stillValid(ContainerLevelAccess.create(transportBlockEntity.getLevel(), transportBlockEntity.getBlockPos()), playerIn, block.get());
     }
 
     @Override

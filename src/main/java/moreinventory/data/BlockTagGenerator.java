@@ -16,14 +16,14 @@ public class BlockTagGenerator extends BlockTagsProvider {
     @Override
     protected void addTags() {
         tag(BlockTags.MINEABLE_WITH_AXE)
-                .add(Blocks.CATCHALL);
+                .add(Blocks.CATCHALL.get());
 
         for (var storageBox : StorageBoxTypeBlockEntity.blockMap.values()) {
             tag(BlockTags.MINEABLE_WITH_PICKAXE)
                     .add(storageBox);
         }
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
-                .add(Blocks.IMPORTER, Blocks.EXPORTER);
+                .add(Blocks.IMPORTER.get(), Blocks.EXPORTER.get());
     }
 
 }

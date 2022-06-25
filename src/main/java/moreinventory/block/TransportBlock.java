@@ -279,7 +279,7 @@ public class TransportBlock extends BaseEntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
         var blockEntity = isImporter ? BlockEntities.IMPORTER_BLOCK_ENTITY_TYPE : BlockEntities.EXPORTER_BLOCK_ENTITY_TYPE;
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, blockEntity, BaseTransportBlockEntity::tickFunc);
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, blockEntity.get(), BaseTransportBlockEntity::tickFunc);
     }
 
 }
