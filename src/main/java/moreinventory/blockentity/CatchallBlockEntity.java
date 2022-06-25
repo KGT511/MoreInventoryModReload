@@ -51,18 +51,13 @@ public class CatchallBlockEntity extends RandomizableContainerBlockEntity {
     public void load(CompoundTag nbt) {
         super.load(nbt);
         this.storage = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        if (!this.tryLoadLootTable(nbt)) {
-            ContainerHelper.loadAllItems(nbt, this.storage);
-        }
-
+        ContainerHelper.loadAllItems(nbt, this.storage);
     }
 
     @Override
     protected void saveAdditional(CompoundTag compound) {
         super.saveAdditional(compound);
-        if (!this.trySaveLootTable(compound)) {
-            ContainerHelper.saveAllItems(compound, this.storage);
-        }
+        ContainerHelper.saveAllItems(compound, this.storage);
     }
 
     @Override
@@ -79,15 +74,6 @@ public class CatchallBlockEntity extends RandomizableContainerBlockEntity {
     protected AbstractContainerMenu createMenu(int id, Inventory player) {
         return new CatchallContainer(id, player, this);
     }
-
-    //	@Override
-    //	public void updateContainingBlockInfo() {
-    //		super.updateContainingBlockInfo();
-    //		if (this.storageHandler != null) {
-    //			this.storageHandler.invalidate();
-    //			this.storageHandler = null;
-    //		}
-    //	}
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
@@ -119,9 +105,9 @@ public class CatchallBlockEntity extends RandomizableContainerBlockEntity {
 
     @Override
     public CompoundTag getUpdateTag() {
-        var compound = new CompoundTag();
-        ContainerHelper.saveAllItems(compound, this.storage);
-        return compound;
+        CompoundTag compoundtag = new CompoundTag();
+        this.saveAdditional(compoundtag);
+        return compoundtag;
     }
 
     @Override

@@ -68,31 +68,28 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
     public void load(CompoundTag nbt) {
         super.load(nbt);
 
-        if (!this.tryLoadLootTable(nbt)) {
-            this.type = StorageBoxType.valueOf(nbt.getString(tagKeyTypeName));
-            this.storageItems = NonNullList.withSize(getStorageStackSize(type), ItemStack.EMPTY);
-            MIMUtils.readNonNullListShort(nbt, this.storageItems);
-            var contentsNBT = nbt.getCompound(tagKeyContents);
-            var tmp = ItemStack.of(contentsNBT);
-            if (tmp.getItem() == ItemStack.EMPTY.getItem() && tmp.getCount() == ItemStack.EMPTY.getCount()) {
-                this.contents = ItemStack.EMPTY;
-            } else {
-                this.contents = tmp;
-            }
+        this.type = StorageBoxType.valueOf(nbt.getString(tagKeyTypeName));
+        this.storageItems = NonNullList.withSize(getStorageStackSize(type), ItemStack.EMPTY);
+        MIMUtils.readNonNullListShort(nbt, this.storageItems);
+        var contentsNBT = nbt.getCompound(tagKeyContents);
+        var tmp = ItemStack.of(contentsNBT);
+        if (tmp.getItem() == ItemStack.EMPTY.getItem() && tmp.getCount() == ItemStack.EMPTY.getCount()) {
+            this.contents = ItemStack.EMPTY;
+        } else {
+            this.contents = tmp;
         }
+
     }
 
     @Override
     protected void saveAdditional(CompoundTag compound) {
         super.saveAdditional(compound);
 
-        if (!this.trySaveLootTable(compound)) {
-            compound.putString(tagKeyTypeName, this.type.name());
-            MIMUtils.writeNonNullListShort(compound, this.storageItems, true);
-            var nbt = new CompoundTag();
-            contents.save(nbt);
-            compound.put(tagKeyContents, nbt);
-        }
+        compound.putString(tagKeyTypeName, this.type.name());
+        MIMUtils.writeNonNullListShort(compound, this.storageItems, true);
+        var nbt = new CompoundTag();
+        contents.save(nbt);
+        compound.put(tagKeyContents, nbt);
     }
 
     @Override
@@ -141,7 +138,7 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag compoundtag = new CompoundTag();
-        MIMUtils.writeNonNullListShort(compoundtag, this.storageItems, true);
+        this.saveAdditional(compoundtag);
         return compoundtag;
     }
 

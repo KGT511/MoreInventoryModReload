@@ -47,17 +47,13 @@ public abstract class BaseTransportBlockEntity extends RandomizableContainerBloc
     public void load(CompoundTag nbt) {
         super.load(nbt);
         this.slotItems = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        if (!this.tryLoadLootTable(nbt)) {
-            ContainerHelper.loadAllItems(nbt, this.slotItems);
-        }
+        ContainerHelper.loadAllItems(nbt, this.slotItems);
     }
 
     @Override
     protected void saveAdditional(CompoundTag compound) {
         super.saveAdditional(compound);
-        if (!this.trySaveLootTable(compound)) {
-            ContainerHelper.saveAllItems(compound, this.slotItems);
-        }
+        ContainerHelper.saveAllItems(compound, this.slotItems);
     }
 
     @Override
@@ -108,9 +104,9 @@ public abstract class BaseTransportBlockEntity extends RandomizableContainerBloc
 
     @Override
     public CompoundTag getUpdateTag() {
-        var compound = new CompoundTag();
-        ContainerHelper.saveAllItems(compound, this.slotItems);
-        return compound;
+        CompoundTag compoundtag = new CompoundTag();
+        this.saveAdditional(compoundtag);
+        return compoundtag;
     }
 
     @Override

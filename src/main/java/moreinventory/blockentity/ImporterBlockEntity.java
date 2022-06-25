@@ -34,19 +34,15 @@ public class ImporterBlockEntity extends BaseTransportBlockEntity {
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
-        if (!this.tryLoadLootTable(nbt)) {
-            this.register = nbt.getBoolean(registerKey);
-            this.isWhite = nbt.getBoolean(isWhiteKey);
-        }
+        this.register = nbt.getBoolean(registerKey);
+        this.isWhite = nbt.getBoolean(isWhiteKey);
     }
 
     @Override
     protected void saveAdditional(CompoundTag compound) {
         super.saveAdditional(compound);
-        if (!this.trySaveLootTable(compound)) {
-            compound.putBoolean(registerKey, this.register);
-            compound.putBoolean(isWhiteKey, this.isWhite);
-        }
+        compound.putBoolean(registerKey, this.register);
+        compound.putBoolean(isWhiteKey, this.isWhite);
     }
 
     @Override
