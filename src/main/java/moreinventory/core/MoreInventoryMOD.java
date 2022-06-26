@@ -16,6 +16,7 @@ import moreinventory.client.screen.PouchContainerScreen;
 import moreinventory.client.screen.TransportContainerScreen;
 import moreinventory.container.Containers;
 import moreinventory.item.Items;
+import moreinventory.item.SpannerItem;
 import moreinventory.item.TransporterItem;
 import moreinventory.network.ServerboundImporterUpdatePacket;
 import moreinventory.network.ServerboundPouchUpdatePacket;
@@ -82,6 +83,7 @@ public class MoreInventoryMOD {
         StorageBoxInventorySize.init();
         StorageBoxTypeBlockEntity.init();
         TransporterItem.setTransportableBlocks();
+        SpannerItem.setRotatableBlocks();
     }
 
     public static void initNetwork() {

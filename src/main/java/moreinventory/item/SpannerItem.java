@@ -21,7 +21,7 @@ public class SpannerItem extends Item {
 
     public static final ArrayList<Block> rotatableBlockList = new ArrayList<>();
 
-    public static final void setTransportableBlocks() {
+    public static final void setRotatableBlocks() {
         rotatableBlockList.clear();
         rotatableBlockList.add(Blocks.CATCHALL.get());
         for (var block : StorageBoxTypeBlockEntity.blockMap.values()) {
