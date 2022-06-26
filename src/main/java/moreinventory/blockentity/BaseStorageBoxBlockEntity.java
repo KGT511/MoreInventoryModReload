@@ -15,7 +15,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -61,7 +60,7 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent(StorageBoxTypeBlockEntity.blockMap.get(this.type).getDescriptionId());
+        return Component.translatable(StorageBoxTypeBlockEntity.blockMap.get(this.type).getDescriptionId());
     }
 
     @Override

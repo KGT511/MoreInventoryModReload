@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "P P",
-    "PSP",
-    "SSS"
-  ],
   "key": {
     "P": {
       "tag": "minecraft:planks"
@@ -13,6 +8,11 @@
       "tag": "minecraft:wooden_slabs"
     }
   },
+  "pattern": [
+    "P P",
+    "PSP",
+    "SSS"
+  ],
   "result": {
     "item": "moreinventorymod:transporter"
   }

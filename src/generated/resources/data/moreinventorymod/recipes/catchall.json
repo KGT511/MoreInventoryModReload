@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "P P",
-    "PCP",
-    "SSS"
-  ],
   "key": {
-    "P": {
-      "tag": "minecraft:planks"
-    },
     "C": {
       "item": "minecraft:chest"
+    },
+    "P": {
+      "tag": "minecraft:planks"
     },
     "S": {
       "tag": "minecraft:wooden_slabs"
     }
   },
+  "pattern": [
+    "P P",
+    "PCP",
+    "SSS"
+  ],
   "result": {
     "item": "moreinventorymod:catchall"
   }

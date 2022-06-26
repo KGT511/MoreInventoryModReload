@@ -1,5 +1,6 @@
 package moreinventory.blockentity;
 
+import moreinventory.block.Blocks;
 import moreinventory.block.CatchallBlock;
 import moreinventory.container.CatchallContainer;
 import net.minecraft.core.BlockPos;
@@ -8,7 +9,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
@@ -44,7 +44,7 @@ public class CatchallBlockEntity extends RandomizableContainerBlockEntity {
 
     @Override
     public Component getDefaultName() {
-        return new TranslatableComponent("block.moreinventorymod.catchall");
+        return Component.translatable(Blocks.CATCHALL.get().getDescriptionId());
     }
 
     @Override

@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemModelGenerator extends ItemModelProvider {
     public ItemModelGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {
@@ -45,7 +46,7 @@ public class ItemModelGenerator extends ItemModelProvider {
     }
 
     public static String name(Item item) {
-        return item.getRegistryName().getPath();
+        return ForgeRegistries.ITEMS.getKey(item).getPath();
     }
 
     private void toBlock(Block b) {

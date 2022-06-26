@@ -25,7 +25,7 @@ public class TransportContainer extends AbstractContainerMenu {
     private BaseTransportBlockEntity transportBlockEntity;
 
     public TransportContainer(int windowID, Inventory playerInventory, BaseTransportBlockEntity blockEntity) {
-        super(Containers.TRANSPORT_CONTAINER_TYPE, windowID);
+        super(Containers.TRANSPORT_CONTAINER_TYPE.get(), windowID);
         this.transportBlockEntity = blockEntity;
 
         for (int i = 0; i < 3; i++) {

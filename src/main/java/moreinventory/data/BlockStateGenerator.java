@@ -22,6 +22,7 @@ import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelBuilder.FaceRotation;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class BlockStateGenerator extends BlockStateProvider {
 
@@ -47,7 +48,7 @@ public class BlockStateGenerator extends BlockStateProvider {
     }
 
     public static String name(Block block) {
-        return block.getRegistryName().getPath();
+        return ForgeRegistries.BLOCKS.getKey(block).getPath();
     }
 
     private void registerCatchallBlock(Block block, ResourceLocation texture) {

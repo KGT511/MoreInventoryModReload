@@ -16,6 +16,7 @@ import moreinventory.client.screen.PouchContainerScreen;
 import moreinventory.client.screen.TransportContainerScreen;
 import moreinventory.container.Containers;
 import moreinventory.item.Items;
+import moreinventory.item.SpannerItem;
 import moreinventory.item.TransporterItem;
 import moreinventory.network.ServerboundImporterUpdatePacket;
 import moreinventory.network.ServerboundPouchUpdatePacket;
@@ -65,7 +66,7 @@ public class MoreInventoryMOD {
         Items.register(eventBus);
         Blocks.register(eventBus);
         BlockEntities.register(eventBus);
-
+        Containers.register(eventBus);
         Recipes.register(eventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -82,6 +83,7 @@ public class MoreInventoryMOD {
         StorageBoxInventorySize.init();
         StorageBoxTypeBlockEntity.init();
         TransporterItem.setTransportableBlocks();
+        SpannerItem.setRotatableBlocks();
     }
 
     public static void initNetwork() {
@@ -117,9 +119,9 @@ public class MoreInventoryMOD {
         BlockEntityRenderers.register(BlockEntities.IMPORTER_BLOCK_ENTITY_TYPE.get(), TransportRenderer::new);
         BlockEntityRenderers.register(BlockEntities.EXPORTER_BLOCK_ENTITY_TYPE.get(), TransportRenderer::new);
 
-        MenuScreens.register(Containers.CATCHALL_CONTAINER_TYPE, CatchallContainerScreen::new);
-        MenuScreens.register(Containers.TRANSPORT_CONTAINER_TYPE, TransportContainerScreen::new);
-        MenuScreens.register(Containers.POUCH_CONTAINER_TYPE, PouchContainerScreen::new);
+        MenuScreens.register(Containers.CATCHALL_CONTAINER_TYPE.get(), CatchallContainerScreen::new);
+        MenuScreens.register(Containers.TRANSPORT_CONTAINER_TYPE.get(), TransportContainerScreen::new);
+        MenuScreens.register(Containers.POUCH_CONTAINER_TYPE.get(), PouchContainerScreen::new);
 
         ForgeHooksClient.registerLayerDefinition(ModelLayers.TRANPORT, TransportRenderer::createBodyLayer);
     }

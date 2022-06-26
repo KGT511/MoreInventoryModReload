@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "LLL",
-    "PDP",
-    "LPL"
-  ],
   "key": {
     "D": {
       "item": "minecraft:diamond"
@@ -16,6 +11,11 @@
       "item": "moreinventorymod:leather_pack"
     }
   },
+  "pattern": [
+    "LLL",
+    "PDP",
+    "LPL"
+  ],
   "result": {
     "item": "moreinventorymod:pouch"
   }

@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "H": {
+      "item": "minecraft:hopper"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "S": {
+      "item": "minecraft:cobblestone"
+    }
+  },
   "pattern": [
     "SSS",
     "SHS",
     "SRS"
   ],
-  "key": {
-    "S": {
-      "item": "minecraft:cobblestone"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
-    "H": {
-      "item": "minecraft:hopper"
-    }
-  },
   "result": {
     "item": "moreinventorymod:importer"
   }

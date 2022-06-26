@@ -13,8 +13,6 @@ import moreinventory.util.MIMUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -46,7 +44,7 @@ public class PouchContainerScreen extends AbstractContainerScreen<PouchContainer
         super.init();
         var inventory = this.menu.getInventory();
         this.isStorageBoxButton = new ConfigButton(PouchInventory.Val.STORAGE_BOX.ordinal(),
-                0, 0, 16, 16, 184, 120, inventory.getIsStorageBox(), TextComponent.EMPTY,
+                0, 0, 16, 16, 184, 120, inventory.getIsStorageBox(), Component.empty(),
                 (id, val) -> {
                     MoreInventoryMOD.CHANNEL.sendToServer(new ServerboundPouchUpdatePacket(id, val));
                 });
@@ -54,7 +52,7 @@ public class PouchContainerScreen extends AbstractContainerScreen<PouchContainer
         this.isStorageBoxButton.y = this.topPos + 25 + this.grade * 18;
 
         this.isHotBarButton = new ConfigButton(PouchInventory.Val.HOT_BAR.ordinal(),
-                0, 0, 16, 16, 200, 120, inventory.getIsHotBar(), TextComponent.EMPTY,
+                0, 0, 16, 16, 200, 120, inventory.getIsHotBar(), Component.empty(),
                 (id, val) -> {
                     MoreInventoryMOD.CHANNEL.sendToServer(new ServerboundPouchUpdatePacket(id, val));
                 });
@@ -62,7 +60,7 @@ public class PouchContainerScreen extends AbstractContainerScreen<PouchContainer
         this.isHotBarButton.y = this.isStorageBoxButton.y;
 
         this.isAutoCollectButton = new ConfigButton(PouchInventory.Val.AUTO_COLLECT.ordinal(),
-                0, 0, 16, 16, 216, 120, inventory.getIsAUtoCollect(), TextComponent.EMPTY,
+                0, 0, 16, 16, 216, 120, inventory.getIsAUtoCollect(), Component.empty(),
                 (id, val) -> {
                     MoreInventoryMOD.CHANNEL.sendToServer(new ServerboundPouchUpdatePacket(id, val));
                 });
@@ -89,11 +87,11 @@ public class PouchContainerScreen extends AbstractContainerScreen<PouchContainer
         this.renderTooltip(poseStack, mouseX, mouseY);
 
         if (this.isStorageBoxHoverChecker.checkHover(mouseX, mouseY))
-            this.renderTooltip(poseStack, new TranslatableComponent(Text.pouchConfigStorageBox), mouseX, mouseY);
+            this.renderTooltip(poseStack, Component.translatable(Text.pouchConfigStorageBox), mouseX, mouseY);
         if (this.isHotBarHoverChecker.checkHover(mouseX, mouseY))
-            this.renderTooltip(poseStack, new TranslatableComponent(Text.pouchConfigHotBar), mouseX, mouseY);
+            this.renderTooltip(poseStack, Component.translatable(Text.pouchConfigHotBar), mouseX, mouseY);
         if (this.isAutoCollectHoverChecker.checkHover(mouseX, mouseY))
-            this.renderTooltip(poseStack, new TranslatableComponent(Text.pouchConfigAutoCollect), mouseX, mouseY);
+            this.renderTooltip(poseStack, Component.translatable(Text.pouchConfigAutoCollect), mouseX, mouseY);
     }
 
     @Override
@@ -118,6 +116,6 @@ public class PouchContainerScreen extends AbstractContainerScreen<PouchContainer
     @Override
     protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
         super.renderLabels(poseStack, mouseX, mouseY);
-        MIMUtils.drawStringWithoutShadow(poseStack, this.font, new TranslatableComponent(Text.pouchConfig), this.imageWidth + 18, 10, 4210752);
+        MIMUtils.drawStringWithoutShadow(poseStack, this.font, Component.translatable(Text.pouchConfig), this.imageWidth + 18, 10, 4210752);
     }
 }

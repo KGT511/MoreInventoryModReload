@@ -1,12 +1,27 @@
 {
   "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "moreinventorymod:block/importer_black",
-    "blue": "moreinventorymod:block/importer",
-    "black": "minecraft:block/anvil"
-  },
   "elements": [
     {
+      "faces": {
+        "down": {
+          "texture": "#black"
+        },
+        "east": {
+          "texture": "#black"
+        },
+        "north": {
+          "texture": "#black"
+        },
+        "south": {
+          "texture": "#black"
+        },
+        "up": {
+          "texture": "#black"
+        },
+        "west": {
+          "texture": "#black"
+        }
+      },
       "from": [
         2,
         0,
@@ -16,12 +31,14 @@
         14,
         1,
         14
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#black"
         },
-        "up": {
+        "east": {
           "texture": "#black"
         },
         "north": {
@@ -30,15 +47,13 @@
         "south": {
           "texture": "#black"
         },
-        "west": {
+        "up": {
           "texture": "#black"
         },
-        "east": {
+        "west": {
           "texture": "#black"
         }
-      }
-    },
-    {
+      },
       "from": [
         4,
         1,
@@ -48,12 +63,14 @@
         12,
         2,
         12
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#black"
         },
-        "up": {
+        "east": {
           "texture": "#black"
         },
         "north": {
@@ -62,15 +79,13 @@
         "south": {
           "texture": "#black"
         },
-        "west": {
+        "up": {
           "texture": "#black"
         },
-        "east": {
+        "west": {
           "texture": "#black"
         }
-      }
-    },
-    {
+      },
       "from": [
         5,
         11,
@@ -80,12 +95,14 @@
         11,
         12,
         11
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#black"
         },
-        "up": {
+        "east": {
           "texture": "#black"
         },
         "north": {
@@ -94,15 +111,13 @@
         "south": {
           "texture": "#black"
         },
-        "west": {
+        "up": {
           "texture": "#black"
         },
-        "east": {
+        "west": {
           "texture": "#black"
         }
-      }
-    },
-    {
+      },
       "from": [
         4,
         12,
@@ -112,12 +127,14 @@
         12,
         13,
         12
-      ],
+      ]
+    },
+    {
       "faces": {
         "down": {
           "texture": "#black"
         },
-        "up": {
+        "east": {
           "texture": "#black"
         },
         "north": {
@@ -126,15 +143,13 @@
         "south": {
           "texture": "#black"
         },
-        "west": {
+        "up": {
           "texture": "#black"
         },
-        "east": {
+        "west": {
           "texture": "#black"
         }
-      }
-    },
-    {
+      },
       "from": [
         6,
         13,
@@ -144,29 +159,29 @@
         10,
         14,
         10
-      ],
-      "faces": {
-        "down": {
-          "texture": "#black"
-        },
-        "up": {
-          "texture": "#black"
-        },
-        "north": {
-          "texture": "#black"
-        },
-        "south": {
-          "texture": "#black"
-        },
-        "west": {
-          "texture": "#black"
-        },
-        "east": {
-          "texture": "#black"
-        }
-      }
+      ]
     },
     {
+      "faces": {
+        "down": {
+          "texture": "#blue"
+        },
+        "east": {
+          "texture": "#blue"
+        },
+        "north": {
+          "texture": "#blue"
+        },
+        "south": {
+          "texture": "#blue"
+        },
+        "up": {
+          "texture": "#blue"
+        },
+        "west": {
+          "texture": "#blue"
+        }
+      },
       "from": [
         7,
         14,
@@ -176,27 +191,12 @@
         9,
         16,
         9
-      ],
-      "faces": {
-        "down": {
-          "texture": "#blue"
-        },
-        "up": {
-          "texture": "#blue"
-        },
-        "north": {
-          "texture": "#blue"
-        },
-        "south": {
-          "texture": "#blue"
-        },
-        "west": {
-          "texture": "#blue"
-        },
-        "east": {
-          "texture": "#blue"
-        }
-      }
+      ]
     }
-  ]
+  ],
+  "textures": {
+    "all": "moreinventorymod:block/importer_black",
+    "black": "minecraft:block/anvil",
+    "blue": "moreinventorymod:block/importer"
+  }
 }

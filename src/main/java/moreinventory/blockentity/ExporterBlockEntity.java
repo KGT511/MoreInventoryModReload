@@ -6,7 +6,6 @@ import moreinventory.container.TransportContainer;
 import moreinventory.util.MIMUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +23,7 @@ public class ExporterBlockEntity extends BaseTransportBlockEntity {
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent(Blocks.EXPORTER.get().getDescriptionId());
+        return Component.translatable(Blocks.EXPORTER.get().getDescriptionId());
     }
 
     @Override

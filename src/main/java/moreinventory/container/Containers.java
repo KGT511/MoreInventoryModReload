@@ -1,37 +1,35 @@
 package moreinventory.container;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Supplier;
 
 import moreinventory.core.MoreInventoryMOD;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 @Mod.EventBusSubscriber(modid = MoreInventoryMOD.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Containers {
-    public static List<MenuType<?>> containerList = new ArrayList<>();
+    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, MoreInventoryMOD.MOD_ID);
 
-    public static MenuType<CatchallContainer> CATCHALL_CONTAINER_TYPE = (MenuType<CatchallContainer>) register(
-            "catchall_container", IForgeMenuType.create(CatchallContainer::createContainerClientSide));
-    public static MenuType<TransportContainer> TRANSPORT_CONTAINER_TYPE = (MenuType<TransportContainer>) register("importer_container",
-            IForgeMenuType.create(TransportContainer::createContainerClientSide));
-    public static final MenuType<PouchContainer> POUCH_CONTAINER_TYPE = (MenuType<PouchContainer>) register("pouch_container",
-            IForgeMenuType.create(PouchContainer::createContainerClientSide));
+    public static final RegistryObject<MenuType<CatchallContainer>> CATCHALL_CONTAINER_TYPE = register(
+            "catchall_container", () -> IForgeMenuType.create(CatchallContainer::createContainerClientSide));
+    public static final RegistryObject<MenuType<TransportContainer>> TRANSPORT_CONTAINER_TYPE = register(
+            "importer_container",
+            () -> IForgeMenuType.create(TransportContainer::createContainerClientSide));
+    public static final RegistryObject<MenuType<PouchContainer>> POUCH_CONTAINER_TYPE = register(
+            "pouch_container",
+            () -> IForgeMenuType.create(PouchContainer::createContainerClientSide));
 
-    private static <T extends AbstractContainerMenu> ForgeRegistryEntry<MenuType<?>> register(String key, MenuType<T> itemIn) {
-        containerList.add(itemIn);
-        return itemIn.setRegistryName(MoreInventoryMOD.MOD_ID, key);
+    public static <T extends MenuType<?>> RegistryObject<T> register(String name, Supplier<T> sup) {
+        var ret = MENU_TYPES.register(name, sup);
+        return ret;
     }
 
-    @SubscribeEvent
-    public static void registerItems(RegistryEvent.Register<MenuType<?>> event) {
-        for (var item : containerList) {
-            event.getRegistry().register(item);
-        }
+    public static void register(IEventBus eventBus) {
+        MENU_TYPES.register(eventBus);
     }
 }

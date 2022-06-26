@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "MSM",
-    "MWM",
-    "MSM"
-  ],
   "key": {
     "M": {
       "tag": "forge:gems/diamond"
@@ -16,8 +11,13 @@
       "item": "moreinventorymod:storage_box_wood"
     }
   },
+  "pattern": [
+    "MSM",
+    "MWM",
+    "MSM"
+  ],
   "result": {
-    "item": "moreinventorymod:storage_box_diamond",
-    "count": 3
+    "count": 3,
+    "item": "moreinventorymod:storage_box_diamond"
   }
 }

@@ -13,8 +13,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
@@ -39,11 +37,11 @@ public class TransportContainerScreen extends AbstractContainerScreen<TransportC
             var importerBlockEntity = ((ImporterBlockEntity) this.menu.getBlockEntity());
             this.isWhiteButton = this.addRenderableWidget(
                     new TransportContainerScreen.Button(leftPos + imageWidth - 55, topPos + 35,
-                            new TranslatableComponent(Text.importerMoveWhiteDetail), new TranslatableComponent(Text.importerMoveBlackDetail),
+                            Component.translatable(Text.importerMoveWhiteDetail), Component.translatable(Text.importerMoveBlackDetail),
                             importerBlockEntity.getBlockPos(), ImporterBlockEntity.Val.WHITE.ordinal()));
             this.isRegisterButton = this.addRenderableWidget(
                     new TransportContainerScreen.Button(leftPos + 5, topPos + 35,
-                            new TranslatableComponent(Text.importerRegisterOnDetail), new TranslatableComponent(Text.importerRegisterOffDetail),
+                            Component.translatable(Text.importerRegisterOnDetail), Component.translatable(Text.importerRegisterOffDetail),
                             importerBlockEntity.getBlockPos(), ImporterBlockEntity.Val.REGISTER.ordinal()));
             this.isWhiteButton.active = true;
             this.isRegisterButton.active = true;
@@ -64,12 +62,12 @@ public class TransportContainerScreen extends AbstractContainerScreen<TransportC
 
             var isRegister = importerBlockEntity.getIsRegister();
             var isWhite = importerBlockEntity.getIswhite();
-            var registerTxt = new TranslatableComponent(isRegister ? Text.importerRegisterOn : Text.importerRegisterOff);
-            var moveTxt = new TranslatableComponent(isWhite ? Text.importerMoveWhite : Text.importerMoveBlack);
+            var registerTxt = Component.translatable(isRegister ? Text.importerRegisterOn : Text.importerRegisterOff);
+            var moveTxt = Component.translatable(isWhite ? Text.importerMoveWhite : Text.importerMoveBlack);
             drawCenteredString(poseStack, this.font, registerTxt, 30 + xOffset, 40 + yOffset, 14737632);
             drawCenteredString(poseStack, this.font, moveTxt, imageWidth - 30 + xOffset, 40 + yOffset, 14737632);
-            this.drawCenteredStringWithoutShadow(poseStack, new TranslatableComponent(Text.importerMove), imageWidth - 30 + xOffset, 20 + yOffset, 328965);
-            this.drawCenteredStringWithoutShadow(poseStack, new TranslatableComponent(Text.importerRegister), 30 + xOffset, 20 + yOffset, 328965);
+            this.drawCenteredStringWithoutShadow(poseStack, Component.translatable(Text.importerMove), imageWidth - 30 + xOffset, 20 + yOffset, 328965);
+            this.drawCenteredStringWithoutShadow(poseStack, Component.translatable(Text.importerRegister), 30 + xOffset, 20 + yOffset, 328965);
             isWhiteButton.onValueUpdate(importerBlockEntity);
             isRegisterButton.onValueUpdate(importerBlockEntity);
 
@@ -107,7 +105,7 @@ public class TransportContainerScreen extends AbstractContainerScreen<TransportC
         private int id;
 
         protected Button(int x, int y, Component trueDisplayTxt, Component falseDisplayTxt, BlockPos blockPos, int id) {
-            super(x, y, 53, 20, TextComponent.EMPTY, (p) -> {
+            super(x, y, 53, 20, Component.empty(), (p) -> {
                 MoreInventoryMOD.CHANNEL.sendToServer(new ServerboundImporterUpdatePacket(blockPos, id));
             });
             this.trueTxt = trueDisplayTxt;

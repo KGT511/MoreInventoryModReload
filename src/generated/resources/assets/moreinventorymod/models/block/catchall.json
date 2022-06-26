@@ -1,10 +1,33 @@
 {
   "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "minecraft:block/oak_planks"
-  },
   "elements": [
     {
+      "faces": {
+        "down": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "east": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "north": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "south": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "up": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "west": {
+          "rotation": 180,
+          "texture": "#all"
+        }
+      },
       "from": [
         0,
         0,
@@ -14,35 +37,35 @@
         1,
         12,
         16
-      ],
-      "faces": {
-        "down": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "up": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "north": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "south": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "west": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "east": {
-          "texture": "#all",
-          "rotation": 180
-        }
-      }
+      ]
     },
     {
+      "faces": {
+        "down": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "east": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "north": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "south": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "up": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "west": {
+          "rotation": 180,
+          "texture": "#all"
+        }
+      },
       "from": [
         1,
         0,
@@ -52,35 +75,35 @@
         15,
         12,
         1
-      ],
-      "faces": {
-        "down": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "up": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "north": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "south": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "west": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "east": {
-          "texture": "#all",
-          "rotation": 180
-        }
-      }
+      ]
     },
     {
+      "faces": {
+        "down": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "east": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "north": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "south": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "up": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "west": {
+          "rotation": 180,
+          "texture": "#all"
+        }
+      },
       "from": [
         15,
         0,
@@ -90,35 +113,35 @@
         16,
         12,
         16
-      ],
-      "faces": {
-        "down": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "up": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "north": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "south": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "west": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "east": {
-          "texture": "#all",
-          "rotation": 180
-        }
-      }
+      ]
     },
     {
+      "faces": {
+        "down": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "east": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "north": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "south": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "up": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "west": {
+          "rotation": 180,
+          "texture": "#all"
+        }
+      },
       "from": [
         1,
         0,
@@ -128,35 +151,35 @@
         15,
         12,
         16
-      ],
-      "faces": {
-        "down": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "up": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "north": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "south": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "west": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "east": {
-          "texture": "#all",
-          "rotation": 180
-        }
-      }
+      ]
     },
     {
+      "faces": {
+        "down": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "east": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "north": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "south": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "up": {
+          "rotation": 180,
+          "texture": "#all"
+        },
+        "west": {
+          "rotation": 180,
+          "texture": "#all"
+        }
+      },
       "from": [
         1,
         0,
@@ -166,33 +189,10 @@
         15,
         0,
         15
-      ],
-      "faces": {
-        "down": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "up": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "north": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "south": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "west": {
-          "texture": "#all",
-          "rotation": 180
-        },
-        "east": {
-          "texture": "#all",
-          "rotation": 180
-        }
-      }
+      ]
     }
-  ]
+  ],
+  "textures": {
+    "all": "minecraft:block/oak_planks"
+  }
 }

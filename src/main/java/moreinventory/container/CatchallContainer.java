@@ -19,7 +19,7 @@ public class CatchallContainer extends AbstractContainerMenu {
     private CatchallBlockEntity catchall;
 
     public CatchallContainer(int windowID, Inventory playerInventory, CatchallBlockEntity blockEntity) {
-        super(Containers.CATCHALL_CONTAINER_TYPE, windowID);
+        super(Containers.CATCHALL_CONTAINER_TYPE.get(), windowID);
         this.catchall = blockEntity;
 
         for (int i = 0; i < 9; ++i) {

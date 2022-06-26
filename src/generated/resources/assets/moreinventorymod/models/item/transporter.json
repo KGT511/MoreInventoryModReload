@@ -1,104 +1,104 @@
 {
   "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "moreinventorymod:item/transporter"
-  },
   "overrides": [
     {
+      "model": "moreinventorymod:item/transporter_chest",
       "predicate": {
         "minecraft:custom_model_data": 1.0
-      },
-      "model": "moreinventorymod:item/transporter_chest"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_trapped_chest",
       "predicate": {
         "minecraft:custom_model_data": 2.0
-      },
-      "model": "moreinventorymod:item/transporter_trapped_chest"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_furnace",
       "predicate": {
         "minecraft:custom_model_data": 3.0
-      },
-      "model": "moreinventorymod:item/transporter_furnace"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_dispenser",
       "predicate": {
         "minecraft:custom_model_data": 4.0
-      },
-      "model": "moreinventorymod:item/transporter_dispenser"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_dropper",
       "predicate": {
         "minecraft:custom_model_data": 5.0
-      },
-      "model": "moreinventorymod:item/transporter_dropper"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_storage_box_wood",
       "predicate": {
         "minecraft:custom_model_data": 6.0
-      },
-      "model": "moreinventorymod:item/transporter_storage_box_wood"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_storage_box_iron",
       "predicate": {
         "minecraft:custom_model_data": 7.0
-      },
-      "model": "moreinventorymod:item/transporter_storage_box_iron"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_storage_box_gold",
       "predicate": {
         "minecraft:custom_model_data": 8.0
-      },
-      "model": "moreinventorymod:item/transporter_storage_box_gold"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_storage_box_diamond",
       "predicate": {
         "minecraft:custom_model_data": 9.0
-      },
-      "model": "moreinventorymod:item/transporter_storage_box_diamond"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_storage_box_emerald",
       "predicate": {
         "minecraft:custom_model_data": 10.0
-      },
-      "model": "moreinventorymod:item/transporter_storage_box_emerald"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_storage_box_copper",
       "predicate": {
         "minecraft:custom_model_data": 11.0
-      },
-      "model": "moreinventorymod:item/transporter_storage_box_copper"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_storage_box_tin",
       "predicate": {
         "minecraft:custom_model_data": 12.0
-      },
-      "model": "moreinventorymod:item/transporter_storage_box_tin"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_storage_box_bronze",
       "predicate": {
         "minecraft:custom_model_data": 13.0
-      },
-      "model": "moreinventorymod:item/transporter_storage_box_bronze"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_storage_box_silver",
       "predicate": {
         "minecraft:custom_model_data": 14.0
-      },
-      "model": "moreinventorymod:item/transporter_storage_box_silver"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_storage_box_glass",
       "predicate": {
         "minecraft:custom_model_data": 15.0
-      },
-      "model": "moreinventorymod:item/transporter_storage_box_glass"
+      }
     },
     {
+      "model": "moreinventorymod:item/transporter_furnace_lit",
       "predicate": {
         "minecraft:custom_model_data": 99.0
-      },
-      "model": "moreinventorymod:item/transporter_furnace_lit"
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "moreinventorymod:item/transporter"
+  }
 }

@@ -1,18 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "minecraft:stone"
+    }
+  },
   "pattern": [
     "SSS",
     " I ",
     "SSS"
   ],
-  "key": {
-    "S": {
-      "item": "minecraft:stone"
-    },
-    "I": {
-      "item": "minecraft:iron_ingot"
-    }
-  },
   "result": {
     "item": "moreinventorymod:spanner"
   }

@@ -22,7 +22,7 @@ public class PouchContainer extends AbstractContainerMenu {
     private PouchInventory pouchInventory;
 
     protected PouchContainer(int windowID, Inventory inventory, PouchInventory pouchInventory) {
-        super(Containers.POUCH_CONTAINER_TYPE, windowID);
+        super(Containers.POUCH_CONTAINER_TYPE.get(), windowID);
         this.pouchInventory = pouchInventory;
 
         for (int j = 0; j < 6; ++j) {
