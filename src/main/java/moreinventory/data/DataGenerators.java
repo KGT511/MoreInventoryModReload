@@ -4,9 +4,9 @@ import moreinventory.core.MoreInventoryMOD;
 import moreinventory.data.lang.EnUsLanguageGenerator;
 import moreinventory.data.lang.JaJpLanguageGenerator;
 import net.minecraft.data.DataGenerator;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod.EventBusSubscriber(modid = MoreInventoryMOD.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DataGenerators {

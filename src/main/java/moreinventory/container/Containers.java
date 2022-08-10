@@ -13,7 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 @Mod.EventBusSubscriber(modid = MoreInventoryMOD.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Containers {
-    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, MoreInventoryMOD.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MoreInventoryMOD.MOD_ID);
 
     public static final RegistryObject<MenuType<CatchallContainer>> CATCHALL_CONTAINER_TYPE = register(
             "catchall_container", () -> IForgeMenuType.create(CatchallContainer::createContainerClientSide));

@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class BlockEntities {
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, MoreInventoryMOD.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MoreInventoryMOD.MOD_ID);
 
     public static final RegistryObject<BlockEntityType<CatchallBlockEntity>> CATCHALL_BLOCK_ENTITY_TYPE = register(
             "catchall_tile",

@@ -74,7 +74,7 @@ public class CatchallBlock extends BaseEntityBlock {
             var namedContainerProvider = this.getMenuProvider(state, level, pos);
             if (namedContainerProvider != null) {
                 var serverPlayerEntity = (ServerPlayer) player;
-                NetworkHooks.openGui(serverPlayerEntity, namedContainerProvider,
+                NetworkHooks.openScreen(serverPlayerEntity, namedContainerProvider,
                         (packetBuffer -> {
                             packetBuffer.writeBlockPos(pos);
                         }));

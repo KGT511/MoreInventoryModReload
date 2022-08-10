@@ -138,7 +138,7 @@ public class TransportBlock extends BaseEntityBlock {
             var menuProvider = this.getMenuProvider(state, level, pos);
             if (menuProvider != null) {
                 var serverPlayerEntity = (ServerPlayer) player;
-                NetworkHooks.openGui(serverPlayerEntity, menuProvider, level.getBlockEntity(pos).getBlockPos());
+                NetworkHooks.openScreen(serverPlayerEntity, menuProvider, level.getBlockEntity(pos).getBlockPos());
             }
         } else if (player.getMainHandItem().isEmpty()) {
             if (state.getBlock() instanceof TransportBlock) {

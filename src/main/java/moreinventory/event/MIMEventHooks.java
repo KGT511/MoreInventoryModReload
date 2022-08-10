@@ -14,8 +14,8 @@ public class MIMEventHooks {
 
     @SubscribeEvent
     public static void pickupItem(EntityItemPickupEvent event) {
-        if (event.getPlayer() instanceof ServerPlayer) {
-            var player = (ServerPlayer) event.getPlayer();
+        if (event.getEntity() instanceof ServerPlayer) {
+            var player = (ServerPlayer) event.getEntity();
             var item = event.getItem().getItem();
             var inventory = player.getInventory();
 
