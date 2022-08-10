@@ -16,6 +16,18 @@ MoreInventoryModを1.16でも使えるように新しく作成しました。
 * インポーター、エクスポーターのレシピ変更
 
 # Changelog
+## v0.2.2
+forge1.19のRecommendedに対応(mc1.19のみ)
+
+## v0.2.1.5
+スパナの処理を修正(mc1.18.2のみ)
+
+## v0.2.1
+ポーチに関するバグを修正
+
+## v0.2.0
+ポーチを追加
+
 ## v0.1.0
 MoreInventoryModReloadedをリリース    
 以下を追加
@@ -25,11 +37,9 @@ MoreInventoryModReloadedをリリース
 * トランスポーター
 * スパナ
 
-## v0.2.0
-ポーチを追加
-
 # Scheduled to be updated
 未実装の内、更新予定のもの一覧
 * はけ、めっき
 * エンダーコンテナ
 * テレポーター
+* ポーチ
