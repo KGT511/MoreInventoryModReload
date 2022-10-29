@@ -65,7 +65,7 @@ public class TransportContainer extends AbstractContainerMenu {
 
     @Override
     public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
-        if (0 <= slotId && slotId < 9) {
+        if (0 <= slotId && slotId < BaseTransportBlockEntity.inventorySize) {
             if (dragType == 0) {
                 var setItem = player.getInventory().player.containerMenu.getCarried().copy();
                 setItem.setCount(1);
@@ -76,6 +76,15 @@ public class TransportContainer extends AbstractContainerMenu {
         } else {
             super.clicked(slotId, dragType, clickTypeIn, player);
         }
+    }
+
+    @Override
+    public boolean canTakeItemForPickAll(ItemStack itemStack, Slot slot) {
+        if (slot.isSameInventory(new Slot(this.transportBlockEntity, 0, 0, 0)) && slot.getSlotIndex() < BaseTransportBlockEntity.inventorySize) {
+            return false;
+        }
+
+        return true;
     }
 
     public BaseTransportBlockEntity getBlockEntity() {

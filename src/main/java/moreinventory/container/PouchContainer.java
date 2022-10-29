@@ -112,6 +112,16 @@ public class PouchContainer extends AbstractContainerMenu {
         }
     }
 
+    @Override
+    public boolean canTakeItemForPickAll(ItemStack itemStack, Slot slot) {
+        var slotId = slot.getSlotIndex();
+        if (slot.isSameInventory(new Slot(this.pouchInventory, 0, 0, 0)) && PouchInventory.slotSize <= slotId && slotId < PouchInventory.slotSize + PouchInventory.collectableSlotSize) {
+            return false;
+        }
+
+        return true;
+    }
+
     public PouchInventory getInventory() {
         return pouchInventory;
     }
