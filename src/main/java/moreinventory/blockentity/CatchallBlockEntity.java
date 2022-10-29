@@ -1,6 +1,5 @@
 package moreinventory.blockentity;
 
-import moreinventory.block.CatchallBlock;
 import moreinventory.container.CatchallContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -19,11 +19,9 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class CatchallBlockEntity extends RandomizableContainerBlockEntity {
+public class CatchallBlockEntity extends RandomizableContainerBlockEntity implements WorldlyContainer {
     public CatchallBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntities.CATCHALL_BLOCK_ENTITY_TYPE, pos, state);
     }
@@ -93,20 +91,7 @@ public class CatchallBlockEntity extends RandomizableContainerBlockEntity {
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (!this.remove && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (this.storageHandler == null)
-                this.storageHandler = LazyOptional.of(this::createHandler);
-            return this.storageHandler.cast();
-        }
-        return super.getCapability(cap, side);
-    }
-
-    private IItemHandlerModifiable createHandler() {
-        var state = this.getBlockState();
-        if (!(state.getBlock() instanceof CatchallBlock)) {
-            return new InvWrapper(this);
-        }
-        return new InvWrapper(this);
+        return LazyOptional.empty();
     }
 
     @Override
@@ -223,4 +208,23 @@ public class CatchallBlockEntity extends RandomizableContainerBlockEntity {
         return indexIn < mainInventorySize ? indexIn : indexIn + armorInventorySize;
     }
 
+    @Override
+    public int[] getSlotsForFace(Direction p_19238_) {
+        return new int[] {};
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int p_19235_, ItemStack p_19236_, Direction p_19237_) {
+        return false;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int p_19239_, ItemStack p_19240_, Direction p_19241_) {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceItem(int p_18952_, ItemStack p_18953_) {
+        return false;
+    }
 }

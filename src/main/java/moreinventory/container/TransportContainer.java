@@ -78,6 +78,15 @@ public class TransportContainer extends AbstractContainerMenu {
         }
     }
 
+    @Override
+    public boolean canTakeItemForPickAll(ItemStack itemStack, Slot slot) {
+        if (slot.isSameInventory(new Slot(this.transportBlockEntity, 0, 0, 0)) && slot.getSlotIndex() < BaseTransportBlockEntity.inventorySize) {
+            return false;
+        }
+
+        return true;
+    }
+
     public BaseTransportBlockEntity getBlockEntity() {
         return transportBlockEntity;
     }

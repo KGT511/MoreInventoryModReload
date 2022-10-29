@@ -1,6 +1,5 @@
 package moreinventory.blockentity;
 
-import moreinventory.block.StorageBoxBlock;
 import moreinventory.blockentity.storagebox.StorageBoxInventorySize;
 import moreinventory.blockentity.storagebox.StorageBoxType;
 import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
@@ -18,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -28,11 +28,9 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity implements Container, IStorageBoxNetwork {
+public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity implements Container, IStorageBoxNetwork, WorldlyContainer {
 
     private ItemStack contents = ItemStack.EMPTY;
     protected NonNullList<ItemStack> storageItems;
@@ -114,20 +112,7 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (!this.remove && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (this.storageHandler == null)
-                this.storageHandler = LazyOptional.of(this::createHandler);
-            return this.storageHandler.cast();
-        }
-        return super.getCapability(cap, side);
-    }
-
-    private IItemHandlerModifiable createHandler() {
-        var state = this.getBlockState();
-        if (!(state.getBlock() instanceof StorageBoxBlock)) {
-            return new InvWrapper(this);
-        }
-        return new InvWrapper(this);
+        return LazyOptional.empty();
     }
 
     @Override
@@ -472,4 +457,23 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
         }
     }
 
+    @Override
+    public int[] getSlotsForFace(Direction p_19238_) {
+        return new int[] {};
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int p_19235_, ItemStack p_19236_, Direction p_19237_) {
+        return false;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int p_19239_, ItemStack p_19240_, Direction p_19241_) {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceItem(int p_18952_, ItemStack p_18953_) {
+        return false;
+    }
 }
