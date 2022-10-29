@@ -1,6 +1,5 @@
 package moreinventory.blockentity;
 
-import moreinventory.block.TransportBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -20,11 +19,9 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.wrapper.InvWrapper;
 
-public abstract class BaseTransportBlockEntity extends RandomizableContainerBlockEntity implements Container {
+public abstract class BaseTransportBlockEntity extends RandomizableContainerBlockEntity implements Container, WorldlyContainer {
 
     public static final int inventorySize = 9;
     protected NonNullList<ItemStack> slotItems = NonNullList.withSize(inventorySize, ItemStack.EMPTY);
@@ -76,20 +73,7 @@ public abstract class BaseTransportBlockEntity extends RandomizableContainerBloc
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (!this.remove && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (this.storageHandler == null)
-                this.storageHandler = LazyOptional.of(this::createHandler);
-            return this.storageHandler.cast();
-        }
-        return super.getCapability(cap, side);
-    }
-
-    private IItemHandlerModifiable createHandler() {
-        var state = this.getBlockState();
-        if (!(state.getBlock() instanceof TransportBlock)) {
-            return new InvWrapper(this);
-        }
-        return new InvWrapper(this);
+        return LazyOptional.empty();
     }
 
     @Override
@@ -191,4 +175,23 @@ public abstract class BaseTransportBlockEntity extends RandomizableContainerBloc
         return inventory.canPlaceItem(slot, itemstack) && (!(inventory instanceof WorldlyContainer) || ((WorldlyContainer) inventory).canPlaceItemThroughFace(slot, itemstack, side));
     }
 
+    @Override
+    public int[] getSlotsForFace(Direction p_19238_) {
+        return new int[] {};
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int p_19235_, ItemStack p_19236_, Direction p_19237_) {
+        return false;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int p_19239_, ItemStack p_19240_, Direction p_19241_) {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceItem(int p_18952_, ItemStack p_18953_) {
+        return false;
+    }
 }
