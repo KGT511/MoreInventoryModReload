@@ -1,6 +1,7 @@
 package moreinventory.tileentity;
 
-import moreinventory.block.StorageBoxBlock;
+import javax.annotation.Nullable;
+
 import moreinventory.inventory.PouchInventory;
 import moreinventory.item.PouchItem;
 import moreinventory.tileentity.storagebox.StorageBoxInventorySize;
@@ -13,6 +14,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.ChestContainer;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
@@ -30,11 +32,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements IInventory, ITickableTileEntity, IStorageBoxNetwork {
+public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements IInventory, ITickableTileEntity, IStorageBoxNetwork, ISidedInventory {
 
     private ItemStack contents = ItemStack.EMPTY;
     protected NonNullList<ItemStack> storageItems;
@@ -125,20 +125,7 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (!this.remove && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (this.storageHandler == null)
-                this.storageHandler = LazyOptional.of(this::createHandler);
-            return this.storageHandler.cast();
-        }
-        return super.getCapability(cap, side);
-    }
-
-    private IItemHandlerModifiable createHandler() {
-        BlockState state = this.getBlockState();
-        if (!(state.getBlock() instanceof StorageBoxBlock)) {
-            return new InvWrapper(this);
-        }
-        return new InvWrapper(this);
+        return LazyOptional.empty();
     }
 
     @Override
@@ -480,4 +467,23 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
         }
     }
 
+    @Override
+    public int[] getSlotsForFace(Direction p_180463_1_) {
+        return new int[] {};
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int p_180462_1_, ItemStack p_180462_2_, @Nullable Direction p_180462_3_) {
+        return false;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int p_180461_1_, ItemStack p_180461_2_, Direction p_180461_3_) {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceItem(int p_94041_1_, ItemStack p_94041_2_) {
+        return false;
+    }
 }

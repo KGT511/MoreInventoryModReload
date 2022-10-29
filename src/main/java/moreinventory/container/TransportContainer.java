@@ -23,11 +23,11 @@ public class TransportContainer extends Container {
 
     public static final int slotSize = BaseTransportTileEntity.inventorySize;
 
-    private BaseTransportTileEntity transportManager;
+    private BaseTransportTileEntity transportTileEntity;
 
     public TransportContainer(int windowID, PlayerInventory playerInventory, BaseTransportTileEntity tile) {
         super(Containers.TRANSPORT_MANAGER_CONTAINER_TYPE, windowID);
-        this.transportManager = tile;
+        this.transportTileEntity = tile;
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -55,8 +55,8 @@ public class TransportContainer extends Container {
 
     @Override
     public boolean stillValid(PlayerEntity playerIn) {
-        Block block = (transportManager instanceof ImporterTileEntity ? Blocks.IMPORTER : Blocks.EXPORTER);
-        return stillValid(IWorldPosCallable.create(transportManager.getLevel(), transportManager.getBlockPos()), playerIn, block);
+        Block block = (transportTileEntity instanceof ImporterTileEntity ? Blocks.IMPORTER : Blocks.EXPORTER);
+        return stillValid(IWorldPosCallable.create(transportTileEntity.getLevel(), transportTileEntity.getBlockPos()), playerIn, block);
     }
 
     @Override
@@ -70,17 +70,26 @@ public class TransportContainer extends Container {
             if (dragType == 0) {
                 ItemStack setItem = player.inventory.getCarried().copy();
                 setItem.setCount(1);
-                transportManager.setItem(slotId, setItem);
+                transportTileEntity.setItem(slotId, setItem);
             } else {
-                transportManager.removeItemNoUpdate(slotId);
+                transportTileEntity.removeItemNoUpdate(slotId);
             }
             return player.inventory.getCarried();
         } else
             return super.clicked(slotId, dragType, clickTypeIn, player);
     }
 
+    @Override
+    public boolean canTakeItemForPickAll(ItemStack itemStack, Slot slot) {
+        if (slot.isSameInventory(new Slot(this.transportTileEntity, 0, 0, 0)) && slot.getSlotIndex() < BaseTransportTileEntity.inventorySize) {
+            return false;
+        }
+
+        return true;
+    }
+
     public BaseTransportTileEntity getTile() {
-        return transportManager;
+        return transportTileEntity;
     }
 
     protected void trackAllIntFields(ImporterTileEntity blockEntity, int valCount) {

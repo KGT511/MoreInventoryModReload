@@ -1,12 +1,14 @@
 package moreinventory.tileentity;
 
+import javax.annotation.Nullable;
+
 import moreinventory.block.Blocks;
-import moreinventory.block.CatchallBlock;
 import moreinventory.container.CatchallContainer;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
@@ -20,11 +22,9 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class CatchallTileEntity extends LockableLootTileEntity implements IInventory {
+public class CatchallTileEntity extends LockableLootTileEntity implements IInventory, ISidedInventory {
     public CatchallTileEntity() {
         super(TileEntities.CATCHALL_TILE_TYPE);
     }
@@ -94,20 +94,7 @@ public class CatchallTileEntity extends LockableLootTileEntity implements IInven
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (!this.remove && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (this.storageHandler == null)
-                this.storageHandler = LazyOptional.of(this::createHandler);
-            return this.storageHandler.cast();
-        }
-        return super.getCapability(cap, side);
-    }
-
-    private IItemHandlerModifiable createHandler() {
-        BlockState state = this.getBlockState();
-        if (!(state.getBlock() instanceof CatchallBlock)) {
-            return new InvWrapper(this);
-        }
-        return new InvWrapper(this);
+        return LazyOptional.empty();
     }
 
     @Override
@@ -229,4 +216,23 @@ public class CatchallTileEntity extends LockableLootTileEntity implements IInven
         return indexIn < mainInventorySize ? indexIn : indexIn + armorInventorySize;
     }
 
+    @Override
+    public int[] getSlotsForFace(Direction p_180463_1_) {
+        return new int[] {};
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int p_180462_1_, ItemStack p_180462_2_, @Nullable Direction p_180462_3_) {
+        return false;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int p_180461_1_, ItemStack p_180461_2_, Direction p_180461_3_) {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceItem(int p_94041_1_, ItemStack p_94041_2_) {
+        return false;
+    }
 }

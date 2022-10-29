@@ -1,9 +1,11 @@
 package moreinventory.tileentity;
 
-import moreinventory.block.TransportBlock;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
@@ -18,11 +20,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.wrapper.InvWrapper;
 
-public abstract class BaseTransportTileEntity extends LockableLootTileEntity implements IInventory, ITickableTileEntity {
+public abstract class BaseTransportTileEntity extends LockableLootTileEntity implements IInventory, ITickableTileEntity, ISidedInventory {
 
     public static final int inventorySize = 9;
     protected NonNullList<ItemStack> slotItems = NonNullList.withSize(inventorySize, ItemStack.EMPTY);
@@ -89,20 +89,7 @@ public abstract class BaseTransportTileEntity extends LockableLootTileEntity imp
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-        if (!this.remove && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (this.storageHandler == null)
-                this.storageHandler = LazyOptional.of(this::createHandler);
-            return this.storageHandler.cast();
-        }
-        return super.getCapability(cap, side);
-    }
-
-    private IItemHandlerModifiable createHandler() {
-        BlockState state = this.getBlockState();
-        if (!(state.getBlock() instanceof TransportBlock)) {
-            return new InvWrapper(this);
-        }
-        return new InvWrapper(this);
+        return LazyOptional.empty();
     }
 
     @Override
@@ -178,4 +165,23 @@ public abstract class BaseTransportTileEntity extends LockableLootTileEntity imp
         }
     }
 
+    @Override
+    public int[] getSlotsForFace(Direction p_180463_1_) {
+        return new int[] {};
+    }
+
+    @Override
+    public boolean canPlaceItemThroughFace(int p_180462_1_, ItemStack p_180462_2_, @Nullable Direction p_180462_3_) {
+        return false;
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int p_180461_1_, ItemStack p_180461_2_, Direction p_180461_3_) {
+        return false;
+    }
+
+    @Override
+    public boolean canPlaceItem(int p_94041_1_, ItemStack p_94041_2_) {
+        return false;
+    }
 }
