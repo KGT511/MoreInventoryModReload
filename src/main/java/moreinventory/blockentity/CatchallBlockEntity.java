@@ -1,5 +1,6 @@
 package moreinventory.blockentity;
 
+import moreinventory.block.Blocks;
 import moreinventory.container.CatchallContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,7 +24,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 
 public class CatchallBlockEntity extends RandomizableContainerBlockEntity implements WorldlyContainer {
     public CatchallBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntities.CATCHALL_BLOCK_ENTITY_TYPE, pos, state);
+        super(BlockEntities.CATCHALL_BLOCK_ENTITY_TYPE.get(), pos, state);
     }
 
     public static final int mainInventorySize = 36;
@@ -42,7 +43,7 @@ public class CatchallBlockEntity extends RandomizableContainerBlockEntity implem
 
     @Override
     public Component getDefaultName() {
-        return new TranslatableComponent("block.moreinventorymod.catchall");
+        return new TranslatableComponent(Blocks.CATCHALL.get().getDescriptionId());
     }
 
     @Override
@@ -79,15 +80,6 @@ public class CatchallBlockEntity extends RandomizableContainerBlockEntity implem
     public AbstractContainerMenu createMenu(int id, Inventory player) {
         return new CatchallContainer(id, player, this);
     }
-
-    //	@Override
-    //	public void updateContainingBlockInfo() {
-    //		super.updateContainingBlockInfo();
-    //		if (this.storageHandler != null) {
-    //			this.storageHandler.invalidate();
-    //			this.storageHandler = null;
-    //		}
-    //	}
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {

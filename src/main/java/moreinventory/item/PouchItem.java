@@ -16,6 +16,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
@@ -112,7 +113,7 @@ public class PouchItem extends Item {
             return itemStack;
         var tag = itemStack.getOrCreateTag();
         var newPouch = (color == 0 ? Items.POUCH : byColor(DyeColor.byId(color - 1)));
-        itemStack = new ItemStack(newPouch);
+        itemStack = new ItemStack((ItemLike) newPouch);
         itemStack.setTag(tag);
 
         return itemStack;

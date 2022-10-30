@@ -7,8 +7,8 @@ import javax.annotation.Nullable;
 
 import moreinventory.block.StorageBoxBlock;
 import moreinventory.blockentity.BaseStorageBoxBlockEntity;
-import moreinventory.blockentity.storagebox.StorageBoxType;
 import moreinventory.core.MoreInventoryMOD;
+import moreinventory.storagebox.StorageBoxType;
 import moreinventory.util.MIMUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -59,16 +59,16 @@ public class TransporterItem extends Item {
         transportableBlocks.add(Blocks.FURNACE);
         transportableBlocks.add(Blocks.DISPENSER);
         transportableBlocks.add(Blocks.DROPPER);
-        transportableBlocks.add(moreinventory.block.Blocks.WOOD_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.IRON_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.GOLD_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.DIAMOND_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.EMERALD_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.COPPER_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.TIN_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.BRONZE_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.SILVER_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.GLASS_STORAGE_BOX);
+        transportableBlocks.add(moreinventory.block.Blocks.WOOD_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.IRON_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.GOLD_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.DIAMOND_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.EMERALD_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.COPPER_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.TIN_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.BRONZE_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.SILVER_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.GLASS_STORAGE_BOX.get());
     }
 
     @Override

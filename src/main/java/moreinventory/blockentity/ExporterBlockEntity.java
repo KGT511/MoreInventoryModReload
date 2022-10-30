@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ExporterBlockEntity extends BaseTransportBlockEntity {
 
     public ExporterBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntities.EXPORTER_BLOCK_ENTITY_TYPE, pos, state);
+        super(BlockEntities.EXPORTER_BLOCK_ENTITY_TYPE.get(), pos, state);
     }
 
     private BlockPos boxPos = BlockPos.ZERO;
@@ -24,7 +24,7 @@ public class ExporterBlockEntity extends BaseTransportBlockEntity {
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent(Blocks.EXPORTER.getDescriptionId());
+        return new TranslatableComponent(Blocks.EXPORTER.get().getDescriptionId());
     }
 
     @Override

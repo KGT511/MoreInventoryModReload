@@ -28,31 +28,27 @@ public class ImporterBlockEntity extends BaseTransportBlockEntity {
     public static final String isWhiteKey = "is_white";
 
     public ImporterBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntities.IMPORTER_BLOCK_ENTITY_TYPE, pos, state);
+        super(BlockEntities.IMPORTER_BLOCK_ENTITY_TYPE.get(), pos, state);
     }
 
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
-        if (!this.tryLoadLootTable(nbt)) {
-            this.register = nbt.getBoolean(registerKey);
-            this.isWhite = nbt.getBoolean(isWhiteKey);
-        }
+        this.register = nbt.getBoolean(registerKey);
+        this.isWhite = nbt.getBoolean(isWhiteKey);
     }
 
     @Override
     public CompoundTag save(CompoundTag compound) {
         super.save(compound);
-        if (!this.trySaveLootTable(compound)) {
-            compound.putBoolean(registerKey, this.register);
-            compound.putBoolean(isWhiteKey, this.isWhite);
-        }
+        compound.putBoolean(registerKey, this.register);
+        compound.putBoolean(isWhiteKey, this.isWhite);
         return compound;
     }
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent(Blocks.IMPORTER.getDescriptionId());
+        return new TranslatableComponent(Blocks.IMPORTER.get().getDescriptionId());
     }
 
     @Override

@@ -3,11 +3,11 @@ package moreinventory.data;
 import java.util.Locale;
 
 import moreinventory.block.Blocks;
-import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.item.Items;
 import moreinventory.item.PouchItem;
 import moreinventory.item.TransporterItem;
+import moreinventory.storagebox.StorageBox;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
@@ -29,14 +29,14 @@ public class ItemModelGenerator extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        toBlock(Blocks.CATCHALL);
-        for (var storageBox : StorageBoxTypeBlockEntity.blockMap.values()) {
-            toBlock(storageBox);
+        toBlock(Blocks.CATCHALL.get());
+        for (var val : StorageBox.storageBoxMap.values()) {
+            toBlock(val.block);
         }
         registerTransporter();
-        singleTexTool(Items.IMPORTER);
-        singleTexTool(Items.EXPORTER);
-        singleTexTool(Items.SPANNER);
+        singleTexTool(Blocks.IMPORTER.get());
+        singleTexTool(Blocks.EXPORTER.get());
+        singleTexTool(Items.SPANNER.get());
         registerPouch();
     }
 
@@ -64,6 +64,10 @@ public class ItemModelGenerator extends ItemModelProvider {
         return new ResourceLocation(MoreInventoryMOD.MOD_ID, name.toLowerCase(Locale.ROOT));
     }
 
+    private ItemModelBuilder singleTexTool(Block item) {
+        return tool(name(item), prefix("item/" + name(item)));
+    }
+
     private ItemModelBuilder singleTexTool(Item item) {
         return tool(name(item), prefix("item/" + name(item)));
     }
@@ -88,8 +92,8 @@ public class ItemModelGenerator extends ItemModelProvider {
         var litName = "transporter_furnace_lit";
         tool(litName, prefix("item/" + litName));
 
-        var name = "item/" + name(Items.TRANSPORTER);
-        var builder = tool(name(Items.TRANSPORTER), prefix(name));
+        var name = "item/" + name(Items.TRANSPORTER.get());
+        var builder = tool(name(Items.TRANSPORTER.get()), prefix(name));
         var predicateName = new ResourceLocation("custom_model_data");
         for (var transportableBlock : TransporterItem.transportableBlocks) {
             var transportableBlockName = BlockStateGenerator.name(transportableBlock);
@@ -104,7 +108,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         for (var color : DyeColor.values()) {
             singleTexTool(PouchItem.byColor(color));
         }
-        singleTexTool(Items.POUCH);
-        singleTexTool(Items.LEATHER_PACK);
+        singleTexTool(Items.POUCH.get());
+        singleTexTool(Items.LEATHER_PACK.get());
     }
 }

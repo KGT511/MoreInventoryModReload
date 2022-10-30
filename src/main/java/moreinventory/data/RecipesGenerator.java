@@ -25,7 +25,7 @@ public class RecipesGenerator extends RecipeProvider {
 
     @Override
     protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
-        ShapedRecipeBuilder.shaped(Blocks.CATCHALL)
+        ShapedRecipeBuilder.shaped(Blocks.CATCHALL.get())
                 .pattern("P P")
                 .pattern("PCP")
                 .pattern("SSS")
@@ -34,7 +34,7 @@ public class RecipesGenerator extends RecipeProvider {
                 .define('S', ItemTags.WOODEN_SLABS)
                 .unlockedBy("has_chest", has(Items.CHEST))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(moreinventory.item.Items.TRANSPORTER)
+        ShapedRecipeBuilder.shaped(moreinventory.item.Items.TRANSPORTER.get())
                 .pattern("P P")
                 .pattern("PSP")
                 .pattern("SSS")
@@ -42,7 +42,7 @@ public class RecipesGenerator extends RecipeProvider {
                 .define('S', ItemTags.WOODEN_SLABS)
                 .unlockedBy("has_planks", has(ItemTags.PLANKS))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(Blocks.WOOD_STORAGE_BOX)
+        ShapedRecipeBuilder.shaped(Blocks.WOOD_STORAGE_BOX.get())
                 .pattern("MSM")
                 .pattern("M M")
                 .pattern("MSM")
@@ -51,17 +51,17 @@ public class RecipesGenerator extends RecipeProvider {
                 .unlockedBy("has_logs", has(ItemTags.LOGS))
                 .save(consumer);
 
-        registerStorageBoxRecipe(consumer, Blocks.IRON_STORAGE_BOX, Tags.Items.INGOTS_IRON);
-        registerStorageBoxRecipe(consumer, Blocks.GOLD_STORAGE_BOX, Tags.Items.INGOTS_GOLD);
-        registerStorageBoxRecipe(consumer, Blocks.DIAMOND_STORAGE_BOX, Tags.Items.GEMS_DIAMOND);
-        registerStorageBoxRecipe(consumer, Blocks.EMERALD_STORAGE_BOX, Tags.Items.GEMS_EMERALD);
+        registerStorageBoxRecipe(consumer, Blocks.IRON_STORAGE_BOX.get(), Tags.Items.INGOTS_IRON);
+        registerStorageBoxRecipe(consumer, Blocks.GOLD_STORAGE_BOX.get(), Tags.Items.INGOTS_GOLD);
+        registerStorageBoxRecipe(consumer, Blocks.DIAMOND_STORAGE_BOX.get(), Tags.Items.GEMS_DIAMOND);
+        registerStorageBoxRecipe(consumer, Blocks.EMERALD_STORAGE_BOX.get(), Tags.Items.GEMS_EMERALD);
 
-        registerStorageBoxRecipe(consumer, Blocks.COPPER_STORAGE_BOX, Items.COPPER_INGOT);
+        registerStorageBoxRecipe(consumer, Blocks.COPPER_STORAGE_BOX.get(), Items.COPPER_INGOT);
         //        registerStorageBoxRecipe(consumer, Blocks.TIN_STORAGE_BOX, Items.IRON_INGOT);
         //        registerStorageBoxRecipe(consumer, Blocks.BRONZE_STORAGE_BOX, Items.IRON_INGOT);
         //        registerStorageBoxRecipe(consumer, Blocks.SILVER_STORAGE_BOX, Items.IRON_INGOT);
 
-        ShapedRecipeBuilder.shaped(Blocks.GLASS_STORAGE_BOX, 32)
+        ShapedRecipeBuilder.shaped(Blocks.GLASS_STORAGE_BOX.get(), 32)
                 .pattern("MSM")
                 .pattern("M M")
                 .pattern("MSM")
@@ -71,7 +71,7 @@ public class RecipesGenerator extends RecipeProvider {
                 .unlockedBy("has_glass_pane", has(Items.GLASS_PANE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(Blocks.IMPORTER)
+        ShapedRecipeBuilder.shaped(Blocks.IMPORTER.get())
                 .pattern("SSS")
                 .pattern("SHS")
                 .pattern("SRS")
@@ -79,9 +79,9 @@ public class RecipesGenerator extends RecipeProvider {
                 .define('R', Items.REDSTONE)
                 .define('H', Items.HOPPER)
                 .unlockedBy("has_chest", has(Items.CHEST))
-                .unlockedBy("has_storage_box", has(moreinventory.item.Items.WOOD_STORAGE_BOX))
+                .unlockedBy("has_storage_box", has(Blocks.WOOD_STORAGE_BOX.get()))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(Blocks.EXPORTER)
+        ShapedRecipeBuilder.shaped(Blocks.EXPORTER.get())
                 .pattern("SRS")
                 .pattern("SHS")
                 .pattern("SSS")
@@ -89,10 +89,10 @@ public class RecipesGenerator extends RecipeProvider {
                 .define('R', Items.REDSTONE)
                 .define('H', Items.HOPPER)
                 .unlockedBy("has_chest", has(Items.CHEST))
-                .unlockedBy("has_storage_box", has(moreinventory.item.Items.WOOD_STORAGE_BOX))
+                .unlockedBy("has_storage_box", has(Blocks.WOOD_STORAGE_BOX.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(moreinventory.item.Items.SPANNER)
+        ShapedRecipeBuilder.shaped(moreinventory.item.Items.SPANNER.get())
                 .pattern("SSS")
                 .pattern(" I ")
                 .pattern("SSS")
@@ -102,7 +102,7 @@ public class RecipesGenerator extends RecipeProvider {
                 .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(moreinventory.item.Items.LEATHER_PACK)
+        ShapedRecipeBuilder.shaped(moreinventory.item.Items.LEATHER_PACK.get())
                 .pattern("LLL")
                 .pattern("LSL")
                 .pattern("LLL")
@@ -110,15 +110,15 @@ public class RecipesGenerator extends RecipeProvider {
                 .define('L', Items.LEATHER)
                 .unlockedBy("has_leather", has(Items.LEATHER))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(moreinventory.item.Items.POUCH)
+        ShapedRecipeBuilder.shaped(moreinventory.item.Items.POUCH.get())
                 .pattern("LLL")
                 .pattern("PDP")
                 .pattern("LPL")
                 .define('D', Items.DIAMOND)
                 .define('L', Items.LEATHER)
-                .define('P', moreinventory.item.Items.LEATHER_PACK)
+                .define('P', moreinventory.item.Items.LEATHER_PACK.get())
                 .unlockedBy("has_leather", has(Items.LEATHER))
-                .unlockedBy("has_leather_pack", has(moreinventory.item.Items.LEATHER_PACK))
+                .unlockedBy("has_leather_pack", has(moreinventory.item.Items.LEATHER_PACK.get()))
                 .save(consumer);
 
         SpecialRecipeBuilder.special(Recipes.POUCH_RECIPE.get())
@@ -140,8 +140,8 @@ public class RecipesGenerator extends RecipeProvider {
                 .pattern("MSM")
                 .define('M', material)
                 .define('S', ItemTags.WOODEN_SLABS)
-                .define('W', moreinventory.item.Items.WOOD_STORAGE_BOX)
-                .unlockedBy("has_storage_box", has(moreinventory.item.Items.WOOD_STORAGE_BOX))
+                .define('W', Blocks.WOOD_STORAGE_BOX.get())
+                .unlockedBy("has_storage_box", has(Blocks.WOOD_STORAGE_BOX.get()))
                 .save(consumer);
     }
 }

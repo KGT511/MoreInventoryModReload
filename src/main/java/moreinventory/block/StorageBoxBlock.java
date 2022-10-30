@@ -5,8 +5,9 @@ import java.lang.reflect.InvocationTargetException;
 import javax.annotation.Nullable;
 
 import moreinventory.blockentity.BaseStorageBoxBlockEntity;
-import moreinventory.blockentity.storagebox.StorageBoxType;
-import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
+import moreinventory.storagebox.StorageBox;
+import moreinventory.storagebox.StorageBoxType;
+import moreinventory.util.MIMLog;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Container;
@@ -84,6 +85,7 @@ public class StorageBoxBlock extends BaseEntityBlock {
         if (level.isClientSide)
             return InteractionResult.SUCCESS;
 
+        MIMLog.warning(level.getBlockEntity(pos).getUpdateTag().toString());
         var storageBoxBlockEntity = (BaseStorageBoxBlockEntity) level.getBlockEntity(pos);
         var ret = storageBoxBlockEntity.rightClickEvent(level, player) ? InteractionResult.SUCCESS : InteractionResult.PASS;
         return ret;
@@ -103,7 +105,7 @@ public class StorageBoxBlock extends BaseEntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         try {
-            return StorageBoxTypeBlockEntity.classMap.get(type).getDeclaredConstructor(BlockPos.class, BlockState.class).newInstance(pos, state);
+            return StorageBox.storageBoxMap.get(type).entityClass.getDeclaredConstructor(BlockPos.class, BlockState.class).newInstance(pos, state);
         } catch (InstantiationException
                 | IllegalAccessException
                 | IllegalArgumentException
@@ -143,7 +145,7 @@ public class StorageBoxBlock extends BaseEntityBlock {
 
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, StorageBoxTypeBlockEntity.map.get(type), BaseStorageBoxBlockEntity::tickFunc);
+        return level.isClientSide ? null : createTickerHelper(blockEntityType, StorageBox.storageBoxMap.get(type).blockEntity, BaseStorageBoxBlockEntity::tickFunc);
     }
 
 }

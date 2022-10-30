@@ -8,9 +8,9 @@ import javax.annotation.Nonnull;
 import moreinventory.block.Blocks;
 import moreinventory.block.CatchallBlock;
 import moreinventory.block.TransportBlock;
-import moreinventory.blockentity.storagebox.StorageBoxType;
-import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
 import moreinventory.core.MoreInventoryMOD;
+import moreinventory.storagebox.StorageBox;
+import moreinventory.storagebox.StorageBoxType;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -37,7 +37,7 @@ public class BlockStateGenerator extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        registerCatchallBlock(Blocks.CATCHALL, mcLoc("block/" + name(net.minecraft.world.level.block.Blocks.OAK_PLANKS)));
+        registerCatchallBlock(Blocks.CATCHALL.get(), mcLoc("block/" + name(net.minecraft.world.level.block.Blocks.OAK_PLANKS)));
         registerStorageBoxBlocks();
         registerTransportBlocks();
     }
@@ -84,8 +84,9 @@ public class BlockStateGenerator extends BlockStateProvider {
     }
 
     private void registerStorageBoxBlocks() {
-        for (var block : StorageBoxTypeBlockEntity.blockMap.values()) {
-            if (block == StorageBoxTypeBlockEntity.blockMap.get(StorageBoxType.GLASS)) {
+        for (var val : StorageBox.storageBoxMap.values()) {
+            var block = val.block;
+            if (block == StorageBox.storageBoxMap.get(StorageBoxType.GLASS).block) {
                 continue;
             }
             var name = name(block);
@@ -98,7 +99,7 @@ public class BlockStateGenerator extends BlockStateProvider {
                     .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360)
                     .build());
         }
-        var glassBlock = Blocks.GLASS_STORAGE_BOX;
+        var glassBlock = Blocks.GLASS_STORAGE_BOX.get();
         var builder = models().cubeAll(name(glassBlock), texture(name(glassBlock) + "_0"));
         getVariantBuilder(glassBlock).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(builder)
@@ -108,7 +109,7 @@ public class BlockStateGenerator extends BlockStateProvider {
     }
 
     private void registerTransportBlocks() {
-        var importerName = name(Blocks.IMPORTER);
+        var importerName = name(Blocks.IMPORTER.get());
         var black_texture = mcLoc("block/" + name(net.minecraft.world.level.block.Blocks.ANVIL));
         var makeImporterBuilder = (Function<String, BlockModelBuilder>) (str) -> {
             return models().cubeAll("block/" + importerName + "/" + importerName + str, texture(importerName + "_black")).texture("blue", texture(importerName)).texture("black", black_texture);
@@ -223,13 +224,13 @@ public class BlockStateGenerator extends BlockStateProvider {
 
         };
 
-        getVariantBuilder(Blocks.IMPORTER).forAllStates(state -> ConfiguredModel.builder()
+        getVariantBuilder(Blocks.IMPORTER.get()).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(importerBuilders[getBuilderIndexFromState.apply(state)])
                 .rotationX(getRotationX.apply(state))
                 .rotationY(getRotationY.apply(state))
                 .build());
 
-        var exporterName = name(Blocks.EXPORTER);
+        var exporterName = name(Blocks.EXPORTER.get());
         var makeExporterBuilder = (Function<String, BlockModelBuilder>) (str) -> {
             return models().withExistingParent("block/" + exporterName + "/" + exporterName + str,
                     new ResourceLocation(MoreInventoryMOD.MOD_ID, "block/" + importerName + "/" + importerName + str))
@@ -242,7 +243,7 @@ public class BlockStateGenerator extends BlockStateProvider {
         var downNorthExporterBuilder = makeExporterBuilder.apply("_down_north");
 
         BlockModelBuilder[] exporterBuilders = { normalExporterBuilder, downEastExporterBuilder, downNorthExporterBuilder };
-        getVariantBuilder(Blocks.EXPORTER).forAllStates(state -> ConfiguredModel.builder()
+        getVariantBuilder(Blocks.EXPORTER.get()).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(exporterBuilders[getBuilderIndexFromState.apply(state)])
                 .rotationX(getRotationX.apply(state))
                 .rotationY(getRotationY.apply(state))

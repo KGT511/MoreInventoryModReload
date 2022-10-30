@@ -1,12 +1,11 @@
 package moreinventory.blockentity;
 
-import moreinventory.blockentity.storagebox.StorageBoxInventorySize;
-import moreinventory.blockentity.storagebox.StorageBoxType;
-import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
 import moreinventory.blockentity.storagebox.network.IStorageBoxNetwork;
 import moreinventory.blockentity.storagebox.network.StorageBoxNetworkManager;
 import moreinventory.inventory.PouchInventory;
 import moreinventory.item.PouchItem;
+import moreinventory.storagebox.StorageBox;
+import moreinventory.storagebox.StorageBoxType;
 import moreinventory.util.MIMUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -46,7 +45,7 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
     public static final String tagKeyTypeName = "typeName";
 
     public BaseStorageBoxBlockEntity(StorageBoxType typeIn, BlockPos pos, BlockState state) {
-        super(StorageBoxTypeBlockEntity.map.get(typeIn), pos, state);
+        super(StorageBox.storageBoxMap.get(typeIn).blockEntity, pos, state);
         int inventorySize = getStorageStackSize(typeIn);
         storageItems = NonNullList.withSize(inventorySize, ItemStack.EMPTY);
         this.type = typeIn;
@@ -59,24 +58,21 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
 
     @Override
     protected Component getDefaultName() {
-        return new TranslatableComponent(StorageBoxTypeBlockEntity.blockMap.get(this.type).getDescriptionId());
+        return new TranslatableComponent(StorageBox.storageBoxMap.get(this.type).block.getDescriptionId());
     }
 
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
-
-        if (!this.tryLoadLootTable(nbt)) {
-            this.type = StorageBoxType.valueOf(nbt.getString(tagKeyTypeName));
-            this.storageItems = NonNullList.withSize(getStorageStackSize(type), ItemStack.EMPTY);
-            MIMUtils.readNonNullListShort(nbt, this.storageItems);
-            var contentsNBT = nbt.getCompound(tagKeyContents);
-            var tmp = ItemStack.of(contentsNBT);
-            if (tmp.getItem() == ItemStack.EMPTY.getItem() && tmp.getCount() == ItemStack.EMPTY.getCount()) {
-                this.contents = ItemStack.EMPTY;
-            } else {
-                this.contents = tmp;
-            }
+        this.type = StorageBoxType.valueOf(nbt.getString(tagKeyTypeName));
+        this.storageItems = NonNullList.withSize(getStorageStackSize(type), ItemStack.EMPTY);
+        MIMUtils.readNonNullListShort(nbt, this.storageItems);
+        var contentsNBT = nbt.getCompound(tagKeyContents);
+        var tmp = ItemStack.of(contentsNBT);
+        if (tmp.getItem() == ItemStack.EMPTY.getItem() && tmp.getCount() == ItemStack.EMPTY.getCount()) {
+            this.contents = ItemStack.EMPTY;
+        } else {
+            this.contents = tmp;
         }
     }
 
@@ -84,13 +80,11 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
     public CompoundTag save(CompoundTag compound) {
         super.save(compound);
 
-        if (!this.trySaveLootTable(compound)) {
-            compound.putString(tagKeyTypeName, this.type.name());
-            MIMUtils.writeNonNullListShort(compound, this.storageItems, true);
-            var nbt = new CompoundTag();
-            contents.save(nbt);
-            compound.put(tagKeyContents, nbt);
-        }
+        compound.putString(tagKeyTypeName, this.type.name());
+        MIMUtils.writeNonNullListShort(compound, this.storageItems, true);
+        var nbt = new CompoundTag();
+        contents.save(nbt);
+        compound.put(tagKeyContents, nbt);
 
         return compound;
     }
@@ -181,7 +175,7 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
     }
 
     public static int getStorageStackSize(StorageBoxType typeIn) {
-        return StorageBoxInventorySize.map.get(typeIn).getInventorySize();
+        return StorageBox.storageBoxMap.get(typeIn).inventorySize;
     }
 
     public StorageBoxType getStorageBoxType() {
