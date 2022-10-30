@@ -1,5 +1,10 @@
 package moreinventory.blockentity;
 
+import java.lang.reflect.InvocationTargetException;
+
+import javax.annotation.Nullable;
+
+import moreinventory.block.StorageBoxBlock;
 import moreinventory.blockentity.storagebox.network.IStorageBoxNetwork;
 import moreinventory.blockentity.storagebox.network.StorageBoxNetworkManager;
 import moreinventory.inventory.PouchInventory;
@@ -58,6 +63,32 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
     @Override
     protected Component getDefaultName() {
         return Component.translatable(StorageBox.storageBoxMap.get(this.type).block.getDescriptionId());
+    }
+
+    public BaseStorageBoxBlockEntity upgrade(StorageBoxType to) {
+        try {
+            var block = StorageBox.storageBoxMap.get(to).block;
+            var blockEntity = StorageBox.storageBoxMap.get(to).entityClass.getDeclaredConstructor(BlockPos.class, BlockState.class).newInstance(this.getBlockPos(),
+                    block.defaultBlockState().setValue(StorageBoxBlock.FACING, this.getBlockState().getValue(StorageBoxBlock.FACING)));
+
+            if (this.storageItems.size() <= blockEntity.storageItems.size()) {
+                for (var i = 0; i < this.storageItems.size(); ++i) {
+                    blockEntity.storageItems.set(i, this.storageItems.get(i).copy());
+                }
+                blockEntity.contents = this.contents;
+            }
+
+            return blockEntity;
+
+        } catch (InstantiationException
+                | IllegalAccessException
+                | IllegalArgumentException
+                | InvocationTargetException
+                | NoSuchMethodException
+                | SecurityException e) {
+            e.printStackTrace();
+            return new BaseStorageBoxBlockEntity(to, this.getBlockPos(), this.getBlockState());
+        }
     }
 
     @Override
