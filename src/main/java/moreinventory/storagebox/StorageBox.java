@@ -41,24 +41,24 @@ public class StorageBox {
 
     public static void init() {
         storageBoxMap.put(StorageBoxType.WOOD,
-                new StorageBox(0, BlockEntities.WOOD_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), WoodStorageBoxBlockEntity.class, Blocks.WOOD_STORAGE_BOX.get(), 0));
+                new StorageBox(64, BlockEntities.WOOD_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), WoodStorageBoxBlockEntity.class, Blocks.WOOD_STORAGE_BOX.get(), 1));
         storageBoxMap.put(StorageBoxType.IRON,
-                new StorageBox(0, BlockEntities.IRON_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), IronStorageBoxBlockEntity.class, Blocks.IRON_STORAGE_BOX.get(), 0));
+                new StorageBox(128, BlockEntities.IRON_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), IronStorageBoxBlockEntity.class, Blocks.IRON_STORAGE_BOX.get(), 2));
         storageBoxMap.put(StorageBoxType.GOLD,
-                new StorageBox(0, BlockEntities.GOLD_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), GoldStorageBoxBlockEntity.class, Blocks.GOLD_STORAGE_BOX.get(), 0));
+                new StorageBox(256, BlockEntities.GOLD_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), GoldStorageBoxBlockEntity.class, Blocks.GOLD_STORAGE_BOX.get(), 3));
         storageBoxMap.put(StorageBoxType.DIAMOND,
-                new StorageBox(0, BlockEntities.DIAMOND_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), DiamondStorageBoxBlockEntity.class, Blocks.DIAMOND_STORAGE_BOX.get(), 0));
+                new StorageBox(512, BlockEntities.DIAMOND_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), DiamondStorageBoxBlockEntity.class, Blocks.DIAMOND_STORAGE_BOX.get(), 4));
         storageBoxMap.put(StorageBoxType.EMERALD,
-                new StorageBox(0, BlockEntities.EMERALD_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), EmeraldStorageBoxBlockEntity.class, Blocks.EMERALD_STORAGE_BOX.get(), 0));
+                new StorageBox(1024, BlockEntities.EMERALD_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), EmeraldStorageBoxBlockEntity.class, Blocks.EMERALD_STORAGE_BOX.get(), 5));
 
         storageBoxMap.put(StorageBoxType.COPPER,
-                new StorageBox(0, BlockEntities.COPPER_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), CopperStorageBoxBlockEntity.class, Blocks.COPPER_STORAGE_BOX.get(), 0));
+                new StorageBox(96, BlockEntities.COPPER_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), CopperStorageBoxBlockEntity.class, Blocks.COPPER_STORAGE_BOX.get(), 2));
         storageBoxMap.put(StorageBoxType.TIN,
-                new StorageBox(0, BlockEntities.TIN_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), TinStorageBoxBlockEntity.class, Blocks.TIN_STORAGE_BOX.get(), 0));
+                new StorageBox(96, BlockEntities.TIN_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), TinStorageBoxBlockEntity.class, Blocks.TIN_STORAGE_BOX.get(), 2));
         storageBoxMap.put(StorageBoxType.BRONZE,
-                new StorageBox(0, BlockEntities.BRONZE_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), BronzeStorageBoxBlockEntity.class, Blocks.BRONZE_STORAGE_BOX.get(), 0));
+                new StorageBox(128, BlockEntities.BRONZE_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), BronzeStorageBoxBlockEntity.class, Blocks.BRONZE_STORAGE_BOX.get(), 2));
         storageBoxMap.put(StorageBoxType.SILVER,
-                new StorageBox(0, BlockEntities.SILVER_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), SilverStorageBoxBlockEntity.class, Blocks.SILVER_STORAGE_BOX.get(), 0));
+                new StorageBox(192, BlockEntities.SILVER_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), SilverStorageBoxBlockEntity.class, Blocks.SILVER_STORAGE_BOX.get(), 3));
 
         storageBoxMap.put(StorageBoxType.GLASS,
                 new StorageBox(0, BlockEntities.GLASS_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), GlassStorageBoxBlockEntity.class, Blocks.GLASS_STORAGE_BOX.get(), 0));
