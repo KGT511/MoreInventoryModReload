@@ -81,5 +81,16 @@ public class JaJpLanguageGenerator extends LanguageProvider {
         add(Text.pouchConfigStorageBox, "有効にすると、コンテナはこのポーチからも収集します");
         add(Text.pouchConfigHotBar, "有効にすると、このポーチはスニークしながら使用した時にホットバーから登録されたアイテムを収集します");
         add(Text.pouchConfigAutoCollect, "有効にすると、このポーチは登録されたアイテムを拾った時に自動収集します");
+
+        add(Items.BRUSH.get(), "ブラシ");
+        add(Items.IRON_PLATING.get(), "鉄メッキ");
+        add(Items.GOLD_PLATING.get(), "金メッキ");
+        add(Items.DIAMOND_PLATING.get(), "ダイヤモンドメッキ");
+        add(Items.EMERALD_PLATING.get(), "エメラルドメッキ");
+        add(Items.COPPER_PLATING.get(), "銅メッキ");
+        add(Items.TIN_PLATING.get(), "錫メッキ");
+        add(Items.BRONZE_PLATING.get(), "青銅メッキ");
+        add(Items.SILVER_PLATING.get(), "銀メッキ");
+        add(Items.STEEL_PLATING.get(), "鋼鉄メッキ");
     }
 }

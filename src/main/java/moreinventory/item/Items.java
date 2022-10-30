@@ -36,7 +36,7 @@ public class Items {
     public static final RegistryObject<Item> LEATHER_PACK = register("leather_pack", () -> new Item(new Item.Properties().tab(MoreInventoryMOD.creativeModeTab)));
 
     public static final RegistryObject<Item> BRUSH = register("brush", () -> new Item(new Item.Properties().tab(MoreInventoryMOD.creativeModeTab)));
-    public static final RegistryObject<Item> IRON_PLATING_ = register("plating_iron", () -> new PlatingItem(StorageBoxType.IRON));
+    public static final RegistryObject<Item> IRON_PLATING = register("plating_iron", () -> new PlatingItem(StorageBoxType.IRON));
     public static final RegistryObject<Item> GOLD_PLATING = register("plating_gold", () -> new PlatingItem(StorageBoxType.GOLD));
     public static final RegistryObject<Item> DIAMOND_PLATING = register("plating_diamond", () -> new PlatingItem(StorageBoxType.DIAMOND));
     public static final RegistryObject<Item> EMERALD_PLATING = register("plating_emerald", () -> new PlatingItem(StorageBoxType.EMERALD));

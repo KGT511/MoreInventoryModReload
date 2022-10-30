@@ -72,5 +72,15 @@ public class EnUsLanguageGenerator extends LanguageProvider {
         add(Text.pouchConfigHotBar, "If enabled, this pouch can collect from your player hotbar when sneak and use.");
         add(Text.pouchConfigAutoCollect, "If enabled, this pouch will collect registered items when you picked up item.");
 
+        add(Items.BRUSH.get(), "Brush");
+        add(Items.IRON_PLATING.get(), "Iron Paint");
+        add(Items.GOLD_PLATING.get(), "Gold Paint");
+        add(Items.DIAMOND_PLATING.get(), "Diamond Paint");
+        add(Items.EMERALD_PLATING.get(), "Emerald Paint");
+        add(Items.COPPER_PLATING.get(), "Copper Paint");
+        add(Items.TIN_PLATING.get(), "Tin Paint");
+        add(Items.BRONZE_PLATING.get(), "Bronze Paint");
+        add(Items.SILVER_PLATING.get(), "Silver Paint");
+        add(Items.STEEL_PLATING.get(), "Steel Paint");
     }
 }

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "moreinventorymod:brush"
+    },
+    "I": {
+      "tag": "forge:gems/emerald"
+    },
+    "M": {
+      "item": "minecraft:lava_bucket"
+    }
+  },
+  "pattern": [
+    "IIM",
+    "B  ",
+    "   "
+  ],
+  "result": {
+    "item": "moreinventorymod:plating_emerald"
+  }
+}
