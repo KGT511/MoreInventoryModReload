@@ -29,6 +29,7 @@ public class Blocks {
     public static final RegistryObject<Block> TIN_STORAGE_BOX = register("storage_box_tin", () -> new StorageBoxBlock(StorageBoxType.TIN));
     public static final RegistryObject<Block> BRONZE_STORAGE_BOX = register("storage_box_bronze", () -> new StorageBoxBlock(StorageBoxType.BRONZE));
     public static final RegistryObject<Block> SILVER_STORAGE_BOX = register("storage_box_silver", () -> new StorageBoxBlock(StorageBoxType.SILVER));
+    public static final RegistryObject<Block> STEEL_STORAGE_BOX = register("storage_box_steel", () -> new StorageBoxBlock(StorageBoxType.STEEL));
 
     public static final RegistryObject<Block> GLASS_STORAGE_BOX = register("storage_box_glass", () -> new StorageBoxBlock(StorageBoxType.GLASS));
 

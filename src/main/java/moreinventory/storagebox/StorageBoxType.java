@@ -13,4 +13,5 @@ public enum StorageBoxType {
     TIN,
     BRONZE,
     SILVER,
+    STEEL,
 }

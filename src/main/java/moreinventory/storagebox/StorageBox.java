@@ -13,6 +13,7 @@ import moreinventory.blockentity.storagebox.GlassStorageBoxBlockEntity;
 import moreinventory.blockentity.storagebox.GoldStorageBoxBlockEntity;
 import moreinventory.blockentity.storagebox.IronStorageBoxBlockEntity;
 import moreinventory.blockentity.storagebox.SilverStorageBoxBlockEntity;
+import moreinventory.blockentity.storagebox.SteelStorageBoxBlockEntity;
 import moreinventory.blockentity.storagebox.TinStorageBoxBlockEntity;
 import moreinventory.blockentity.storagebox.WoodStorageBoxBlockEntity;
 import net.minecraft.world.level.block.Block;
@@ -59,6 +60,8 @@ public class StorageBox {
                 new StorageBox(128, BlockEntities.BRONZE_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), BronzeStorageBoxBlockEntity.class, Blocks.BRONZE_STORAGE_BOX.get(), 2));
         storageBoxMap.put(StorageBoxType.SILVER,
                 new StorageBox(192, BlockEntities.SILVER_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), SilverStorageBoxBlockEntity.class, Blocks.SILVER_STORAGE_BOX.get(), 3));
+        storageBoxMap.put(StorageBoxType.STEEL,
+                new StorageBox(384, BlockEntities.STEEL_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), SteelStorageBoxBlockEntity.class, Blocks.STEEL_STORAGE_BOX.get(), 3));
 
         storageBoxMap.put(StorageBoxType.GLASS,
                 new StorageBox(0, BlockEntities.GLASS_STORAGE_BOX_BLOCK_ENTITY_TYPE.get(), GlassStorageBoxBlockEntity.class, Blocks.GLASS_STORAGE_BOX.get(), 0));

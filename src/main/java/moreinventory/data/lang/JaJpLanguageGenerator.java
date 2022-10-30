@@ -55,6 +55,7 @@ public class JaJpLanguageGenerator extends LanguageProvider {
         add(Blocks.TIN_STORAGE_BOX.get(), "錫のコンテナ");
         add(Blocks.BRONZE_STORAGE_BOX.get(), "青銅のコンテナ");
         add(Blocks.SILVER_STORAGE_BOX.get(), "銀のコンテナ");
+        add(Blocks.STEEL_STORAGE_BOX.get(), "鋼鉄のコンテナ");
         add(Blocks.GLASS_STORAGE_BOX.get(), "ガラスのコンテナ");
 
         add(Blocks.IMPORTER.get(), "インポーター");
