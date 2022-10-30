@@ -54,7 +54,7 @@ public class StorageBoxBlock extends BaseEntityBlock {
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
             var blockEntity = level.getBlockEntity(pos);
-            if (blockEntity instanceof Container) {
+            if (blockEntity instanceof Container && !(newState.getBlock() instanceof StorageBoxBlock)) {
                 Containers.dropContents(level, pos, (Container) blockEntity);
                 level.updateNeighbourForOutputSignal(pos, this);
             }
