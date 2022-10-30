@@ -2,9 +2,9 @@ package moreinventory.block;
 
 import java.util.function.Supplier;
 
-import moreinventory.blockentity.storagebox.StorageBoxType;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.item.Items;
+import moreinventory.storagebox.StorageBoxType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;

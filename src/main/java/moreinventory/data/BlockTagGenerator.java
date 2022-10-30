@@ -1,8 +1,8 @@
 package moreinventory.data;
 
 import moreinventory.block.Blocks;
-import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
 import moreinventory.core.MoreInventoryMOD;
+import moreinventory.storagebox.StorageBox;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
@@ -18,9 +18,9 @@ public class BlockTagGenerator extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_AXE)
                 .add(Blocks.CATCHALL.get());
 
-        for (var storageBox : StorageBoxTypeBlockEntity.blockMap.values()) {
+        for (var val : StorageBox.storageBoxMap.values()) {
             tag(BlockTags.MINEABLE_WITH_PICKAXE)
-                    .add(storageBox);
+                    .add(val.block);
         }
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(Blocks.IMPORTER.get(), Blocks.EXPORTER.get());

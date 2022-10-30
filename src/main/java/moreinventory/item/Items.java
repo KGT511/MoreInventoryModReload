@@ -33,6 +33,7 @@ public class Items {
     public static final RegistryObject<PouchItem> POUCH_RED = register("pouch_red", () -> new PouchItem(DyeColor.RED));
     public static final RegistryObject<PouchItem> POUCH_BLACK = register("pouch_black", () -> new PouchItem(DyeColor.BLACK));
     public static final RegistryObject<Item> LEATHER_PACK = register("leather_pack", () -> new Item(new Item.Properties().tab(MoreInventoryMOD.creativeModeTab)));
+    public static final RegistryObject<Item> BRUSH = register("brush", () -> new Item(new Item.Properties().tab(MoreInventoryMOD.creativeModeTab)));
 
     public static <T extends Item> RegistryObject<T> register(String name, Supplier<T> item) {
         var ret = ITEMS.register(name, item);

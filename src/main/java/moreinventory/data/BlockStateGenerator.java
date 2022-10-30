@@ -8,9 +8,9 @@ import javax.annotation.Nonnull;
 import moreinventory.block.Blocks;
 import moreinventory.block.CatchallBlock;
 import moreinventory.block.TransportBlock;
-import moreinventory.blockentity.storagebox.StorageBoxType;
-import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
 import moreinventory.core.MoreInventoryMOD;
+import moreinventory.storagebox.StorageBox;
+import moreinventory.storagebox.StorageBoxType;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -85,8 +85,9 @@ public class BlockStateGenerator extends BlockStateProvider {
     }
 
     private void registerStorageBoxBlocks() {
-        for (var block : StorageBoxTypeBlockEntity.blockMap.values()) {
-            if (block == StorageBoxTypeBlockEntity.blockMap.get(StorageBoxType.GLASS)) {
+        for (var val : StorageBox.storageBoxMap.values()) {
+            var block = val.block;
+            if (block == StorageBox.storageBoxMap.get(StorageBoxType.GLASS).block) {
                 continue;
             }
             var name = name(block);

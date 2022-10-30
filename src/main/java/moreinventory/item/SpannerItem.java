@@ -3,8 +3,8 @@ package moreinventory.item;
 import java.util.ArrayList;
 
 import moreinventory.block.Blocks;
-import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
 import moreinventory.core.MoreInventoryMOD;
+import moreinventory.storagebox.StorageBox;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -24,8 +24,8 @@ public class SpannerItem extends Item {
     public static final void setRotatableBlocks() {
         rotatableBlockList.clear();
         rotatableBlockList.add(Blocks.CATCHALL.get());
-        for (var block : StorageBoxTypeBlockEntity.blockMap.values()) {
-            rotatableBlockList.add(block);
+        for (var val : StorageBox.storageBoxMap.values()) {
+            rotatableBlockList.add(val.block);
         }
         rotatableBlockList.add(Blocks.IMPORTER.get());
         rotatableBlockList.add(Blocks.EXPORTER.get());

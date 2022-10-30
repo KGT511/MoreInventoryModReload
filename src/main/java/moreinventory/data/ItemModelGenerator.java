@@ -3,11 +3,11 @@ package moreinventory.data;
 import java.util.Locale;
 
 import moreinventory.block.Blocks;
-import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.item.Items;
 import moreinventory.item.PouchItem;
 import moreinventory.item.TransporterItem;
+import moreinventory.storagebox.StorageBox;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
@@ -31,8 +31,8 @@ public class ItemModelGenerator extends ItemModelProvider {
     @Override
     protected void registerModels() {
         toBlock(Blocks.CATCHALL.get());
-        for (var storageBox : StorageBoxTypeBlockEntity.blockMap.values()) {
-            toBlock(storageBox);
+        for (var val : StorageBox.storageBoxMap.values()) {
+            toBlock(val.block);
         }
         registerTransporter();
         singleTexTool(Blocks.IMPORTER.get());

@@ -5,8 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 import moreinventory.block.Blocks;
 import moreinventory.blockentity.BlockEntities;
-import moreinventory.blockentity.storagebox.StorageBoxInventorySize;
-import moreinventory.blockentity.storagebox.StorageBoxTypeBlockEntity;
 import moreinventory.client.model.ModelLayers;
 import moreinventory.client.renderer.CatchallRenderer;
 import moreinventory.client.renderer.StorageBoxRenderer;
@@ -21,6 +19,7 @@ import moreinventory.item.TransporterItem;
 import moreinventory.network.ServerboundImporterUpdatePacket;
 import moreinventory.network.ServerboundPouchUpdatePacket;
 import moreinventory.recipe.Recipes;
+import moreinventory.storagebox.StorageBox;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -80,8 +79,7 @@ public class MoreInventoryMOD {
     }
 
     public static void init() {
-        StorageBoxInventorySize.init();
-        StorageBoxTypeBlockEntity.init();
+        StorageBox.init();
         TransporterItem.setTransportableBlocks();
         SpannerItem.setRotatableBlocks();
     }
@@ -112,8 +110,8 @@ public class MoreInventoryMOD {
         // do something that can only be done on the client
         //bind renderers and gui factories
         BlockEntityRenderers.register(BlockEntities.CATCHALL_BLOCK_ENTITY_TYPE.get(), CatchallRenderer::new);
-        StorageBoxTypeBlockEntity.map.forEach((key, val) -> {
-            BlockEntityRenderers.register(val, StorageBoxRenderer::new);
+        StorageBox.storageBoxMap.forEach((key, val) -> {
+            BlockEntityRenderers.register(val.blockEntity, StorageBoxRenderer::new);
         });
         ItemBlockRenderTypes.setRenderLayer(Blocks.GLASS_STORAGE_BOX.get(), RenderType.translucent());
         BlockEntityRenderers.register(BlockEntities.IMPORTER_BLOCK_ENTITY_TYPE.get(), TransportRenderer::new);
