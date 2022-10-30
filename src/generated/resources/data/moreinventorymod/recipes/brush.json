@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "W": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    " WW",
+    " WW",
+    "S  "
+  ],
+  "result": {
+    "count": 4,
+    "item": "moreinventorymod:brush"
+  }
+}

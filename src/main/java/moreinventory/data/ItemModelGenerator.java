@@ -38,6 +38,7 @@ public class ItemModelGenerator extends ItemModelProvider {
         singleTexTool(Blocks.EXPORTER.get());
         singleTexTool(Items.SPANNER.get());
         registerPouch();
+        registerPlating();
     }
 
     public static String name(Block block) {
@@ -110,5 +111,18 @@ public class ItemModelGenerator extends ItemModelProvider {
         }
         singleTexTool(Items.POUCH.get());
         singleTexTool(Items.LEATHER_PACK.get());
+    }
+
+    public void registerPlating() {
+        singleTexTool(Items.BRUSH.get());
+        singleTexTool(Items.IRON_PLATING.get());
+        singleTexTool(Items.GOLD_PLATING.get());
+        singleTexTool(Items.DIAMOND_PLATING.get());
+        singleTexTool(Items.EMERALD_PLATING.get());
+        singleTexTool(Items.COPPER_PLATING.get());
+        singleTexTool(Items.TIN_PLATING.get());
+        singleTexTool(Items.BRONZE_PLATING.get());
+        singleTexTool(Items.SILVER_PLATING.get());
+        singleTexTool(Items.STEEL_PLATING.get());
     }
 }
