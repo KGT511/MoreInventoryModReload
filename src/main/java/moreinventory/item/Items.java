@@ -36,7 +36,16 @@ public class Items {
     public static final RegistryObject<Item> LEATHER_PACK = register("leather_pack", () -> new Item(new Item.Properties().tab(MoreInventoryMOD.creativeModeTab)));
 
     public static final RegistryObject<Item> BRUSH = register("brush", () -> new Item(new Item.Properties().tab(MoreInventoryMOD.creativeModeTab)));
-    public static final RegistryObject<Item> PLATING_IRON = register("plating_iron", () -> new PlatingItem(StorageBoxType.IRON));
+    public static final RegistryObject<Item> IRON_PLATING_ = register("plating_iron", () -> new PlatingItem(StorageBoxType.IRON));
+    public static final RegistryObject<Item> GOLD_PLATING = register("plating_gold", () -> new PlatingItem(StorageBoxType.GOLD));
+    public static final RegistryObject<Item> DIAMOND_PLATING = register("plating_diamond", () -> new PlatingItem(StorageBoxType.DIAMOND));
+    public static final RegistryObject<Item> EMERALD_PLATING = register("plating_emerald", () -> new PlatingItem(StorageBoxType.EMERALD));
+
+    public static final RegistryObject<Item> COPPER_PLATING = register("plating_copper", () -> new PlatingItem(StorageBoxType.COPPER));
+    public static final RegistryObject<Item> TIN_PLATING = register("plating_tin", () -> new PlatingItem(StorageBoxType.TIN));
+    public static final RegistryObject<Item> BRONZE_PLATING = register("plating_bronze", () -> new PlatingItem(StorageBoxType.BRONZE));
+    public static final RegistryObject<Item> SILVER_PLATING = register("plating_silver", () -> new PlatingItem(StorageBoxType.SILVER));
+    public static final RegistryObject<Item> STEEL_PLATING = register("plating_steel", () -> new PlatingItem(StorageBoxType.STEEL));
 
     public static <T extends Item> RegistryObject<T> register(String name, Supplier<T> item) {
         var ret = ITEMS.register(name, item);
