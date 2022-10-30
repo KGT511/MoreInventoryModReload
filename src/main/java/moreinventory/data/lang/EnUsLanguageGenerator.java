@@ -45,6 +45,7 @@ public class EnUsLanguageGenerator extends LanguageProvider {
         add(Blocks.TIN_STORAGE_BOX.get(), "Tin Container Box");
         add(Blocks.BRONZE_STORAGE_BOX.get(), "Bronze Container Box");
         add(Blocks.SILVER_STORAGE_BOX.get(), "Silver Container Box");
+        add(Blocks.STEEL_STORAGE_BOX.get(), "Steel Container Box");
         add(Blocks.GLASS_STORAGE_BOX.get(), "Glass Container Box");
 
         add(Blocks.IMPORTER.get(), "Importer");

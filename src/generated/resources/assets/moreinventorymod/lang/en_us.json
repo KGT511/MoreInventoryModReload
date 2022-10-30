@@ -10,6 +10,7 @@
   "block.moreinventorymod.storage_box_gold": "Gold Container Box",
   "block.moreinventorymod.storage_box_iron": "Iron Container Box",
   "block.moreinventorymod.storage_box_silver": "Silver Container Box",
+  "block.moreinventorymod.storage_box_steel": "Steel Container Box",
   "block.moreinventorymod.storage_box_tin": "Tin Container Box",
   "block.moreinventorymod.storage_box_wood": "Wood Container Box",
   "gui.moreinventorymod.importer.move": "Move",
