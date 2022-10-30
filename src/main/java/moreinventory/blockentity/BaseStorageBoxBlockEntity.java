@@ -1,7 +1,10 @@
 package moreinventory.blockentity;
 
+import java.lang.reflect.InvocationTargetException;
+
 import javax.annotation.Nullable;
 
+import moreinventory.block.StorageBoxBlock;
 import moreinventory.blockentity.storagebox.network.IStorageBoxNetwork;
 import moreinventory.blockentity.storagebox.network.StorageBoxNetworkManager;
 import moreinventory.inventory.PouchInventory;
@@ -9,6 +12,7 @@ import moreinventory.item.PouchItem;
 import moreinventory.storagebox.StorageBox;
 import moreinventory.storagebox.StorageBoxType;
 import moreinventory.util.MIMUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -33,7 +37,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public class BaseStorageBoxBlockEntity extends LockableLootTileEntity implements IInventory, ITickableTileEntity, IStorageBoxNetwork, ISidedInventory {
+public class BaseStorageBoxBlockEntity extends LockableLootTileEntity
+        implements IInventory, ITickableTileEntity, IStorageBoxNetwork, ISidedInventory {
 
     private ItemStack contents = ItemStack.EMPTY;
     protected NonNullList<ItemStack> storageItems;
@@ -63,6 +68,34 @@ public class BaseStorageBoxBlockEntity extends LockableLootTileEntity implements
     @Override
     protected ITextComponent getDefaultName() {
         return new TranslationTextComponent("block.moreinventorymod.storage_box");
+    }
+
+    public BaseStorageBoxBlockEntity upgrade(StorageBoxType to) {
+        try {
+            Block block = StorageBox.storageBoxMap.get(to).block;
+            BaseStorageBoxBlockEntity blockEntity = StorageBox.storageBoxMap.get(to).entityClass
+                    .getDeclaredConstructor(BlockPos.class, BlockState.class).newInstance(this.getBlockPos(),
+                            block.defaultBlockState().setValue(StorageBoxBlock.FACING,
+                                    this.getBlockState().getValue(StorageBoxBlock.FACING)));
+
+            if (this.storageItems.size() <= blockEntity.storageItems.size()) {
+                for (int i = 0; i < this.storageItems.size(); ++i) {
+                    blockEntity.storageItems.set(i, this.storageItems.get(i).copy());
+                }
+                blockEntity.contents = this.contents;
+            }
+
+            return blockEntity;
+
+        } catch (InstantiationException
+                | IllegalAccessException
+                | IllegalArgumentException
+                | InvocationTargetException
+                | NoSuchMethodException
+                | SecurityException e) {
+            e.printStackTrace();
+            return new BaseStorageBoxBlockEntity(to);
+        }
     }
 
     @Override
@@ -189,7 +222,8 @@ public class BaseStorageBoxBlockEntity extends LockableLootTileEntity implements
     @Override
     public boolean stillValid(PlayerEntity player) {
         return this.level.getBlockEntity(this.worldPosition) == this
-                && player.distanceToSqr(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5) < 64;
+                && player.distanceToSqr(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5,
+                        worldPosition.getZ() + 0.5) < 64;
     }
 
     public static int getStorageStackSize(StorageBoxType typeIn) {
@@ -206,8 +240,9 @@ public class BaseStorageBoxBlockEntity extends LockableLootTileEntity implements
         }
         if (!hasContents() && stack.getItem() != ItemStack.EMPTY.getItem()) {
             contents = stack.copy();
-            //            getStorageBoxNetworkManager().getBoxList().registerItem(xCoord, yCoord, zCoord, worldObj.provider.dimensionId, getContents());
-            //            sendContents();
+            // getStorageBoxNetworkManager().getBoxList().registerItem(xCoord, yCoord,
+            // zCoord, worldObj.provider.dimensionId, getContents());
+            // sendContents();
 
             return true;
         }
@@ -230,24 +265,24 @@ public class BaseStorageBoxBlockEntity extends LockableLootTileEntity implements
         for (int i = 0; i < this.getContainerSize(); ++i) {
             ItemStack slotItem = this.getItem(i);
             if (ItemStack.tagMatches(stack, slotItem) && ItemStack.isSame(stack, slotItem)) {
-                //airじゃないスタックに追加
+                // airじゃないスタックに追加
                 if (slotItem.getCount() == slotItem.getMaxStackSize()) {
                     continue;
                 }
 
                 int sum = stack.getCount() + slotItem.getCount();
                 if (sum <= stack.getMaxStackSize()) {
-                    //溢れないならカウントをプラス
+                    // 溢れないならカウントをプラス
                     slotItem.setCount(sum);
                     stack.setCount(0);
                 } else if (slotItem.getCount() < stack.getMaxStackSize()) {
-                    //あふれるならスロットのカウントをマックスにし、追加するアイテムのカウントを減らす
+                    // あふれるならスロットのカウントをマックスにし、追加するアイテムのカウントを減らす
                     stack.shrink(slotItem.getMaxStackSize() - slotItem.getCount());
                     slotItem.setCount(slotItem.getMaxStackSize());
                 }
                 this.setItem(i, slotItem.copy());
             } else if (slotItem.getItem() == ItemStack.EMPTY.getItem()) {
-                //airのスタックに新しく追加
+                // airのスタックに新しく追加
                 this.setItem(i, stack.copy());
                 stack.setCount(0);
             }
@@ -341,7 +376,7 @@ public class BaseStorageBoxBlockEntity extends LockableLootTileEntity implements
                     player.inventory.add(loadItemStack(0));
                 }
             } else {
-                //インベントリに空きスロットがなくても、同じアイテムを持っていたらぎりぎりまで持てるように
+                // インベントリに空きスロットがなくても、同じアイテムを持っていたらぎりぎりまで持てるように
                 int count = getContents().getMaxStackSize() -
                         player.inventory.countItem(getContents().getItem()) % getContents().getMaxStackSize();
                 if (0 < count && count % getContents().getMaxStackSize() != 0) {
@@ -355,8 +390,8 @@ public class BaseStorageBoxBlockEntity extends LockableLootTileEntity implements
         }
     }
 
-    //アイテムをストレージから取り出す。
-    //max:取り出す最大の数。0だと1スタック取り出す
+    // アイテムをストレージから取り出す。
+    // max:取り出す最大の数。0だと1スタック取り出す
     public ItemStack loadItemStack(int max) {
         int count = max == 0 ? contents.getMaxStackSize() : max;
         int requiredCount = count;
@@ -431,8 +466,8 @@ public class BaseStorageBoxBlockEntity extends LockableLootTileEntity implements
     public void test() {
     }
 
-    //コンテナが置かれたときに呼び出される。他のコンテナが隣接していれば自身をネットワークに追加する。
-    //複数のネットワークとつながった場合、それらを結合する
+    // コンテナが置かれたときに呼び出される。他のコンテナが隣接していれば自身をネットワークに追加する。
+    // 複数のネットワークとつながった場合、それらを結合する
     public void onPlaced() {
         boolean multiple = false;
         for (Direction d : Direction.values()) {
@@ -449,8 +484,8 @@ public class BaseStorageBoxBlockEntity extends LockableLootTileEntity implements
         }
     }
 
-    //隣接したコンテナが破壊されたときに呼ばれる
-    //ネットワークから外し、破壊されたことによりネットワークが分断される場合は新たなネットワークを形成する。
+    // 隣接したコンテナが破壊されたときに呼ばれる
+    // ネットワークから外し、破壊されたことによりネットワークが分断される場合は新たなネットワークを形成する。
     public void onDestroyedNeighbor(BlockPos destroyedPos) {
         int multiple = 0;
         for (Direction d : Direction.values()) {
