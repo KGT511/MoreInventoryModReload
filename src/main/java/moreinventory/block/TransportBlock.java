@@ -2,8 +2,8 @@ package moreinventory.block;
 
 import javax.annotation.Nullable;
 
-import moreinventory.tileentity.ExporterTileEntity;
-import moreinventory.tileentity.ImporterTileEntity;
+import moreinventory.blockentity.ExporterBlockEntity;
+import moreinventory.blockentity.ImporterBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -217,7 +217,7 @@ public class TransportBlock extends ContainerBlock {
 
     @Override
     public TileEntity newBlockEntity(IBlockReader worldIn) {
-        return isImporter ? new ImporterTileEntity() : new ExporterTileEntity();
+        return isImporter ? new ImporterBlockEntity() : new ExporterBlockEntity();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package moreinventory.tileentity;
+package moreinventory.blockentity;
 
 import javax.annotation.Nullable;
 
@@ -22,7 +22,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public abstract class BaseTransportTileEntity extends LockableLootTileEntity implements IInventory, ITickableTileEntity, ISidedInventory {
+public abstract class BaseTransportBlockEntity extends LockableLootTileEntity implements IInventory, ITickableTileEntity, ISidedInventory {
 
     public static final int inventorySize = 9;
     protected NonNullList<ItemStack> slotItems = NonNullList.withSize(inventorySize, ItemStack.EMPTY);
@@ -32,7 +32,7 @@ public abstract class BaseTransportTileEntity extends LockableLootTileEntity imp
 
     private byte updateTime = 0;
 
-    protected BaseTransportTileEntity(TileEntityType<?> typeIn) {
+    protected BaseTransportBlockEntity(TileEntityType<?> typeIn) {
         super(typeIn);
     }
 

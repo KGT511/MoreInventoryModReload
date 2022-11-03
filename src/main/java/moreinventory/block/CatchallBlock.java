@@ -1,6 +1,6 @@
 package moreinventory.block;
 
-import moreinventory.tileentity.CatchallTileEntity;
+import moreinventory.blockentity.CatchallBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -69,7 +69,7 @@ public class CatchallBlock extends ContainerBlock {
             return ActionResultType.SUCCESS;
         }
 
-        CatchallTileEntity tile = ((CatchallTileEntity) world.getBlockEntity(pos));
+        CatchallBlockEntity tile = ((CatchallBlockEntity) world.getBlockEntity(pos));
         if (tile != null) {
             if (!player.isShiftKeyDown() && tile.transferTo(player)) {
                 BlockState newState = world.getBlockState(pos);
@@ -121,7 +121,7 @@ public class CatchallBlock extends ContainerBlock {
 
     @Override
     public TileEntity newBlockEntity(IBlockReader world) {
-        return new CatchallTileEntity();
+        return new CatchallBlockEntity();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package moreinventory.tileentity.storagebox.network;
+package moreinventory.blockentity.storagebox.network;
 
 public interface IStorageBoxNetwork {
     public StorageBoxNetworkManager getStorageBoxNetworkManager();

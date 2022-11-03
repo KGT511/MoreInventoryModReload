@@ -1,14 +1,13 @@
-package moreinventory.tileentity;
+package moreinventory.blockentity;
 
 import javax.annotation.Nullable;
 
+import moreinventory.blockentity.storagebox.network.IStorageBoxNetwork;
+import moreinventory.blockentity.storagebox.network.StorageBoxNetworkManager;
 import moreinventory.inventory.PouchInventory;
 import moreinventory.item.PouchItem;
-import moreinventory.tileentity.storagebox.StorageBoxInventorySize;
-import moreinventory.tileentity.storagebox.StorageBoxType;
-import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
-import moreinventory.tileentity.storagebox.network.IStorageBoxNetwork;
-import moreinventory.tileentity.storagebox.network.StorageBoxNetworkManager;
+import moreinventory.storagebox.StorageBox;
+import moreinventory.storagebox.StorageBoxType;
 import moreinventory.util.MIMUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,7 +33,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements IInventory, ITickableTileEntity, IStorageBoxNetwork, ISidedInventory {
+public class BaseStorageBoxBlockEntity extends LockableLootTileEntity implements IInventory, ITickableTileEntity, IStorageBoxNetwork, ISidedInventory {
 
     private ItemStack contents = ItemStack.EMPTY;
     protected NonNullList<ItemStack> storageItems;
@@ -49,8 +48,8 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
     public static final String tagKeyContents = "contents";
     public static final String tagKeyTypeName = "typeName";
 
-    public BaseStorageBoxTileEntity(StorageBoxType typeIn) {
-        super(StorageBoxTypeTileEntity.map.get(typeIn));
+    public BaseStorageBoxBlockEntity(StorageBoxType typeIn) {
+        super(StorageBox.storageBoxMap.get(typeIn).blockEntity);
         int inventorySize = getStorageStackSize(typeIn);
         storageItems = NonNullList.withSize(inventorySize, ItemStack.EMPTY);
         this.type = typeIn;
@@ -194,7 +193,7 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
     }
 
     public static int getStorageStackSize(StorageBoxType typeIn) {
-        return StorageBoxInventorySize.map.get(typeIn).getInventorySize();
+        return StorageBox.storageBoxMap.get(typeIn).inventorySize;
     }
 
     public StorageBoxType getStorageBoxType() {
@@ -438,8 +437,8 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
         boolean multiple = false;
         for (Direction d : Direction.values()) {
             TileEntity tile = this.level.getBlockEntity(this.worldPosition.relative(d));
-            if (tile instanceof BaseStorageBoxTileEntity) {
-                BaseStorageBoxTileEntity tileStorageBox = (BaseStorageBoxTileEntity) tile;
+            if (tile instanceof BaseStorageBoxBlockEntity) {
+                BaseStorageBoxBlockEntity tileStorageBox = (BaseStorageBoxBlockEntity) tile;
                 if (!multiple) {
                     tileStorageBox.getStorageBoxNetworkManager().add(this);
                     multiple = true;
@@ -456,8 +455,8 @@ public class BaseStorageBoxTileEntity extends LockableLootTileEntity implements 
         int multiple = 0;
         for (Direction d : Direction.values()) {
             TileEntity tile = this.level.getBlockEntity(destroyedPos.relative(d));
-            if (tile instanceof BaseStorageBoxTileEntity) {
-                BaseStorageBoxTileEntity tileStorageBox = (BaseStorageBoxTileEntity) tile;
+            if (tile instanceof BaseStorageBoxBlockEntity) {
+                BaseStorageBoxBlockEntity tileStorageBox = (BaseStorageBoxBlockEntity) tile;
                 tileStorageBox.getStorageBoxNetworkManager().remove(destroyedPos);
                 multiple++;
             }

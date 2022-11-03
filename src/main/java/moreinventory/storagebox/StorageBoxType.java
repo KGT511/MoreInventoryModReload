@@ -1,4 +1,4 @@
-package moreinventory.tileentity.storagebox;
+package moreinventory.storagebox;
 
 public enum StorageBoxType {
     WOOD,

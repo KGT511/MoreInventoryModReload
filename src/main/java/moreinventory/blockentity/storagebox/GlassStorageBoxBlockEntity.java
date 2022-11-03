@@ -1,13 +1,14 @@
-package moreinventory.tileentity.storagebox;
+package moreinventory.blockentity.storagebox;
 
-import moreinventory.tileentity.BaseStorageBoxTileEntity;
+import moreinventory.blockentity.BaseStorageBoxBlockEntity;
+import moreinventory.storagebox.StorageBoxType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class GlassStorageBoxTileEntity extends BaseStorageBoxTileEntity {
+public class GlassStorageBoxBlockEntity extends BaseStorageBoxBlockEntity {
 
-    public GlassStorageBoxTileEntity() {
+    public GlassStorageBoxBlockEntity() {
         super(StorageBoxType.GLASS);
     }
 

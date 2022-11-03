@@ -23,19 +23,19 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
 
     @Override
     protected void addTables() {
-        dropSelf(Blocks.CATCHALL);
-        dropSelf(Blocks.WOOD_STORAGE_BOX);
-        dropSelf(Blocks.IRON_STORAGE_BOX);
-        dropSelf(Blocks.GOLD_STORAGE_BOX);
-        dropSelf(Blocks.DIAMOND_STORAGE_BOX);
-        dropSelf(Blocks.EMERALD_STORAGE_BOX);
-        dropSelf(Blocks.COPPER_STORAGE_BOX);
-        dropSelf(Blocks.TIN_STORAGE_BOX);
-        dropSelf(Blocks.BRONZE_STORAGE_BOX);
-        dropSelf(Blocks.SILVER_STORAGE_BOX);
-        dropSelf(Blocks.GLASS_STORAGE_BOX);
-        dropSelf(Blocks.IMPORTER);
-        dropSelf(Blocks.EXPORTER);
+        dropSelf(Blocks.CATCHALL.get());
+        dropSelf(Blocks.WOOD_STORAGE_BOX.get());
+        dropSelf(Blocks.IRON_STORAGE_BOX.get());
+        dropSelf(Blocks.GOLD_STORAGE_BOX.get());
+        dropSelf(Blocks.DIAMOND_STORAGE_BOX.get());
+        dropSelf(Blocks.EMERALD_STORAGE_BOX.get());
+        dropSelf(Blocks.COPPER_STORAGE_BOX.get());
+        dropSelf(Blocks.TIN_STORAGE_BOX.get());
+        dropSelf(Blocks.BRONZE_STORAGE_BOX.get());
+        dropSelf(Blocks.SILVER_STORAGE_BOX.get());
+        dropSelf(Blocks.GLASS_STORAGE_BOX.get());
+        dropSelf(Blocks.IMPORTER.get());
+        dropSelf(Blocks.EXPORTER.get());
 
     }
 

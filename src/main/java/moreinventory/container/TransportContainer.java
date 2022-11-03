@@ -1,8 +1,8 @@
 package moreinventory.container;
 
 import moreinventory.block.Blocks;
-import moreinventory.tileentity.BaseTransportTileEntity;
-import moreinventory.tileentity.ImporterTileEntity;
+import moreinventory.blockentity.BaseTransportBlockEntity;
+import moreinventory.blockentity.ImporterBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -17,15 +17,15 @@ import net.minecraft.util.IntReferenceHolder;
 public class TransportContainer extends Container {
 
     public static TransportContainer createContainerClientSide(int windowID, PlayerInventory playerInventory, PacketBuffer extraData) {
-        BaseTransportTileEntity tile = (BaseTransportTileEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos());
+        BaseTransportBlockEntity tile = (BaseTransportBlockEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos());
         return new TransportContainer(windowID, playerInventory, tile);
     }
 
-    public static final int slotSize = BaseTransportTileEntity.inventorySize;
+    public static final int slotSize = BaseTransportBlockEntity.inventorySize;
 
-    private BaseTransportTileEntity transportTileEntity;
+    private BaseTransportBlockEntity transportTileEntity;
 
-    public TransportContainer(int windowID, PlayerInventory playerInventory, BaseTransportTileEntity tile) {
+    public TransportContainer(int windowID, PlayerInventory playerInventory, BaseTransportBlockEntity tile) {
         super(Containers.TRANSPORT_MANAGER_CONTAINER_TYPE, windowID);
         this.transportTileEntity = tile;
 
@@ -36,8 +36,8 @@ public class TransportContainer extends Container {
         }
 
         this.bindPlayerInventory(playerInventory);
-        if (tile instanceof ImporterTileEntity) {
-            this.trackAllIntFields((ImporterTileEntity) tile, ImporterTileEntity.Val.values().length);
+        if (tile instanceof ImporterBlockEntity) {
+            this.trackAllIntFields((ImporterBlockEntity) tile, ImporterBlockEntity.Val.values().length);
         }
     }
 
@@ -55,7 +55,7 @@ public class TransportContainer extends Container {
 
     @Override
     public boolean stillValid(PlayerEntity playerIn) {
-        Block block = (transportTileEntity instanceof ImporterTileEntity ? Blocks.IMPORTER : Blocks.EXPORTER);
+        Block block = (transportTileEntity instanceof ImporterBlockEntity ? Blocks.IMPORTER : Blocks.EXPORTER).get();
         return stillValid(IWorldPosCallable.create(transportTileEntity.getLevel(), transportTileEntity.getBlockPos()), playerIn, block);
     }
 
@@ -81,24 +81,24 @@ public class TransportContainer extends Container {
 
     @Override
     public boolean canTakeItemForPickAll(ItemStack itemStack, Slot slot) {
-        if (slot.isSameInventory(new Slot(this.transportTileEntity, 0, 0, 0)) && slot.getSlotIndex() < BaseTransportTileEntity.inventorySize) {
+        if (slot.isSameInventory(new Slot(this.transportTileEntity, 0, 0, 0)) && slot.getSlotIndex() < BaseTransportBlockEntity.inventorySize) {
             return false;
         }
 
         return true;
     }
 
-    public BaseTransportTileEntity getTile() {
+    public BaseTransportBlockEntity getTile() {
         return transportTileEntity;
     }
 
-    protected void trackAllIntFields(ImporterTileEntity blockEntity, int valCount) {
+    protected void trackAllIntFields(ImporterBlockEntity blockEntity, int valCount) {
         for (int f = 0; f < valCount; f++) {
             trackIntField(blockEntity, f);
         }
     }
 
-    protected void trackIntField(ImporterTileEntity blockEntity, int id) {
+    protected void trackIntField(ImporterBlockEntity blockEntity, int id) {
         addDataSlot(new IntReferenceHolder() {
 
             @Override

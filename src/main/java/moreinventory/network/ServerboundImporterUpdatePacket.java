@@ -2,7 +2,7 @@ package moreinventory.network;
 
 import java.util.function.Supplier;
 
-import moreinventory.tileentity.ImporterTileEntity;
+import moreinventory.blockentity.ImporterBlockEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -43,8 +43,8 @@ public class ServerboundImporterUpdatePacket {
     public static void handle(ServerboundImporterUpdatePacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             TileEntity tileEntity = ctx.get().getSender().getCommandSenderWorld().getBlockEntity(msg.blockPos);
-            if (tileEntity instanceof ImporterTileEntity) {
-                ImporterTileEntity importerTileEntity = (ImporterTileEntity) tileEntity;
+            if (tileEntity instanceof ImporterBlockEntity) {
+                ImporterBlockEntity importerTileEntity = (ImporterBlockEntity) tileEntity;
                 int val = (importerTileEntity.getValByID(msg.id) + 1) % 2;
                 importerTileEntity.setValByID(msg.id, val);
 

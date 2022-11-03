@@ -2,9 +2,9 @@ package moreinventory.block;
 
 import javax.annotation.Nullable;
 
-import moreinventory.tileentity.BaseStorageBoxTileEntity;
-import moreinventory.tileentity.storagebox.StorageBoxType;
-import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
+import moreinventory.blockentity.BaseStorageBoxBlockEntity;
+import moreinventory.storagebox.StorageBox;
+import moreinventory.storagebox.StorageBoxType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -41,7 +41,7 @@ public class StorageBoxBlock extends ContainerBlock {
         super(Properties.of(Material.METAL)
                 .sound(SoundType.METAL)
                 .strength(2.0F, 10.0F)
-                .requiresCorrectToolForDrops()//素手で壊すときに遅くなる？
+                .requiresCorrectToolForDrops()// 素手で壊すときに遅くなる？
                 .harvestLevel(0)
                 .harvestTool(ToolType.PICKAXE)
                 .noOcclusion());
@@ -63,40 +63,43 @@ public class StorageBoxBlock extends ContainerBlock {
     }
 
     @Override
-    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getBlockEntity(pos);
+    public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer,
+            ItemStack stack) {
+        BaseStorageBoxBlockEntity tile = (BaseStorageBoxBlockEntity) world.getBlockEntity(pos);
         tile.onPlaced();
         super.setPlacedBy(world, pos, state, placer, stack);
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-        //隣がコンテナだったときに限って呼ばれるように
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos,
+            boolean isMoving) {
+        // 隣がコンテナだったときに限って呼ばれるように
         if (blockIn instanceof StorageBoxBlock) {
-            BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getBlockEntity(pos);
+            BaseStorageBoxBlockEntity tile = (BaseStorageBoxBlockEntity) world.getBlockEntity(pos);
             tile.onDestroyedNeighbor(fromPos);
         }
     }
 
     @Override
-    //right click
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    // right click
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn,
+            BlockRayTraceResult hit) {
         if (world.isClientSide)
             return ActionResultType.SUCCESS;
 
-        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getBlockEntity(pos);
+        BaseStorageBoxBlockEntity tile = (BaseStorageBoxBlockEntity) world.getBlockEntity(pos);
         ActionResultType ret = tile.rightClickEvent(world, player) ? ActionResultType.SUCCESS : ActionResultType.PASS;
         return ret;
 
     }
 
     @Override
-    //left click
+    // left click
     public void attack(BlockState state, World world, BlockPos pos, PlayerEntity player) {
         if (world.isClientSide)
             return;
 
-        BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) world.getBlockEntity(pos);
+        BaseStorageBoxBlockEntity tile = (BaseStorageBoxBlockEntity) world.getBlockEntity(pos);
         tile.leftClickEvent(player);
     }
 
@@ -108,10 +111,10 @@ public class StorageBoxBlock extends ContainerBlock {
     @Override
     public TileEntity newBlockEntity(IBlockReader worldIn) {
         try {
-            return StorageBoxTypeTileEntity.classMap.get(type).newInstance();
+            return StorageBox.storageBoxMap.get(type).entityClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
-            return new BaseStorageBoxTileEntity(type);
+            return new BaseStorageBoxBlockEntity(type);
         }
     }
 

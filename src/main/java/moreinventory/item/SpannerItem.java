@@ -1,7 +1,10 @@
 package moreinventory.item;
 
+import java.util.ArrayList;
+
 import moreinventory.block.Blocks;
 import moreinventory.core.MoreInventoryMOD;
+import moreinventory.storagebox.StorageBox;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +23,18 @@ public class SpannerItem extends Item {
                 .tab(MoreInventoryMOD.itemGroup));
     }
 
+    public static final ArrayList<Block> rotatableBlockList = new ArrayList<>();
+
+    public static final void setRotatableBlocks() {
+        rotatableBlockList.clear();
+        rotatableBlockList.add(Blocks.CATCHALL.get());
+        for (StorageBox val : StorageBox.storageBoxMap.values()) {
+            rotatableBlockList.add(val.block);
+        }
+        rotatableBlockList.add(Blocks.IMPORTER.get());
+        rotatableBlockList.add(Blocks.EXPORTER.get());
+    }
+
     @Override
     public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
         World world = context.getLevel();
@@ -32,7 +47,7 @@ public class SpannerItem extends Item {
         if (!player.isShiftKeyDown()) {
             BlockState state = world.getBlockState(pos);
             Block block = state.getBlock();
-            if (Blocks.blockList.contains(block)) {
+            if (rotatableBlockList.contains(block)) {
                 world.setBlockAndUpdate(pos, block.rotate(world.getBlockState(pos), world, pos, Rotation.CLOCKWISE_90));
                 return ActionResultType.SUCCESS;
             }

@@ -3,11 +3,11 @@ package moreinventory.client.screen;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import moreinventory.blockentity.ImporterBlockEntity;
 import moreinventory.container.TransportContainer;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.data.lang.Text;
 import moreinventory.network.ServerboundImporterUpdatePacket;
-import moreinventory.tileentity.ImporterTileEntity;
 import moreinventory.util.MIMUtils;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -34,16 +34,16 @@ public class TransportContainerScreen extends ContainerScreen<TransportContainer
     @Override
     protected void init() {
         super.init();
-        if (this.menu.getTile() instanceof ImporterTileEntity) {
-            ImporterTileEntity tileEntity = (ImporterTileEntity) this.menu.getTile();
+        if (this.menu.getTile() instanceof ImporterBlockEntity) {
+            ImporterBlockEntity tileEntity = (ImporterBlockEntity) this.menu.getTile();
             this.isWhiteButton = this.addButton(
                     new TransportContainerScreen.Button(leftPos + imageWidth - 55, topPos + 35,
                             new TranslationTextComponent(Text.importerMoveWhiteDetail), new TranslationTextComponent(Text.importerMoveBlackDetail),
-                            tileEntity.getBlockPos(), ImporterTileEntity.Val.WHITE.ordinal()));
+                            tileEntity.getBlockPos(), ImporterBlockEntity.Val.WHITE.ordinal()));
             this.isRegisterButton = this.addButton(
                     new TransportContainerScreen.Button(leftPos + 5, topPos + 35,
                             new TranslationTextComponent(Text.importerRegisterOnDetail), new TranslationTextComponent(Text.importerRegisterOffDetail),
-                            tileEntity.getBlockPos(), ImporterTileEntity.Val.REGISTER.ordinal()));
+                            tileEntity.getBlockPos(), ImporterBlockEntity.Val.REGISTER.ordinal()));
             this.isWhiteButton.active = true;
             this.isRegisterButton.active = true;
         }
@@ -54,11 +54,11 @@ public class TransportContainerScreen extends ContainerScreen<TransportContainer
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
-        if (this.menu.getTile() instanceof ImporterTileEntity) {
+        if (this.menu.getTile() instanceof ImporterBlockEntity) {
             int i = (this.width - this.imageWidth) / 2;
             int j = (this.height - this.imageHeight) / 2;
             int xOffset = i, yOffset = j;
-            ImporterTileEntity tileEntity = ((ImporterTileEntity) this.menu.getTile());
+            ImporterBlockEntity tileEntity = ((ImporterBlockEntity) this.menu.getTile());
 
             boolean isRegister = tileEntity.getIsRegister();
             boolean isWhite = tileEntity.getIswhite();
@@ -87,7 +87,7 @@ public class TransportContainerScreen extends ContainerScreen<TransportContainer
     @Override
     protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
         super.renderLabels(matrixStack, mouseX, mouseY);
-        if (this.menu.getTile() instanceof ImporterTileEntity) {
+        if (this.menu.getTile() instanceof ImporterBlockEntity) {
             this.isRegisterButton.renderToolTip(matrixStack, mouseX, mouseY);
             this.isWhiteButton.renderToolTip(matrixStack, mouseX, mouseY);
         }
@@ -125,7 +125,7 @@ public class TransportContainerScreen extends ContainerScreen<TransportContainer
             }
         }
 
-        public void onValueUpdate(ImporterTileEntity blockEntity) {
+        public void onValueUpdate(ImporterBlockEntity blockEntity) {
             int val = blockEntity.getValByID(this.id);
             this.setVal(MIMUtils.intToBool(val));
         }

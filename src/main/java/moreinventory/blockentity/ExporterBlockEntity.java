@@ -1,4 +1,4 @@
-package moreinventory.tileentity;
+package moreinventory.blockentity;
 
 import java.util.List;
 
@@ -18,10 +18,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class ExporterTileEntity extends BaseTransportTileEntity {
+public class ExporterBlockEntity extends BaseTransportBlockEntity {
 
-    public ExporterTileEntity() {
-        super(TileEntities.EXPORTER_TILE_TYPE);
+    public ExporterBlockEntity() {
+        super(BlockEntities.EXPORTER_BLOCK_ENTITY_TYPE.get());
     }
 
     private BlockPos boxPos = BlockPos.ZERO;
@@ -29,7 +29,7 @@ public class ExporterTileEntity extends BaseTransportTileEntity {
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent(Blocks.EXPORTER.getDescriptionId());
+        return new TranslationTextComponent(Blocks.EXPORTER.get().getDescriptionId());
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ExporterTileEntity extends BaseTransportTileEntity {
 
                 if (itemstack.getItem() != ItemStack.EMPTY.getItem()
                         && getBoxPos(itemstack) && !(this.worldPosition.equals(boxPos))) {
-                    BaseStorageBoxTileEntity tile = (BaseStorageBoxTileEntity) this.level.getBlockEntity(boxPos);
+                    BaseStorageBoxBlockEntity tile = (BaseStorageBoxBlockEntity) this.level.getBlockEntity(boxPos);
 
                     for (int j = 0; j < tile.getContainerSize(); j++) {
                         ItemStack itemstack1 = tile.getItem(j);
@@ -77,10 +77,10 @@ public class ExporterTileEntity extends BaseTransportTileEntity {
 
         TileEntity tile = this.level.getBlockEntity(inPos);
 
-        if (tile != null && tile instanceof BaseStorageBoxTileEntity) {
-            List<BaseStorageBoxTileEntity> list = ((BaseStorageBoxTileEntity) tile).getStorageBoxNetworkManager().getMatchingList(itemstack, inPos);
+        if (tile != null && tile instanceof BaseStorageBoxBlockEntity) {
+            List<BaseStorageBoxBlockEntity> list = ((BaseStorageBoxBlockEntity) tile).getStorageBoxNetworkManager().getMatchingList(itemstack, inPos);
 
-            for (BaseStorageBoxTileEntity tileStorageBox : list) {
+            for (BaseStorageBoxBlockEntity tileStorageBox : list) {
                 if (!tileStorageBox.getBlockPos().equals(outPos)) {//入力と出力が同じネットワークになるのを防ぐ
                     boxPos = tileStorageBox.getBlockPos();
                     return true;

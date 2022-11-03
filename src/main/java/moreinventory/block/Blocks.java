@@ -1,46 +1,52 @@
 package moreinventory.block;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Supplier;
 
 import moreinventory.core.MoreInventoryMOD;
-import moreinventory.tileentity.storagebox.StorageBoxType;
+import moreinventory.item.Items;
+import moreinventory.storagebox.StorageBoxType;
 import net.minecraft.block.Block;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber(modid = MoreInventoryMOD.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Blocks {
-    public static final List<Block> blockList = new ArrayList<Block>();
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MoreInventoryMOD.MOD_ID);
 
-    public static final Block CATCHALL = register("catchall", new CatchallBlock());
+    public static final RegistryObject<Block> CATCHALL = register("catchall", () -> new CatchallBlock());
 
-    public static final Block WOOD_STORAGE_BOX = register("storage_box_wood", new StorageBoxBlock(StorageBoxType.WOOD));
-    public static final Block IRON_STORAGE_BOX = register("storage_box_iron", new StorageBoxBlock(StorageBoxType.IRON));
-    public static final Block GOLD_STORAGE_BOX = register("storage_box_gold", new StorageBoxBlock(StorageBoxType.GOLD));
-    public static final Block DIAMOND_STORAGE_BOX = register("storage_box_diamond", new StorageBoxBlock(StorageBoxType.DIAMOND));
-    public static final Block EMERALD_STORAGE_BOX = register("storage_box_emerald", new StorageBoxBlock(StorageBoxType.EMERALD));
+    public static final RegistryObject<Block> WOOD_STORAGE_BOX = register("storage_box_wood", () -> new StorageBoxBlock(StorageBoxType.WOOD));
+    public static final RegistryObject<Block> IRON_STORAGE_BOX = register("storage_box_iron", () -> new StorageBoxBlock(StorageBoxType.IRON));
+    public static final RegistryObject<Block> GOLD_STORAGE_BOX = register("storage_box_gold", () -> new StorageBoxBlock(StorageBoxType.GOLD));
+    public static final RegistryObject<Block> DIAMOND_STORAGE_BOX = register("storage_box_diamond", () -> new StorageBoxBlock(StorageBoxType.DIAMOND));
 
-    public static final Block COPPER_STORAGE_BOX = register("storage_box_copper", new StorageBoxBlock(StorageBoxType.COPPER));
-    public static final Block TIN_STORAGE_BOX = register("storage_box_tin", new StorageBoxBlock(StorageBoxType.TIN));
-    public static final Block BRONZE_STORAGE_BOX = register("storage_box_bronze", new StorageBoxBlock(StorageBoxType.BRONZE));
-    public static final Block SILVER_STORAGE_BOX = register("storage_box_silver", new StorageBoxBlock(StorageBoxType.SILVER));
+    public static final RegistryObject<Block> EMERALD_STORAGE_BOX = register("storage_box_emerald", () -> new StorageBoxBlock(StorageBoxType.EMERALD));
+    public static final RegistryObject<Block> COPPER_STORAGE_BOX = register("storage_box_copper", () -> new StorageBoxBlock(StorageBoxType.COPPER));
+    public static final RegistryObject<Block> TIN_STORAGE_BOX = register("storage_box_tin", () -> new StorageBoxBlock(StorageBoxType.TIN));
+    public static final RegistryObject<Block> BRONZE_STORAGE_BOX = register("storage_box_bronze", () -> new StorageBoxBlock(StorageBoxType.BRONZE));
+    public static final RegistryObject<Block> SILVER_STORAGE_BOX = register("storage_box_silver", () -> new StorageBoxBlock(StorageBoxType.SILVER));
 
-    public static final Block GLASS_STORAGE_BOX = register("storage_box_glass", new StorageBoxBlock(StorageBoxType.GLASS));
+    public static final RegistryObject<Block> GLASS_STORAGE_BOX = register("storage_box_glass", () -> new StorageBoxBlock(StorageBoxType.GLASS));
 
-    public static final Block IMPORTER = register("importer", new TransportBlock(true));
-    public static final Block EXPORTER = register("exporter", new TransportBlock(false));
+    public static final RegistryObject<Block> IMPORTER = register("importer", () -> new TransportBlock(true));
+    public static final RegistryObject<Block> EXPORTER = register("exporter", () -> new TransportBlock(false));
 
-    private static Block register(String key, Block blockIn) {
-        blockList.add(blockIn);
-        return blockIn.setRegistryName(MoreInventoryMOD.MOD_ID, key);
+    private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block) {
+        RegistryObject<T> ret = BLOCKS.register(name, block);
+        registerBlockItem(name, ret, MoreInventoryMOD.itemGroup);
+        return ret;
     }
 
-    @SubscribeEvent
-    public static void registerBlocks(RegistryEvent.Register<Block> event) {
-        for (Block block : blockList) {
-            event.getRegistry().register(block);
-        }
+    private static <T extends Block> RegistryObject<BlockItem> registerBlockItem(String name, Supplier<T> block, ItemGroup tab) {
+        RegistryObject<BlockItem> ret = Items.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(tab)));
+        return ret;
+    }
+
+    public static void register(IEventBus eventBus) {
+        BLOCKS.register(eventBus);
     }
 }

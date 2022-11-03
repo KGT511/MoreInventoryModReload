@@ -1,9 +1,9 @@
-package moreinventory.tileentity;
+package moreinventory.blockentity;
 
 import moreinventory.block.Blocks;
 import moreinventory.block.TransportBlock;
+import moreinventory.blockentity.storagebox.network.IStorageBoxNetwork;
 import moreinventory.container.TransportContainer;
-import moreinventory.tileentity.storagebox.network.IStorageBoxNetwork;
 import moreinventory.util.MIMUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class ImporterTileEntity extends BaseTransportTileEntity {
+public class ImporterBlockEntity extends BaseTransportBlockEntity {
     private boolean register = false;
     private boolean isWhite = false;//falseの時はブラックリストになる
 
@@ -29,8 +29,8 @@ public class ImporterTileEntity extends BaseTransportTileEntity {
     public static final String registerKey = "register";
     public static final String isWhiteKey = "is_white";
 
-    public ImporterTileEntity() {
-        super(TileEntities.IMPORTER_TILE_TYPE);
+    public ImporterBlockEntity() {
+        super(BlockEntities.IMPORTER_BLOCK_ENTITY_TYPE.get());
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ImporterTileEntity extends BaseTransportTileEntity {
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent(Blocks.IMPORTER.getDescriptionId());
+        return new TranslationTextComponent(Blocks.IMPORTER.get().getDescriptionId());
     }
 
     @Override
@@ -82,7 +82,7 @@ public class ImporterTileEntity extends BaseTransportTileEntity {
                 ItemStack itemstack = inventory.getItem(slot);
                 if (itemstack != null && canExtract(itemstack)) {
                     if (MIMUtils.canAccessFromSide(inventory, slot, in.getOpposite()) && MIMUtils.canExtractFromSide(inventory, itemstack, slot, in.getOpposite())) {
-                        if (tile instanceof BaseStorageBoxTileEntity && ((BaseStorageBoxTileEntity) tile).getStorageBoxNetworkManager().storeToNetwork(itemstack, register, outPos)) {
+                        if (tile instanceof BaseStorageBoxBlockEntity && ((BaseStorageBoxBlockEntity) tile).getStorageBoxNetworkManager().storeToNetwork(itemstack, register, outPos)) {
 
                             return;
                         }

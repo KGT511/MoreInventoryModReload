@@ -42,23 +42,23 @@ public class JaJpLanguageGenerator extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        add(Blocks.CATCHALL, "ガラクタ入れ");
-        add(Items.TRANSPORTER, "トランスポーター");
-        add(Items.SPANNER, "スパナ");
+        add(Blocks.CATCHALL.get(), "ガラクタ入れ");
+        add(Items.TRANSPORTER.get(), "トランスポーター");
+        add(Items.SPANNER.get(), "スパナ");
 
-        add(Blocks.WOOD_STORAGE_BOX, "木のコンテナ");
-        add(Blocks.IRON_STORAGE_BOX, "鉄のコンテナ");
-        add(Blocks.GOLD_STORAGE_BOX, "金のコンテナ");
-        add(Blocks.DIAMOND_STORAGE_BOX, "ダイヤモンドのコンテナ");
-        add(Blocks.EMERALD_STORAGE_BOX, "エメラルドのコンテナ");
-        add(Blocks.COPPER_STORAGE_BOX, "銅のコンテナ");
-        add(Blocks.TIN_STORAGE_BOX, "錫のコンテナ");
-        add(Blocks.BRONZE_STORAGE_BOX, "青銅のコンテナ");
-        add(Blocks.SILVER_STORAGE_BOX, "銀のコンテナ");
-        add(Blocks.GLASS_STORAGE_BOX, "ガラスのコンテナ");
+        add(Blocks.WOOD_STORAGE_BOX.get(), "木のコンテナ");
+        add(Blocks.IRON_STORAGE_BOX.get(), "鉄のコンテナ");
+        add(Blocks.GOLD_STORAGE_BOX.get(), "金のコンテナ");
+        add(Blocks.DIAMOND_STORAGE_BOX.get(), "ダイヤモンドのコンテナ");
+        add(Blocks.EMERALD_STORAGE_BOX.get(), "エメラルドのコンテナ");
+        add(Blocks.COPPER_STORAGE_BOX.get(), "銅のコンテナ");
+        add(Blocks.TIN_STORAGE_BOX.get(), "錫のコンテナ");
+        add(Blocks.BRONZE_STORAGE_BOX.get(), "青銅のコンテナ");
+        add(Blocks.SILVER_STORAGE_BOX.get(), "銀のコンテナ");
+        add(Blocks.GLASS_STORAGE_BOX.get(), "ガラスのコンテナ");
 
-        add(Blocks.IMPORTER, "インポーター");
-        add(Blocks.EXPORTER, "エクスポーター");
+        add(Blocks.IMPORTER.get(), "インポーター");
+        add(Blocks.EXPORTER.get(), "エクスポーター");
         add(Text.importerRegister, "登録");
         add(Text.importerRegisterOn, "する");
         add(Text.importerRegisterOff, "しない");
@@ -70,11 +70,11 @@ public class JaJpLanguageGenerator extends LanguageProvider {
         add(Text.importerMoveWhiteDetail, "リストのアイテムのみ輸送します");
         add(Text.importerMoveBlackDetail, "リスト以外のアイテムを輸送します");
 
-        add(Items.POUCH, "ポーチ");
+        add(Items.POUCH.get(), "ポーチ");
         for (DyeColor color : DyeColor.values()) {
             add(PouchItem.byColor(color), colorMap.get(color) + "色のポーチ");
         }
-        add(Items.LEATHER_PACK, "革の詰め物");
+        add(Items.LEATHER_PACK.get(), "革の詰め物");
 
         add(Text.pouchConfig, "コンフィグ");
         add(Text.pouchConfigStorageBox, "有効にすると、コンテナはこのポーチからも収集します");

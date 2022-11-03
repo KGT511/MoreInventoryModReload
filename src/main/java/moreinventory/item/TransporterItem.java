@@ -6,9 +6,9 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import moreinventory.block.StorageBoxBlock;
+import moreinventory.blockentity.BaseStorageBoxBlockEntity;
 import moreinventory.core.MoreInventoryMOD;
-import moreinventory.tileentity.BaseStorageBoxTileEntity;
-import moreinventory.tileentity.storagebox.StorageBoxType;
+import moreinventory.storagebox.StorageBoxType;
 import moreinventory.util.MIMUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -61,16 +61,16 @@ public class TransporterItem extends Item {
         transportableBlocks.add(Blocks.FURNACE);
         transportableBlocks.add(Blocks.DISPENSER);
         transportableBlocks.add(Blocks.DROPPER);
-        transportableBlocks.add(moreinventory.block.Blocks.WOOD_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.IRON_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.GOLD_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.DIAMOND_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.EMERALD_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.COPPER_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.TIN_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.BRONZE_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.SILVER_STORAGE_BOX);
-        transportableBlocks.add(moreinventory.block.Blocks.GLASS_STORAGE_BOX);
+        transportableBlocks.add(moreinventory.block.Blocks.WOOD_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.IRON_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.GOLD_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.DIAMOND_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.EMERALD_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.COPPER_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.TIN_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.BRONZE_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.SILVER_STORAGE_BOX.get());
+        transportableBlocks.add(moreinventory.block.Blocks.GLASS_STORAGE_BOX.get());
     }
 
     @Override
@@ -146,12 +146,12 @@ public class TransporterItem extends Item {
         }
         if (hold.getItem() instanceof BlockItem && ((BlockItem) hold.getItem()).getBlock() instanceof StorageBoxBlock) {
             CompoundNBT compoundnbt = stack.getTag();
-            if (compoundnbt.contains(BaseStorageBoxTileEntity.tagKeyContents)) {
-                CompoundNBT nbt = compoundnbt.getCompound(BaseStorageBoxTileEntity.tagKeyContents);
+            if (compoundnbt.contains(BaseStorageBoxBlockEntity.tagKeyContents)) {
+                CompoundNBT nbt = compoundnbt.getCompound(BaseStorageBoxBlockEntity.tagKeyContents);
                 ItemStack storageContents = ItemStack.of(nbt);
                 if (storageContents.getItem() != ItemStack.EMPTY.getItem()) {
-                    StorageBoxType type = StorageBoxType.valueOf(compoundnbt.getString(BaseStorageBoxTileEntity.tagKeyTypeName));
-                    NonNullList<ItemStack> storageItems = NonNullList.withSize(BaseStorageBoxTileEntity.getStorageStackSize(type), ItemStack.EMPTY);
+                    StorageBoxType type = StorageBoxType.valueOf(compoundnbt.getString(BaseStorageBoxBlockEntity.tagKeyTypeName));
+                    NonNullList<ItemStack> storageItems = NonNullList.withSize(BaseStorageBoxBlockEntity.getStorageStackSize(type), ItemStack.EMPTY);
                     MIMUtils.readNonNullListShort(compoundnbt, storageItems);
                     int count = 0;
                     for (ItemStack storageItem : storageItems) {

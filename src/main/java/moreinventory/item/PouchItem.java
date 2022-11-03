@@ -115,7 +115,7 @@ public class PouchItem extends Item {
         if (!(itemStack.getItem() instanceof PouchItem))
             return itemStack;
         CompoundNBT tag = itemStack.getOrCreateTag();
-        PouchItem newPouch = (color == 0 ? Items.POUCH : byColor(DyeColor.byId(color - 1)));
+        PouchItem newPouch = (color == 0 ? Items.POUCH.get() : byColor(DyeColor.byId(color - 1)));
         itemStack = new ItemStack(newPouch);
         itemStack.setTag(tag);
 

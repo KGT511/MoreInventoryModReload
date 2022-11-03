@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import moreinventory.block.Blocks;
+import moreinventory.blockentity.BlockEntities;
 import moreinventory.client.renderer.CatchallRenderer;
 import moreinventory.client.renderer.StorageBoxRenderer;
 import moreinventory.client.renderer.TransportRenderer;
@@ -11,13 +12,12 @@ import moreinventory.client.screen.CatchallContainerScreen;
 import moreinventory.client.screen.PouchContainerScreen;
 import moreinventory.client.screen.TransportContainerScreen;
 import moreinventory.container.Containers;
+import moreinventory.item.Items;
 import moreinventory.item.TransporterItem;
 import moreinventory.network.ServerboundImporterUpdatePacket;
 import moreinventory.network.ServerboundPouchUpdatePacket;
 import moreinventory.recipe.Recipes;
-import moreinventory.tileentity.TileEntities;
-import moreinventory.tileentity.storagebox.StorageBoxInventorySize;
-import moreinventory.tileentity.storagebox.StorageBoxTypeTileEntity;
+import moreinventory.storagebox.StorageBox;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -53,12 +53,16 @@ public class MoreInventoryMOD {
 
     public MoreInventoryMOD() {
         initNetwork();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        eventBus.addListener(this::setup);
+        eventBus.addListener(this::enqueueIMC);
+        eventBus.addListener(this::processIMC);
+        eventBus.addListener(this::doClientStuff);
+
+        Items.register(eventBus);
+        Blocks.register(eventBus);
+        BlockEntities.register(eventBus);
+
         Recipes.register(eventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -73,9 +77,8 @@ public class MoreInventoryMOD {
     }
 
     public static void init() {
+        StorageBox.init();
         TransporterItem.setTransportableBlocks();
-        StorageBoxInventorySize.init();
-        StorageBoxTypeTileEntity.init();
     }
 
     public static void initNetwork() {
@@ -95,13 +98,13 @@ public class MoreInventoryMOD {
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
         //bind renderers and gui factories
-        ClientRegistry.bindTileEntityRenderer(TileEntities.CATCHALL_TILE_TYPE, CatchallRenderer::new);
-        StorageBoxTypeTileEntity.map.forEach((key, val) -> {
-            ClientRegistry.bindTileEntityRenderer(val, StorageBoxRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(BlockEntities.CATCHALL_BLOCK_ENTITY_TYPE.get(), CatchallRenderer::new);
+        StorageBox.storageBoxMap.forEach((key, val) -> {
+            ClientRegistry.bindTileEntityRenderer(val.blockEntity, StorageBoxRenderer::new);
         });
-        RenderTypeLookup.setRenderLayer(Blocks.GLASS_STORAGE_BOX, RenderType.translucent());
-        ClientRegistry.bindTileEntityRenderer(TileEntities.IMPORTER_TILE_TYPE, TransportRenderer::new);
-        ClientRegistry.bindTileEntityRenderer(TileEntities.EXPORTER_TILE_TYPE, TransportRenderer::new);
+        RenderTypeLookup.setRenderLayer(Blocks.GLASS_STORAGE_BOX.get(), RenderType.translucent());
+        ClientRegistry.bindTileEntityRenderer(BlockEntities.IMPORTER_BLOCK_ENTITY_TYPE.get(), TransportRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(BlockEntities.EXPORTER_BLOCK_ENTITY_TYPE.get(), TransportRenderer::new);
 
         ScreenManager.register(Containers.CATCHALL_CONTAINER_TYPE, CatchallContainerScreen::new);
         ScreenManager.register(Containers.TRANSPORT_MANAGER_CONTAINER_TYPE, TransportContainerScreen::new);

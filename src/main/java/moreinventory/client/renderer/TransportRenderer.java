@@ -4,9 +4,9 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import moreinventory.block.TransportBlock;
+import moreinventory.blockentity.BaseTransportBlockEntity;
+import moreinventory.blockentity.ImporterBlockEntity;
 import moreinventory.core.MoreInventoryMOD;
-import moreinventory.tileentity.BaseTransportTileEntity;
-import moreinventory.tileentity.ImporterTileEntity;
 import moreinventory.util.MIMUtils;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 
-public class TransportRenderer extends TileEntityRenderer<BaseTransportTileEntity> {
+public class TransportRenderer extends TileEntityRenderer<BaseTransportBlockEntity> {
     private static final ResourceLocation IMPORTER_LIGHT_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/importer.png");
     private static final ResourceLocation IMPORTER_DARK_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/importer_black.png");
     private static final ResourceLocation EXPORTER_LIGHT_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/exporter.png");
@@ -53,10 +53,10 @@ public class TransportRenderer extends TileEntityRenderer<BaseTransportTileEntit
     }
 
     @Override
-    public void render(BaseTransportTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(BaseTransportBlockEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         matrixStackIn.pushPose();
         ResourceLocation lightTexture, darkTexture;
-        if (tileEntityIn instanceof ImporterTileEntity) {
+        if (tileEntityIn instanceof ImporterBlockEntity) {
             lightTexture = IMPORTER_LIGHT_TEXTURE;
             darkTexture = IMPORTER_DARK_TEXTURE;
         } else {

@@ -1,4 +1,4 @@
-package moreinventory.tileentity;
+package moreinventory.blockentity;
 
 import javax.annotation.Nullable;
 
@@ -24,9 +24,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public class CatchallTileEntity extends LockableLootTileEntity implements IInventory, ISidedInventory {
-    public CatchallTileEntity() {
-        super(TileEntities.CATCHALL_TILE_TYPE);
+public class CatchallBlockEntity extends LockableLootTileEntity implements IInventory, ISidedInventory {
+    public CatchallBlockEntity() {
+        super(BlockEntities.CATCHALL_BLOCK_ENTITY_TYPE.get());
     }
 
     public static final int mainInventorySize = 36;
@@ -45,7 +45,7 @@ public class CatchallTileEntity extends LockableLootTileEntity implements IInven
 
     @Override
     public ITextComponent getDefaultName() {
-        return new TranslationTextComponent(Blocks.CATCHALL.getDescriptionId());
+        return new TranslationTextComponent(Blocks.CATCHALL.get().getDescriptionId());
     }
 
     @Override

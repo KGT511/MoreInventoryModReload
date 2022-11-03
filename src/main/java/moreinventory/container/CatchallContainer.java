@@ -1,6 +1,6 @@
 package moreinventory.container;
 
-import moreinventory.tileentity.CatchallTileEntity;
+import moreinventory.blockentity.CatchallBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -10,15 +10,15 @@ import net.minecraft.network.PacketBuffer;
 
 public class CatchallContainer extends Container {
     public static CatchallContainer createContainerClientSide(int windowID, PlayerInventory playerInventory, PacketBuffer extraData) {
-        CatchallTileEntity tile = (CatchallTileEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos());
+        CatchallBlockEntity tile = (CatchallBlockEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos());
         return new CatchallContainer(windowID, playerInventory, tile);
     }
 
-    public static final int slotSize = CatchallTileEntity.inventorySize;
+    public static final int slotSize = CatchallBlockEntity.inventorySize;
 
-    private CatchallTileEntity catchall;
+    private CatchallBlockEntity catchall;
 
-    public CatchallContainer(int windowID, PlayerInventory playerInventory, CatchallTileEntity tile) {
+    public CatchallContainer(int windowID, PlayerInventory playerInventory, CatchallBlockEntity tile) {
         super(Containers.CATCHALL_CONTAINER_TYPE, windowID);
         this.catchall = tile;
 

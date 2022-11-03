@@ -2,9 +2,9 @@ package moreinventory.inventory;
 
 import java.util.List;
 
+import moreinventory.blockentity.BaseStorageBoxBlockEntity;
+import moreinventory.blockentity.storagebox.network.StorageBoxNetworkManager;
 import moreinventory.item.PouchItem;
-import moreinventory.tileentity.BaseStorageBoxTileEntity;
-import moreinventory.tileentity.storagebox.network.StorageBoxNetworkManager;
 import moreinventory.util.MIMUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -178,7 +178,7 @@ public class PouchInventory implements IInventory {
         return false;
     }
 
-    public void collectedByStorageBox(BaseStorageBoxTileEntity tile) {
+    public void collectedByStorageBox(BaseStorageBoxBlockEntity tile) {
         for (int i = 0; i < slotSize; i++) {
             tile.store(this.getItem(i));
         }

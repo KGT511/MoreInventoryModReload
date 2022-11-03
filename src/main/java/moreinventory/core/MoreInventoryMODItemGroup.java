@@ -1,12 +1,8 @@
 package moreinventory.core;
 
-import moreinventory.item.Items;
-import net.minecraft.item.Item;
+import moreinventory.block.Blocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class MoreInventoryMODItemGroup extends ItemGroup {
     public MoreInventoryMODItemGroup() {
@@ -15,14 +11,7 @@ public class MoreInventoryMODItemGroup extends ItemGroup {
 
     @Override
     public ItemStack makeIcon() {
-        return new ItemStack(Items.WOOD_STORAGE_BOX);
+        return new ItemStack(Blocks.WOOD_STORAGE_BOX.get());
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void fillItemList(NonNullList<ItemStack> items) {
-        for (Item item : Items.itemList) {
-            item.fillItemCategory(this, items);
-        }
-    }
 }
