@@ -1,9 +1,11 @@
 package moreinventory.item;
 
+import moreinventory.block.StorageBoxBlock;
 import moreinventory.blockentity.BaseStorageBoxBlockEntity;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.storagebox.StorageBox;
 import moreinventory.storagebox.StorageBoxType;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,8 +44,11 @@ public class PlatingItem extends Item {
             if (beforeTier != 0 && (afterTier == beforeTier || afterTier == beforeTier + 1)
                     && StorageBox.storageBoxMap.get(afterType).inventorySize > StorageBox.storageBoxMap.get(beforeType).inventorySize) {
                 BaseStorageBoxBlockEntity newStorageBoxEntity = storageBoxEntity.upgrade(afterType);
-                level.setBlock(pos, newStorageBoxEntity.getBlockState(), 0);
+                BlockState newBlockState = StorageBox.storageBoxMap.get(afterType).block.defaultBlockState().setValue(StorageBoxBlock.FACING,
+                        storageBoxEntity.getBlockState().getValue(StorageBoxBlock.FACING));
+                level.setBlock(pos, newBlockState, 0);
                 level.setBlockEntity(pos, newStorageBoxEntity);
+                level.blockEntityChanged(pos, newStorageBoxEntity);
                 level.sendBlockUpdated(pos, storageBoxEntity.getBlockState(), level.getBlockState(pos), 0);
                 newStorageBoxEntity.onPlaced();
 

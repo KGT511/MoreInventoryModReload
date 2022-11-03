@@ -1,10 +1,7 @@
 package moreinventory.blockentity;
 
-import java.lang.reflect.InvocationTargetException;
-
 import javax.annotation.Nullable;
 
-import moreinventory.block.StorageBoxBlock;
 import moreinventory.blockentity.storagebox.network.IStorageBoxNetwork;
 import moreinventory.blockentity.storagebox.network.StorageBoxNetworkManager;
 import moreinventory.inventory.PouchInventory;
@@ -71,31 +68,26 @@ public class BaseStorageBoxBlockEntity extends LockableLootTileEntity
     }
 
     public BaseStorageBoxBlockEntity upgrade(StorageBoxType to) {
+        Block block = StorageBox.storageBoxMap.get(to).block;
+        BaseStorageBoxBlockEntity blockEntity;
         try {
-            Block block = StorageBox.storageBoxMap.get(to).block;
-            BaseStorageBoxBlockEntity blockEntity = StorageBox.storageBoxMap.get(to).entityClass
-                    .getDeclaredConstructor(BlockPos.class, BlockState.class).newInstance(this.getBlockPos(),
-                            block.defaultBlockState().setValue(StorageBoxBlock.FACING,
-                                    this.getBlockState().getValue(StorageBoxBlock.FACING)));
-
+            blockEntity = StorageBox.storageBoxMap.get(to).entityClass.newInstance();
             if (this.storageItems.size() <= blockEntity.storageItems.size()) {
                 for (int i = 0; i < this.storageItems.size(); ++i) {
                     blockEntity.storageItems.set(i, this.storageItems.get(i).copy());
                 }
                 blockEntity.contents = this.contents;
             }
+            blockEntity.worldPosition = this.worldPosition;
+            blockEntity.level = this.level;
 
             return blockEntity;
-
-        } catch (InstantiationException
-                | IllegalAccessException
-                | IllegalArgumentException
-                | InvocationTargetException
-                | NoSuchMethodException
-                | SecurityException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
+
             return new BaseStorageBoxBlockEntity(to);
         }
+
     }
 
     @Override
