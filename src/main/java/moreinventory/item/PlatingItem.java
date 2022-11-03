@@ -37,10 +37,11 @@ public class PlatingItem extends Item {
             var afterTier = StorageBox.storageBoxMap.get(afterType).tier;
             if (beforeTier != 0 && (afterTier == beforeTier || afterTier == beforeTier + 1)
                     && StorageBox.storageBoxMap.get(afterType).inventorySize > StorageBox.storageBoxMap.get(beforeType).inventorySize) {
-                var tmp = storageBoxEntity.upgrade(afterType);
-                level.setBlock(pos, tmp.getBlockState(), 0);
-                level.setBlockEntity(tmp);
+                var newStorageBoxEntity = storageBoxEntity.upgrade(afterType);
+                level.setBlock(pos, newStorageBoxEntity.getBlockState(), 0);
+                level.setBlockEntity(newStorageBoxEntity);
                 level.sendBlockUpdated(pos, storageBoxEntity.getBlockState(), level.getBlockState(pos), 0);
+                newStorageBoxEntity.onPlaced();
 
                 var player = context.getPlayer();
 
