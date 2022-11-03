@@ -8,9 +8,9 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import moreinventory.blockentity.BaseStorageBoxBlockEntity;
-import moreinventory.blockentity.storagebox.StorageBoxType;
 import moreinventory.inventory.PouchInventory;
 import moreinventory.item.PouchItem;
+import moreinventory.storagebox.StorageBoxType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Container;

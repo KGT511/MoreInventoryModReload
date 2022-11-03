@@ -1,6 +1,7 @@
 package moreinventory.blockentity.storagebox;
 
 import moreinventory.blockentity.BaseStorageBoxBlockEntity;
+import moreinventory.storagebox.StorageBoxType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
