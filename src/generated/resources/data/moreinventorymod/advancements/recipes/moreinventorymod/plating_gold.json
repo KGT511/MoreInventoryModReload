@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "moreinventorymod:plating_gold"
+    ]
+  },
+  "criteria": {
+    "has_brush": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "moreinventorymod:brush"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "moreinventorymod:plating_gold"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_brush",
+      "has_the_recipe"
+    ]
+  ]
+}

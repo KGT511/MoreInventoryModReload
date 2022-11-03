@@ -11,6 +11,7 @@ import moreinventory.blockentity.storagebox.GlassStorageBoxBlockEntity;
 import moreinventory.blockentity.storagebox.GoldStorageBoxBlockEntity;
 import moreinventory.blockentity.storagebox.IronStorageBoxBlockEntity;
 import moreinventory.blockentity.storagebox.SilverStorageBoxBlockEntity;
+import moreinventory.blockentity.storagebox.SteelStorageBoxBlockEntity;
 import moreinventory.blockentity.storagebox.TinStorageBoxBlockEntity;
 import moreinventory.blockentity.storagebox.WoodStorageBoxBlockEntity;
 import moreinventory.core.MoreInventoryMOD;
@@ -55,6 +56,10 @@ public class BlockEntities {
     public static final RegistryObject<TileEntityType<SilverStorageBoxBlockEntity>> SILVER_STORAGE_BOX_BLOCK_ENTITY_TYPE = register(
             "storage_box_tile_silver",
             () -> TileEntityType.Builder.of(SilverStorageBoxBlockEntity::new, Blocks.SILVER_STORAGE_BOX.get()).build(null));
+    public static final RegistryObject<TileEntityType<SteelStorageBoxBlockEntity>> STEEL_STORAGE_BOX_BLOCK_ENTITY_TYPE = register(
+            "storage_box_tile_steel",
+            () -> TileEntityType.Builder.of(SteelStorageBoxBlockEntity::new, Blocks.STEEL_STORAGE_BOX.get()).build(null));
+
     public static final RegistryObject<TileEntityType<GlassStorageBoxBlockEntity>> GLASS_STORAGE_BOX_BLOCK_ENTITY_TYPE = register(
             "storage_box_tile_glass",
             () -> TileEntityType.Builder.of(GlassStorageBoxBlockEntity::new, Blocks.GLASS_STORAGE_BOX.get()).build(null));

@@ -55,10 +55,11 @@ public class RecipesGenerator extends RecipeProvider {
         registerStorageBoxRecipe(consumer, Blocks.DIAMOND_STORAGE_BOX.get(), Tags.Items.GEMS_DIAMOND);
         registerStorageBoxRecipe(consumer, Blocks.EMERALD_STORAGE_BOX.get(), Tags.Items.GEMS_EMERALD);
 
-        //        registerStorageBoxRecipe(consumer, Blocks.COPPER_STORAGE_BOX, Items.COPPER_INGOT);
-        //        registerStorageBoxRecipe(consumer, Blocks.TIN_STORAGE_BOX, Items.IRON_INGOT);
-        //        registerStorageBoxRecipe(consumer, Blocks.BRONZE_STORAGE_BOX, Items.IRON_INGOT);
-        //        registerStorageBoxRecipe(consumer, Blocks.SILVER_STORAGE_BOX, Items.IRON_INGOT);
+        //        registerStorageBoxRecipe(consumer, Blocks.COPPER_STORAGE_BOX.get(), Items.COPPER_INGOT);
+        //        registerStorageBoxRecipe(consumer, Blocks.TIN_STORAGE_BOX.get(), Items.IRON_INGOT);
+        //        registerStorageBoxRecipe(consumer, Blocks.BRONZE_STORAGE_BOX.get(), Items.IRON_INGOT);
+        //        registerStorageBoxRecipe(consumer, Blocks.SILVER_STORAGE_BOX.get(), Items.IRON_INGOT);
+        //        registerStorageBoxRecipe(consumer, Blocks.STEEL_STORAGE_BOX.get(), Items.IRON_INGOT);
 
         ShapedRecipeBuilder.shaped(Blocks.GLASS_STORAGE_BOX.get(), 32)
                 .pattern("MSM")
@@ -122,6 +123,27 @@ public class RecipesGenerator extends RecipeProvider {
 
         CustomRecipeBuilder.special(Recipes.POUCH_RECIPE.get())
                 .save(consumer, "pouch_coloring");
+
+        ShapedRecipeBuilder.shaped(moreinventory.item.Items.BRUSH.get(), 4)
+                .pattern(" WW")
+                .pattern(" WW")
+                .pattern("S  ")
+                .define('W', ItemTags.WOOL)
+                .define('S', Items.STICK)
+                .unlockedBy("has_wool", has(ItemTags.WOOL))
+                .unlockedBy("has_container", has(Blocks.WOOD_STORAGE_BOX.get()))
+                .save(consumer);
+
+        registerPlatingRecipe(consumer, moreinventory.item.Items.IRON_PLATING.get(), Tags.Items.INGOTS_IRON);
+        registerPlatingRecipe(consumer, moreinventory.item.Items.GOLD_PLATING.get(), Tags.Items.INGOTS_GOLD);
+        registerPlatingRecipe(consumer, moreinventory.item.Items.DIAMOND_PLATING.get(), Tags.Items.GEMS_DIAMOND);
+        registerPlatingRecipe(consumer, moreinventory.item.Items.EMERALD_PLATING.get(), Tags.Items.GEMS_EMERALD);
+
+        //        registerPlatingRecipe(consumer, moreinventory.item.Items.COPPER_PLATING.get(), Items.COPPER_INGOT);
+        //        registerPlatingRecipe(consumer, moreinventory.item.Items.TIN_PLATING.get(), Items.IRON_INGOT);
+        //        registerPlatingRecipe(consumer, moreinventory.item.Items.BRONZE_PLATING.get(), Items.IRON_INGOT);
+        //        registerPlatingRecipe(consumer, moreinventory.item.Items.SILVER_PLATING.get(), Items.IRON_INGOT);
+        //        registerPlatingRecipe(consumer, moreinventory.item.Items.STEEL_PLATING.get(), Items.IRON_INGOT);
     }
 
     private void registerStorageBoxRecipe(Consumer<IFinishedRecipe> consumer, Block block, IOptionalNamedTag<Item> ingotsIron) {
@@ -137,6 +159,23 @@ public class RecipesGenerator extends RecipeProvider {
                 .define('S', ItemTags.WOODEN_SLABS)
                 .define('W', Blocks.WOOD_STORAGE_BOX.get())
                 .unlockedBy("has_storage_box", has(Blocks.WOOD_STORAGE_BOX.get()))
+                .save(consumer);
+    }
+
+    private void registerPlatingRecipe(Consumer<IFinishedRecipe> consumer, Item item, IOptionalNamedTag<Item> material) {
+        registerPlatinfRecipe(consumer, item, Ingredient.of(material));
+
+    }
+
+    private void registerPlatinfRecipe(Consumer<IFinishedRecipe> consumer, Item item, Ingredient material) {
+        ShapedRecipeBuilder.shaped(item)
+                .pattern("IIM")
+                .pattern("B  ")
+                .pattern("   ")
+                .define('I', material)
+                .define('M', Items.LAVA_BUCKET)
+                .define('B', moreinventory.item.Items.BRUSH.get())
+                .unlockedBy("has_brush", has(moreinventory.item.Items.BRUSH.get()))
                 .save(consumer);
     }
 }

@@ -45,6 +45,7 @@ public class EnUsLanguageGenerator extends LanguageProvider {
         add(Blocks.TIN_STORAGE_BOX.get(), "Tin Container Box");
         add(Blocks.BRONZE_STORAGE_BOX.get(), "Bronze Container Box");
         add(Blocks.SILVER_STORAGE_BOX.get(), "Silver Container Box");
+        add(Blocks.STEEL_STORAGE_BOX.get(), "Steel Container Box");
         add(Blocks.GLASS_STORAGE_BOX.get(), "Glass Container Box");
 
         add(Blocks.IMPORTER.get(), "Importer");
@@ -70,5 +71,16 @@ public class EnUsLanguageGenerator extends LanguageProvider {
         add(Text.pouchConfigStorageBox, "If enabled, container box can collect from this pouch.");
         add(Text.pouchConfigHotBar, "If enabled, this pouch can collect from your player hotbar when sneak and use.");
         add(Text.pouchConfigAutoCollect, "If enabled, this pouch will collect registered items when you picked up item.");
+
+        add(Items.BRUSH.get(), "Brush");
+        add(Items.IRON_PLATING.get(), "Iron Paint");
+        add(Items.GOLD_PLATING.get(), "Gold Paint");
+        add(Items.DIAMOND_PLATING.get(), "Diamond Paint");
+        add(Items.EMERALD_PLATING.get(), "Emerald Paint");
+        add(Items.COPPER_PLATING.get(), "Copper Paint");
+        add(Items.TIN_PLATING.get(), "Tin Paint");
+        add(Items.BRONZE_PLATING.get(), "Bronze Paint");
+        add(Items.SILVER_PLATING.get(), "Silver Paint");
+        add(Items.STEEL_PLATING.get(), "Steel Paint");
     }
 }

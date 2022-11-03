@@ -54,7 +54,7 @@ public class StorageBoxBlock extends ContainerBlock {
     public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
             TileEntity tileentity = world.getBlockEntity(pos);
-            if (tileentity instanceof IInventory) {
+            if (tileentity instanceof IInventory && !(newState.getBlock() instanceof StorageBoxBlock)) {
                 InventoryHelper.dropContents(world, pos, (IInventory) tileentity);
                 world.updateNeighbourForOutputSignal(pos, this);
             }
