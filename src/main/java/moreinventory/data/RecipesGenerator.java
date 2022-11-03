@@ -167,7 +167,7 @@ public class RecipesGenerator extends RecipeProvider {
                 .save(consumer);
     }
 
-    private void registerPlatingRecipe(Consumer<FinishedRecipe> consumer, Item item, TagKey<Item> material) {
+    private void registerPlatingRecipe(Consumer<FinishedRecipe> consumer, Item item, Tag<Item> material) {
         registerPlatinfRecipe(consumer, item, Ingredient.of(material));
 
     }
