@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "key": {
-    "B": {
-      "item": "moreinventorymod:brush"
-    },
-    "I": {
-      "item": "minecraft:copper_ingot"
-    },
-    "M": {
-      "item": "minecraft:lava_bucket"
-    }
-  },
   "pattern": [
     "IIM",
     "B  ",
     "   "
   ],
+  "key": {
+    "I": {
+      "item": "minecraft:copper_ingot"
+    },
+    "M": {
+      "item": "minecraft:lava_bucket"
+    },
+    "B": {
+      "item": "moreinventorymod:brush"
+    }
+  },
   "result": {
     "item": "moreinventorymod:plating_copper"
   }
