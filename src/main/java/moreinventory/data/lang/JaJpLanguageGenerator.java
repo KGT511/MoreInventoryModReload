@@ -6,12 +6,12 @@ import moreinventory.block.Blocks;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.item.Items;
 import moreinventory.item.PouchItem;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.common.data.LanguageProvider;
 
 public class JaJpLanguageGenerator extends LanguageProvider {
-    public JaJpLanguageGenerator(DataGenerator generator, String modid) {
+    public JaJpLanguageGenerator(PackOutput generator, String modid) {
         super(generator, modid, "ja_jp");
     }
 

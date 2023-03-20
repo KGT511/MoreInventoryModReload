@@ -12,7 +12,7 @@ import moreinventory.core.MoreInventoryMOD;
 import moreinventory.storagebox.StorageBox;
 import moreinventory.storagebox.StorageBoxType;
 import net.minecraft.core.Direction;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,7 +26,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class BlockStateGenerator extends BlockStateProvider {
 
-    public BlockStateGenerator(DataGenerator gen, ExistingFileHelper exFileHelper) {
+    public BlockStateGenerator(PackOutput gen, ExistingFileHelper exFileHelper) {
         super(gen, MoreInventoryMOD.MOD_ID, exFileHelper);
     }
 

@@ -4,12 +4,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 import moreinventory.block.Blocks;
-import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-public class BlockLootTables extends BlockLoot {
+public class BlockLootTables extends BlockLootSubProvider {
     private final Set<Block> knownBlocks = new HashSet<>();
+    private static final Set<Item> EXPLOSION_RESISTANT = Set.of();
+
+    protected BlockLootTables() {
+        super(EXPLOSION_RESISTANT, FeatureFlags.REGISTRY.allFlags());
+    }
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
@@ -23,7 +30,7 @@ public class BlockLootTables extends BlockLoot {
     }
 
     @Override
-    protected void addTables() {
+    protected void generate() {
         dropSelf(Blocks.CATCHALL.get());
         dropSelf(Blocks.WOOD_STORAGE_BOX.get());
         dropSelf(Blocks.IRON_STORAGE_BOX.get());

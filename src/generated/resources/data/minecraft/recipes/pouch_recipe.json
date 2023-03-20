@@ -1,3 +1,4 @@
 {
-  "type": "moreinventorymod:pouch_recipe"
+  "type": "moreinventorymod:pouch_recipe",
+  "category": "misc"
 }

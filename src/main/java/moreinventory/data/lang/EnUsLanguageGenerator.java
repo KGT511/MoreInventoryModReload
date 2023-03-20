@@ -4,14 +4,15 @@ import java.util.HashMap;
 
 import moreinventory.block.Blocks;
 import moreinventory.core.MoreInventoryMOD;
+import moreinventory.core.MoreInventoryMODCreativeModeTab;
 import moreinventory.item.Items;
 import moreinventory.item.PouchItem;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.common.data.LanguageProvider;
 
 public class EnUsLanguageGenerator extends LanguageProvider {
-    public EnUsLanguageGenerator(DataGenerator generator, String modid) {
+    public EnUsLanguageGenerator(PackOutput generator, String modid) {
         super(generator, modid, "en_us");
     }
 
@@ -30,7 +31,7 @@ public class EnUsLanguageGenerator extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        add(MoreInventoryMOD.creativeModeTab.getDisplayName().getString(), "MoreInventoryMOD");
+        add(MoreInventoryMODCreativeModeTab.MULTI_ENDER_CHEST_CREATIVE_TAB.getDisplayName().getString(), "MoreInventoryMOD");
 
         add(Blocks.CATCHALL.get(), "catchall");
         add(Items.TRANSPORTER.get(), "transporter");

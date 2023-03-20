@@ -4,8 +4,9 @@ import java.util.function.Consumer;
 
 import moreinventory.block.Blocks;
 import moreinventory.recipe.Recipes;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.SpecialRecipeBuilder;
@@ -19,13 +20,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 
 public class RecipesGenerator extends RecipeProvider {
-    public RecipesGenerator(DataGenerator generatorIn) {
+    public RecipesGenerator(PackOutput generatorIn) {
         super(generatorIn);
     }
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
-        ShapedRecipeBuilder.shaped(Blocks.CATCHALL.get())
+    protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Blocks.CATCHALL.get())
                 .pattern("P P")
                 .pattern("PCP")
                 .pattern("SSS")
@@ -34,7 +35,7 @@ public class RecipesGenerator extends RecipeProvider {
                 .define('S', ItemTags.WOODEN_SLABS)
                 .unlockedBy("has_chest", has(Items.CHEST))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(moreinventory.item.Items.TRANSPORTER.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, moreinventory.item.Items.TRANSPORTER.get())
                 .pattern("P P")
                 .pattern("PSP")
                 .pattern("SSS")
@@ -42,7 +43,7 @@ public class RecipesGenerator extends RecipeProvider {
                 .define('S', ItemTags.WOODEN_SLABS)
                 .unlockedBy("has_planks", has(ItemTags.PLANKS))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(Blocks.WOOD_STORAGE_BOX.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Blocks.WOOD_STORAGE_BOX.get())
                 .pattern("MSM")
                 .pattern("M M")
                 .pattern("MSM")
@@ -62,7 +63,7 @@ public class RecipesGenerator extends RecipeProvider {
         //        registerStorageBoxRecipe(consumer, Blocks.SILVER_STORAGE_BOX.get(), Items.IRON_INGOT);
         //        registerStorageBoxRecipe(consumer, Blocks.STEEL_STORAGE_BOX.get(), Items.IRON_INGOT);
 
-        ShapedRecipeBuilder.shaped(Blocks.GLASS_STORAGE_BOX.get(), 32)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Blocks.GLASS_STORAGE_BOX.get(), 32)
                 .pattern("MSM")
                 .pattern("M M")
                 .pattern("MSM")
@@ -71,7 +72,7 @@ public class RecipesGenerator extends RecipeProvider {
                 .unlockedBy("has_glass", has(Items.GLASS))
                 .unlockedBy("has_glass_pane", has(Items.GLASS_PANE))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(Blocks.IMPORTER.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Blocks.IMPORTER.get())
                 .pattern("SSS")
                 .pattern("SHS")
                 .pattern("SRS")
@@ -81,7 +82,7 @@ public class RecipesGenerator extends RecipeProvider {
                 .unlockedBy("has_chest", has(Items.CHEST))
                 .unlockedBy("has_storage_box", has(Blocks.WOOD_STORAGE_BOX.get()))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(Blocks.EXPORTER.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Blocks.EXPORTER.get())
                 .pattern("SRS")
                 .pattern("SHS")
                 .pattern("SSS")
@@ -92,7 +93,7 @@ public class RecipesGenerator extends RecipeProvider {
                 .unlockedBy("has_storage_box", has(Blocks.WOOD_STORAGE_BOX.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(moreinventory.item.Items.SPANNER.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, moreinventory.item.Items.SPANNER.get())
                 .pattern("SSS")
                 .pattern(" I ")
                 .pattern("SSS")
@@ -102,7 +103,7 @@ public class RecipesGenerator extends RecipeProvider {
                 .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(moreinventory.item.Items.LEATHER_PACK.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, moreinventory.item.Items.LEATHER_PACK.get())
                 .pattern("LLL")
                 .pattern("LSL")
                 .pattern("LLL")
@@ -110,7 +111,7 @@ public class RecipesGenerator extends RecipeProvider {
                 .define('L', Items.LEATHER)
                 .unlockedBy("has_leather", has(Items.LEATHER))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(moreinventory.item.Items.POUCH.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, moreinventory.item.Items.POUCH.get())
                 .pattern("LLL")
                 .pattern("PDP")
                 .pattern("LPL")
@@ -124,7 +125,7 @@ public class RecipesGenerator extends RecipeProvider {
         SpecialRecipeBuilder.special(Recipes.POUCH_RECIPE.get())
                 .save(consumer, Recipes.POUCH_RECIPE.getId().getPath());
 
-        ShapedRecipeBuilder.shaped(moreinventory.item.Items.BRUSH.get(), 4)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, moreinventory.item.Items.BRUSH.get(), 4)
                 .pattern(" WW")
                 .pattern(" WW")
                 .pattern("S  ")
@@ -155,7 +156,7 @@ public class RecipesGenerator extends RecipeProvider {
     }
 
     private void registerStorageBoxRecipe(Consumer<FinishedRecipe> consumer, Block block, Ingredient material) {
-        ShapedRecipeBuilder.shaped(block, 3)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, block, 3)
                 .pattern("MSM")
                 .pattern("MWM")
                 .pattern("MSM")
@@ -176,7 +177,7 @@ public class RecipesGenerator extends RecipeProvider {
     }
 
     private void registerPlatinfRecipe(Consumer<FinishedRecipe> consumer, Item item, Ingredient material) {
-        ShapedRecipeBuilder.shaped(item)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, item)
                 .pattern("IIM")
                 .pattern("B  ")
                 .pattern("   ")

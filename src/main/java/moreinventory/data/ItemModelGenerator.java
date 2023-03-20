@@ -8,7 +8,7 @@ import moreinventory.item.Items;
 import moreinventory.item.PouchItem;
 import moreinventory.item.TransporterItem;
 import moreinventory.storagebox.StorageBox;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -19,7 +19,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemModelGenerator extends ItemModelProvider {
-    public ItemModelGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+    public ItemModelGenerator(PackOutput generator, ExistingFileHelper existingFileHelper) {
         super(generator, MoreInventoryMOD.MOD_ID, existingFileHelper);
     }
 
