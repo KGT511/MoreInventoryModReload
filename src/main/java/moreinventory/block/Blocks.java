@@ -6,7 +6,6 @@ import moreinventory.core.MoreInventoryMOD;
 import moreinventory.item.Items;
 import moreinventory.storagebox.StorageBoxType;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -38,12 +37,12 @@ public class Blocks {
 
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block) {
         var ret = BLOCKS.register(name, block);
-        registerBlockItem(name, ret, MoreInventoryMOD.creativeModeTab);
+        registerBlockItem(name, ret);
         return ret;
     }
 
-    private static <T extends Block> RegistryObject<BlockItem> registerBlockItem(String name, Supplier<T> block, CreativeModeTab tab) {
-        var ret = Items.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(tab)));
+    private static <T extends Block> RegistryObject<BlockItem> registerBlockItem(String name, Supplier<T> block) {
+        var ret = Items.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
         return ret;
     }
 

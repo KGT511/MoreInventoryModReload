@@ -25,7 +25,6 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -44,7 +43,6 @@ import net.minecraftforge.network.simple.SimpleChannel;
 public class MoreInventoryMOD {
     public static final String MOD_ID = "moreinventorymod";
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final CreativeModeTab creativeModeTab = new MoreInventoryMODCreativeModeTab();
     //    public static final SimpleNetworkWrapper network = new SimpleNetworkWrapper(MOD_ID);
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder

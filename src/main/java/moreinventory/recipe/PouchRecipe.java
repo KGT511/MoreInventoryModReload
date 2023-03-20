@@ -8,14 +8,15 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class PouchRecipe extends CustomRecipe {
 
-    public PouchRecipe(ResourceLocation p_i48169_1_) {
-        super(p_i48169_1_);
+    public PouchRecipe(ResourceLocation resource, CraftingBookCategory category) {
+        super(resource, category);
     }
 
     //染料と色変え可能なアイテムが1つずつあるかチェック

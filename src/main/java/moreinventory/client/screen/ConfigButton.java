@@ -38,21 +38,22 @@ public class ConfigButton extends AbstractWidget {
 
             RenderSystem.setShaderTexture(0, POUCH_GUI_TEXTURE);
             //            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-            this.setFocused(mouseX >= this.x && mouseY >= this.y && mouseX < this.x + width && mouseY < this.y + this.height);
+            var x = this.getX();
+            var y = this.getY();
+            this.setFocused(mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + this.height);
 
             if (this.val) {
-                blit(poseStack, this.x, this.y, 200, 104, 16, 16);
+                blit(poseStack, x, y, 200, 104, 16, 16);
             } else {
-                blit(poseStack, this.x, this.y, 184, 104, 16, 16);
+                blit(poseStack, x, y, 184, 104, 16, 16);
             }
 
-            blit(poseStack, this.x, this.y, this.iconIndexX, this.iconIndexY, 16, 16);
+            blit(poseStack, x, y, this.iconIndexX, this.iconIndexY, 16, 16);
 
             if (this.val) {
-                blit(poseStack, this.x, this.y, 216, 104, 16, 16);
+                blit(poseStack, x, y, 216, 104, 16, 16);
             } else {
-                blit(poseStack, this.x, this.y, 232, 104, 16, 16);
+                blit(poseStack, x, y, 232, 104, 16, 16);
             }
             this.renderBg(poseStack, minecraft, mouseX, mouseY);
         }
@@ -74,8 +75,9 @@ public class ConfigButton extends AbstractWidget {
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput p_169152_) {
-        this.defaultButtonNarrationText(p_169152_);
+    protected void updateWidgetNarration(NarrationElementOutput p_259858_) {
+        this.defaultButtonNarrationText(p_259858_);
+
     }
 
 }

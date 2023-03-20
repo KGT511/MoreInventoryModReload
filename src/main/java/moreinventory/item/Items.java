@@ -33,9 +33,9 @@ public class Items {
     public static final RegistryObject<PouchItem> POUCH_GREEN = register("pouch_green", () -> new PouchItem(DyeColor.GREEN));
     public static final RegistryObject<PouchItem> POUCH_RED = register("pouch_red", () -> new PouchItem(DyeColor.RED));
     public static final RegistryObject<PouchItem> POUCH_BLACK = register("pouch_black", () -> new PouchItem(DyeColor.BLACK));
-    public static final RegistryObject<Item> LEATHER_PACK = register("leather_pack", () -> new Item(new Item.Properties().tab(MoreInventoryMOD.creativeModeTab)));
+    public static final RegistryObject<Item> LEATHER_PACK = register("leather_pack", () -> new Item(new Item.Properties()));
 
-    public static final RegistryObject<Item> BRUSH = register("brush", () -> new Item(new Item.Properties().tab(MoreInventoryMOD.creativeModeTab)));
+    public static final RegistryObject<Item> BRUSH = register("brush", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> IRON_PLATING = register("plating_iron", () -> new PlatingItem(StorageBoxType.IRON));
     public static final RegistryObject<Item> GOLD_PLATING = register("plating_gold", () -> new PlatingItem(StorageBoxType.GOLD));
     public static final RegistryObject<Item> DIAMOND_PLATING = register("plating_diamond", () -> new PlatingItem(StorageBoxType.DIAMOND));

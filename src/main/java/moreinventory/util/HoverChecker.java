@@ -46,10 +46,10 @@ public class HoverChecker {
      */
     public boolean checkHover(int mouseX, int mouseY, boolean canHover) {
         if (this.button != null) {
-            this.top = button.y;
-            this.bottom = button.y + button.getHeight();
-            this.left = button.x;
-            this.right = button.x + button.getWidth();
+            this.top = button.getY();
+            this.bottom = button.getY() + button.getHeight();
+            this.left = button.getX();
+            this.right = button.getX() + button.getWidth();
             canHover = canHover && button.visible;
         }
 

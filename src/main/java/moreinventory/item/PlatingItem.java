@@ -1,7 +1,6 @@
 package moreinventory.item;
 
 import moreinventory.blockentity.BaseStorageBoxBlockEntity;
-import moreinventory.core.MoreInventoryMOD;
 import moreinventory.storagebox.StorageBox;
 import moreinventory.storagebox.StorageBoxType;
 import net.minecraft.world.InteractionResult;
@@ -15,8 +14,7 @@ public class PlatingItem extends Item {
     public PlatingItem(StorageBoxType type) {
         super(new Properties()
                 .durability(0)
-                .stacksTo(64)
-                .tab(MoreInventoryMOD.creativeModeTab));
+                .stacksTo(64));
         this.type = type;
     }
 

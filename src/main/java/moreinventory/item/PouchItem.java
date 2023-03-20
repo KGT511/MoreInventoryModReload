@@ -3,7 +3,6 @@ package moreinventory.item;
 import java.util.TreeMap;
 
 import moreinventory.container.PouchContainerProvider;
-import moreinventory.core.MoreInventoryMOD;
 import moreinventory.inventory.PouchInventory;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -27,8 +26,7 @@ public class PouchItem extends Item {
 
     public PouchItem(DyeColor color) {
         super(new Properties()
-                .durability(0)
-                .tab(MoreInventoryMOD.creativeModeTab));
+                .durability(0));
         this.color = color;
         if (color != null)
             ITEM_BY_COLOR.put(color, this);

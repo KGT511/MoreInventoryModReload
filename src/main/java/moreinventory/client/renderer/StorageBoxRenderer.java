@@ -1,7 +1,7 @@
 package moreinventory.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 
 import moreinventory.block.StorageBoxBlock;
 import moreinventory.blockentity.BaseStorageBoxBlockEntity;
@@ -31,19 +31,19 @@ public class StorageBoxRenderer implements BlockEntityRenderer<BaseStorageBoxBlo
         matrixStackIn.pushPose();
         float f = blockstate.getValue(StorageBoxBlock.FACING).toYRot();
         matrixStackIn.translate(0.5D, 0.5D, 0.5D);
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(-f));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(-f));
         matrixStackIn.translate(0.D, 1.D / 16.D * 2.D, 0.5D);
         float scale = 0.75F;
         matrixStackIn.scale(scale, scale, scale);
-        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180.F));
-        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180.F));
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(180.F));
+        matrixStackIn.mulPose(Axis.ZP.rotationDegrees(180.F));
         Minecraft.getInstance().getItemRenderer().renderStatic(contents, ItemTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, 0);
         matrixStackIn.popPose();
 
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5D, 0.5D, 0.5D);
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(-f + 180));
-        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(-f + 180));
+        matrixStackIn.mulPose(Axis.ZP.rotationDegrees(180));
 
         int amount = blockEntityIn.getAmount();
         int stackSize = amount / contents.getMaxStackSize();

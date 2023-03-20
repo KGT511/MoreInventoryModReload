@@ -48,24 +48,24 @@ public class PouchContainerScreen extends AbstractContainerScreen<PouchContainer
                 (id, val) -> {
                     MoreInventoryMOD.CHANNEL.sendToServer(new ServerboundPouchUpdatePacket(id, val));
                 });
-        this.isStorageBoxButton.x = this.leftPos + this.imageWidth + 6;
-        this.isStorageBoxButton.y = this.topPos + 25 + this.grade * 18;
+        this.isStorageBoxButton.setX(this.leftPos + this.imageWidth + 6);
+        this.isStorageBoxButton.setY(this.topPos + 25 + this.grade * 18);
 
         this.isHotBarButton = new ConfigButton(PouchInventory.Val.HOT_BAR.ordinal(),
                 0, 0, 16, 16, 200, 120, inventory.getIsHotBar(), Component.empty(),
                 (id, val) -> {
                     MoreInventoryMOD.CHANNEL.sendToServer(new ServerboundPouchUpdatePacket(id, val));
                 });
-        this.isHotBarButton.x = this.leftPos + this.imageWidth + 24;
-        this.isHotBarButton.y = this.isStorageBoxButton.y;
+        this.isHotBarButton.setX(this.leftPos + this.imageWidth + 24);
+        this.isHotBarButton.setY(this.isStorageBoxButton.getY());
 
         this.isAutoCollectButton = new ConfigButton(PouchInventory.Val.AUTO_COLLECT.ordinal(),
                 0, 0, 16, 16, 216, 120, inventory.getIsAUtoCollect(), Component.empty(),
                 (id, val) -> {
                     MoreInventoryMOD.CHANNEL.sendToServer(new ServerboundPouchUpdatePacket(id, val));
                 });
-        this.isAutoCollectButton.x = this.leftPos + this.imageWidth + 42;
-        this.isAutoCollectButton.y = this.isStorageBoxButton.y;
+        this.isAutoCollectButton.setX(this.leftPos + this.imageWidth + 42);
+        this.isAutoCollectButton.setY(this.isStorageBoxButton.getY());
 
         this.addRenderableWidget(this.isStorageBoxButton);
         this.addRenderableWidget(this.isHotBarButton);

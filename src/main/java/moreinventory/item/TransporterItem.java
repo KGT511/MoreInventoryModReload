@@ -7,12 +7,12 @@ import javax.annotation.Nullable;
 
 import moreinventory.block.StorageBoxBlock;
 import moreinventory.blockentity.BaseStorageBoxBlockEntity;
-import moreinventory.core.MoreInventoryMOD;
 import moreinventory.storagebox.StorageBoxType;
 import moreinventory.util.MIMUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
@@ -42,8 +42,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class TransporterItem extends Item {
     public TransporterItem() {
         super(new Properties()
-                .durability(40)
-                .tab(MoreInventoryMOD.creativeModeTab));
+                .durability(40));
     }
 
     public static final ArrayList<Block> transportableBlocks = new ArrayList<>();
@@ -293,7 +292,7 @@ public class TransporterItem extends Item {
         var state = block.getStateForPlacement(new BlockPlaceContext(context));
 
         if (block instanceof FurnaceBlock) {
-            var furnaceState = NbtUtils.readBlockState(blockStateTag);
+            var furnaceState = NbtUtils.readBlockState(context.getLevel().holderLookup(Registries.BLOCK), blockStateTag);
             state = state.setValue(FurnaceBlock.LIT, furnaceState.getValue(FurnaceBlock.LIT));
         }
         return state;

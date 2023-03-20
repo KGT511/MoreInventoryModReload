@@ -9,6 +9,7 @@ import moreinventory.core.MoreInventoryMOD;
 import moreinventory.data.lang.Text;
 import moreinventory.network.ServerboundImporterUpdatePacket;
 import moreinventory.util.MIMUtils;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
@@ -88,8 +89,10 @@ public class TransportContainerScreen extends AbstractContainerScreen<TransportC
         super.renderLabels(poseStack, mouseX, mouseY);
         if (this.menu.getBlockEntity() instanceof ImporterBlockEntity) {
 
-            this.isRegisterButton.renderToolTip(poseStack, mouseX, mouseY);
-            this.isWhiteButton.renderToolTip(poseStack, mouseX, mouseY);
+            this.isRegisterButton.updateTooltip();
+            this.isWhiteButton.updateTooltip();
+            //                        this.isRegisterButton.renderToolTip(poseStack, mouseX, mouseY);
+            //                        this.isWhiteButton.renderToolTip(poseStack, mouseX, mouseY);
 
         }
     }
@@ -111,6 +114,7 @@ public class TransportContainerScreen extends AbstractContainerScreen<TransportC
             this.trueTxt = trueDisplayTxt;
             this.falseTxt = falseDisplayTxt;
             this.id = id;
+
         }
 
         public boolean getVal() {
@@ -126,13 +130,12 @@ public class TransportContainerScreen extends AbstractContainerScreen<TransportC
             super.onClick(mouseX, mouseY);
         }
 
-        @Override
-        public void renderToolTip(PoseStack poseStack, int x, int y) {
-            super.renderToolTip(poseStack, x, y);
-            if (this.isHoveredOrFocused()) {
-                var txt = val ? trueTxt : falseTxt;
-                TransportContainerScreen.this.renderTooltip(poseStack, txt, x - this.x, y / 2);
-            }
+        private Component getTxt() {
+            return val ? trueTxt : falseTxt;
+        }
+
+        public void updateTooltip() {
+            this.setTooltip(Tooltip.create(this.getTxt()));
         }
 
         public void onValueUpdate(ImporterBlockEntity blockEntity) {

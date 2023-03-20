@@ -1,7 +1,7 @@
 package moreinventory.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 
 import moreinventory.block.CatchallBlock;
 import moreinventory.blockentity.CatchallBlockEntity;
@@ -28,7 +28,7 @@ public class CatchallRenderer implements BlockEntityRenderer<CatchallBlockEntity
         matrixStackIn.pushPose();
 
         matrixStackIn.translate(0.5D, 0.5D, 0.5D);
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(-f));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(-f));
         matrixStackIn.translate(-0.5D, -0.5D, -0.5D);
 
         var nonnulllist = blockEntityIn.getItems();
@@ -49,8 +49,8 @@ public class CatchallRenderer implements BlockEntityRenderer<CatchallBlockEntity
                     int y = (height - i) * 3;
                     int z = (j + 1) * 3 + j * 2;
                     matrixStackIn.translate(x / scale, y / scale, z / scale);
-                    matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(90.0F));
-                    matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180.F));
+                    matrixStackIn.mulPose(Axis.XP.rotationDegrees(90.0F));
+                    matrixStackIn.mulPose(Axis.ZP.rotationDegrees(180.F));
                     matrixStackIn.scale(0.25F, 0.25F, 0.25F);
                     Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, 0);
                     matrixStackIn.popPose();
