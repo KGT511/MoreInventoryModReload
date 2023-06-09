@@ -8,9 +8,9 @@ import moreinventory.blockentity.BaseStorageBoxBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class StorageBoxRenderer implements BlockEntityRenderer<BaseStorageBoxBlockEntity> {
@@ -37,7 +37,7 @@ public class StorageBoxRenderer implements BlockEntityRenderer<BaseStorageBoxBlo
         matrixStackIn.scale(scale, scale, scale);
         matrixStackIn.mulPose(Axis.XP.rotationDegrees(180.F));
         matrixStackIn.mulPose(Axis.ZP.rotationDegrees(180.F));
-        Minecraft.getInstance().getItemRenderer().renderStatic(contents, ItemTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, 0);
+        Minecraft.getInstance().getItemRenderer().renderStatic(contents, ItemDisplayContext.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, blockEntityIn.getLevel(), 0);
         matrixStackIn.popPose();
 
         matrixStackIn.pushPose();
@@ -60,7 +60,7 @@ public class StorageBoxRenderer implements BlockEntityRenderer<BaseStorageBoxBlo
 
         matrixStackIn.translate(-text.length() / 2.D * 2. * (5. + (text.length() % 2 == 0 ? 0.5 : 0)) / 7. / 16., 0.5 - 1.D / 16.D * 3.5D, -0.5001D);
         matrixStackIn.scale(textScale, textScale, textScale);
-        this.font.drawInBatch(text, 0.F, 0.F, 0xF0F0F0, false, matrixStackIn.last().pose(), bufferIn, false, 0, combinedLightIn);
+        this.font.drawInBatch(text, 0.F, 0.F, 0xF0F0F0, false, matrixStackIn.last().pose(), bufferIn, Font.DisplayMode.NORMAL, 0, combinedLightIn);
         matrixStackIn.popPose();
     }
 }

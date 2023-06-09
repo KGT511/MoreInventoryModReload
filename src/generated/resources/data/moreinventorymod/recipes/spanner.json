@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "moreinventorymod:spanner"
-  }
+  },
+  "show_notification": true
 }

@@ -19,5 +19,6 @@
   ],
   "result": {
     "item": "moreinventorymod:plating_copper"
-  }
+  },
+  "show_notification": true
 }

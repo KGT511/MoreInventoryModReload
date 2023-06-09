@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "moreinventorymod:storage_box_wood"
-  }
+  },
+  "show_notification": true
 }

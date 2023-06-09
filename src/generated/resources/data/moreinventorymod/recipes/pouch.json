@@ -19,5 +19,6 @@
   ],
   "result": {
     "item": "moreinventorymod:pouch"
-  }
+  },
+  "show_notification": true
 }

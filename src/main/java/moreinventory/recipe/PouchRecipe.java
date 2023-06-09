@@ -2,6 +2,7 @@ package moreinventory.recipe;
 
 import moreinventory.inventory.PouchInventory;
 import moreinventory.item.PouchItem;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.DyeColor;
@@ -53,7 +54,7 @@ public class PouchRecipe extends CustomRecipe {
 
     //完成品を返す
     @Override
-    public ItemStack assemble(CraftingContainer inventory) {
+    public ItemStack assemble(CraftingContainer inventory, RegistryAccess ra) {
         var pouch = ItemStack.EMPTY;
         DyeColor dyeColor = null;
         int gradeUpCnt = 0;

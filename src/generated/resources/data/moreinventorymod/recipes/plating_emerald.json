@@ -19,5 +19,6 @@
   ],
   "result": {
     "item": "moreinventorymod:plating_emerald"
-  }
+  },
+  "show_notification": true
 }

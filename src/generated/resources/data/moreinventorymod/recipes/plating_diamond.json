@@ -19,5 +19,6 @@
   ],
   "result": {
     "item": "moreinventorymod:plating_diamond"
-  }
+  },
+  "show_notification": true
 }

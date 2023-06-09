@@ -7,9 +7,9 @@ import moreinventory.block.CatchallBlock;
 import moreinventory.blockentity.CatchallBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -52,7 +52,8 @@ public class CatchallRenderer implements BlockEntityRenderer<CatchallBlockEntity
                     matrixStackIn.mulPose(Axis.XP.rotationDegrees(90.0F));
                     matrixStackIn.mulPose(Axis.ZP.rotationDegrees(180.F));
                     matrixStackIn.scale(0.25F, 0.25F, 0.25F);
-                    Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, 0);
+                    Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemDisplayContext.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, blockEntityIn.getLevel(),
+                            0);
                     matrixStackIn.popPose();
                 }
             }

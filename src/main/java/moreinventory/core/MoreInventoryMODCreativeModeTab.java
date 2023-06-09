@@ -21,7 +21,7 @@ public class MoreInventoryMODCreativeModeTab {
                     MoreInventoryMODCreativeModeTab.MULTI_ENDER_CHEST_CREATIVE_TAB = builder
                             .title(Component.translatable("itemGroup." + MoreInventoryMOD.MOD_ID))
                             .icon(() -> new ItemStack(Blocks.CATCHALL.get()))
-                            .displayItems((fearture, output, hasPermissions) -> {
+                            .displayItems((fearture, output) -> {
                                 for (var block : Blocks.BLOCKS.getEntries()) {
                                     output.accept(block.get());
                                 }

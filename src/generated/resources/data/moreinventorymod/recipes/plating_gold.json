@@ -19,5 +19,6 @@
   ],
   "result": {
     "item": "moreinventorymod:plating_gold"
-  }
+  },
+  "show_notification": true
 }

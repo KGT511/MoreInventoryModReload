@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "moreinventorymod:transporter"
-  }
+  },
+  "show_notification": true
 }

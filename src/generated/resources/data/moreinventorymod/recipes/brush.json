@@ -17,5 +17,6 @@
   "result": {
     "count": 4,
     "item": "moreinventorymod:brush"
-  }
+  },
+  "show_notification": true
 }

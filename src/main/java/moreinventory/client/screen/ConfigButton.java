@@ -6,7 +6,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import moreinventory.core.MoreInventoryMOD;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
@@ -32,12 +31,10 @@ public class ConfigButton extends AbstractWidget {
     }
 
     @Override
-    public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partial) {
+    public void renderWidget(PoseStack poseStack, int mouseX, int mouseY, float partial) {
         if (visible) {
-            var minecraft = Minecraft.getInstance();
 
             RenderSystem.setShaderTexture(0, POUCH_GUI_TEXTURE);
-            //            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             var x = this.getX();
             var y = this.getY();
             this.setFocused(mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + this.height);
@@ -55,7 +52,7 @@ public class ConfigButton extends AbstractWidget {
             } else {
                 blit(poseStack, x, y, 232, 104, 16, 16);
             }
-            this.renderBg(poseStack, minecraft, mouseX, mouseY);
+            //            this.render(poseStack, mouseX, mouseY, partial);
         }
     }
 
