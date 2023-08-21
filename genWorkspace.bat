@@ -1,3 +1,4 @@
 @echo off
-gradlew --refresh-dependencies genEclipseRuns && gradlew eclipse
+gradlew genEclipseRuns && gradlew eclipse
+@REM gradlew --refresh-dependencies genEclipseRuns && gradlew eclipse
 pause
