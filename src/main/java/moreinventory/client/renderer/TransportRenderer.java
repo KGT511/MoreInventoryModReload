@@ -37,7 +37,7 @@ public class TransportRenderer implements BlockEntityRenderer<BaseTransportBlock
     private static final String outStr = "out";
 
     public TransportRenderer(Context context) {
-        ModelPart modelpart = context.bakeLayer(ModelLayers.TRANPORT);
+        ModelPart modelpart = context.bakeLayer(ModelLayers.TRANSPORTER);
         this.in1 = modelpart.getChild(in1Str);
         this.in2 = modelpart.getChild(in2Str);
         this.center = modelpart.getChild(centerStr);

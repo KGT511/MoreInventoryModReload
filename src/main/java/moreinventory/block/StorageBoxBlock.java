@@ -32,7 +32,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class StorageBoxBlock extends BaseEntityBlock {
@@ -40,7 +39,7 @@ public class StorageBoxBlock extends BaseEntityBlock {
     private StorageBoxType type;
 
     protected StorageBoxBlock(StorageBoxType typeIn) {
-        super(Properties.of(Material.METAL)
+        super(Properties.of()
                 .sound(SoundType.METAL)
                 .strength(2.0F, 10.0F)
                 .requiresCorrectToolForDrops()

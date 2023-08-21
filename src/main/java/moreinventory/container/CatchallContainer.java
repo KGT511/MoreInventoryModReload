@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class CatchallContainer extends AbstractContainerMenu {
     public static CatchallContainer createContainerClientSide(int windowID, Inventory playerInventory, FriendlyByteBuf extraData) {
-        var blockEntity = (CatchallBlockEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos());
+        var blockEntity = (CatchallBlockEntity) playerInventory.player.level().getBlockEntity(extraData.readBlockPos());
         return new CatchallContainer(windowID, playerInventory, blockEntity);
     }
 

@@ -30,7 +30,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -113,7 +112,7 @@ public class TransportBlock extends BaseEntityBlock {
             Block.box(10.0D, 6.0D, 6.0D, 11.0D, 10.0D, 10.0D));
 
     protected TransportBlock(boolean isImporterIn) {
-        super(Properties.of(Material.STONE)
+        super(Properties.of()
                 .sound(SoundType.STONE)
                 .strength(1.0f));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING_IN, Direction.DOWN).setValue(FACING_OUT, Direction.UP));

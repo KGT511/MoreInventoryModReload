@@ -1,13 +1,13 @@
 package moreinventory.util;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.item.ItemStack;
@@ -101,7 +101,7 @@ public final class MIMUtils {
             for (int i = 0; i < size; ++i) {
                 ItemStack item = inventory.getItem(i);
 
-                if (item != null && item.getItem() == itemstack.getItem() && itemstack.getDamageValue() == item.getDamageValue() && ItemStack.tagMatches(itemstack, item)) {
+                if (item != null && item.getItem() == itemstack.getItem() && itemstack.getDamageValue() == item.getDamageValue() && ItemStack.isSameItemSameTags(itemstack, item)) {
                     if (canAccessFromSide(inventory, i, side) && canInsertFromSide(inventory, itemstack, i, side)) {
                         int sum = item.getCount() + itemstack.getCount();
 
@@ -141,11 +141,12 @@ public final class MIMUtils {
         return success;
     }
 
-    public static void drawCenteredStringWithoutShadow(PoseStack poseStack, Font font, Component string, float x, float y, int color) {
-        font.draw(poseStack, string, x - font.width(string) / 2, y, color);
+    public static void drawCenteredStringWithoutShadow(GuiGraphics poseStack, Font font, Component string, int x, int y, int color) {
+        poseStack.drawWordWrap(font, FormattedText.of(string.getString()), x - font.width(string) / 2, y, 114, 0);
     }
 
-    public static void drawStringWithoutShadow(PoseStack poseStack, Font font, Component string, float x, float y, int color) {
-        font.draw(poseStack, string, x, y, color);
+    public static void drawStringWithoutShadow(GuiGraphics poseStack, Font font, Component string, int x, int y, int color) {
+        poseStack.drawString(font, string, x, y, color);
+
     }
 }

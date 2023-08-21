@@ -2,10 +2,8 @@ package moreinventory.client.screen;
 
 import java.util.function.BiConsumer;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import moreinventory.core.MoreInventoryMOD;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
@@ -31,26 +29,25 @@ public class ConfigButton extends AbstractWidget {
     }
 
     @Override
-    public void renderWidget(PoseStack poseStack, int mouseX, int mouseY, float partial) {
+    public void renderWidget(GuiGraphics poseStack, int mouseX, int mouseY, float partial) {
         if (visible) {
 
-            RenderSystem.setShaderTexture(0, POUCH_GUI_TEXTURE);
             var x = this.getX();
             var y = this.getY();
             this.setFocused(mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + this.height);
 
             if (this.val) {
-                blit(poseStack, x, y, 200, 104, 16, 16);
+                poseStack.blit(POUCH_GUI_TEXTURE, x, y, 200, 104, 16, 16);
             } else {
-                blit(poseStack, x, y, 184, 104, 16, 16);
+                poseStack.blit(POUCH_GUI_TEXTURE, x, y, 184, 104, 16, 16);
             }
 
-            blit(poseStack, x, y, this.iconIndexX, this.iconIndexY, 16, 16);
+            poseStack.blit(POUCH_GUI_TEXTURE, x, y, this.iconIndexX, this.iconIndexY, 16, 16);
 
             if (this.val) {
-                blit(poseStack, x, y, 216, 104, 16, 16);
+                poseStack.blit(POUCH_GUI_TEXTURE, x, y, 216, 104, 16, 16);
             } else {
-                blit(poseStack, x, y, 232, 104, 16, 16);
+                poseStack.blit(POUCH_GUI_TEXTURE, x, y, 232, 104, 16, 16);
             }
             //            this.render(poseStack, mouseX, mouseY, partial);
         }

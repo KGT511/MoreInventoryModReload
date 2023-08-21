@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 public class TransportContainer extends AbstractContainerMenu {
 
     public static TransportContainer createContainerClientSide(int windowID, Inventory playerInventory, FriendlyByteBuf extraData) {
-        var blockEntity = (BaseTransportBlockEntity) playerInventory.player.level.getBlockEntity(extraData.readBlockPos());
+        var blockEntity = (BaseTransportBlockEntity) playerInventory.player.level().getBlockEntity(extraData.readBlockPos());
         return new TransportContainer(windowID, playerInventory, blockEntity);
     }
 

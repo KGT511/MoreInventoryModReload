@@ -145,7 +145,7 @@ public class PouchInventory implements Container {
 
     @Override
     public boolean stillValid(Player player) {
-        return this.usingPouch.sameItem(player.getMainHandItem());
+        return this.usingPouch.is(player.getMainHandItem().getItem());
     }
 
     public void increaseGrade() {
@@ -171,8 +171,8 @@ public class PouchInventory implements Container {
     }
 
     public boolean isCollectableItem(ItemStack itemstack) {
-        for (ItemStack colletctableItemStack : this.getCollectableSlotItems())
-            if (itemstack.sameItem(colletctableItemStack))
+        for (var colletctableItemStack : this.getCollectableSlotItems())
+            if (ItemStack.isSameItem(itemstack, colletctableItemStack))
                 return true;
 
         return false;
@@ -299,7 +299,7 @@ public class PouchInventory implements Container {
             for (int i = 0; i < size; ++i) {
                 var item = inventory.getItem(i);
 
-                if (item != null && item.getItem() == itemstack.getItem() && itemstack.getDamageValue() == item.getDamageValue() && ItemStack.tagMatches(itemstack, item)) {
+                if (item != null && item.getItem() == itemstack.getItem() && itemstack.getDamageValue() == item.getDamageValue() && ItemStack.isSameItemSameTags(itemstack, item)) {
                     if (MIMUtils.canAccessFromSide(inventory, i, side) && MIMUtils.canInsertFromSide(inventory, itemstack, i, side)) {
                         int sum = item.getCount() + itemstack.getCount();
 

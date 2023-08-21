@@ -1,8 +1,5 @@
 package moreinventory.client.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import moreinventory.container.PouchContainer;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.data.lang.Text;
@@ -10,8 +7,8 @@ import moreinventory.inventory.PouchInventory;
 import moreinventory.network.ServerboundPouchUpdatePacket;
 import moreinventory.util.HoverChecker;
 import moreinventory.util.MIMUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -81,40 +78,38 @@ public class PouchContainerScreen extends AbstractContainerScreen<PouchContainer
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics poseStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(poseStack);
         super.render(poseStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(poseStack, mouseX, mouseY);
 
         if (this.isStorageBoxHoverChecker.checkHover(mouseX, mouseY))
-            this.renderTooltip(poseStack, Component.translatable(Text.pouchConfigStorageBox), mouseX, mouseY);
+            poseStack.renderTooltip(font, Component.translatable(Text.pouchConfigStorageBox), mouseX, mouseY);
         if (this.isHotBarHoverChecker.checkHover(mouseX, mouseY))
-            this.renderTooltip(poseStack, Component.translatable(Text.pouchConfigHotBar), mouseX, mouseY);
+            poseStack.renderTooltip(font, Component.translatable(Text.pouchConfigHotBar), mouseX, mouseY);
         if (this.isAutoCollectHoverChecker.checkHover(mouseX, mouseY))
-            this.renderTooltip(poseStack, Component.translatable(Text.pouchConfigAutoCollect), mouseX, mouseY);
+            poseStack.renderTooltip(font, Component.translatable(Text.pouchConfigAutoCollect), mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(PoseStack poseStack, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, POUCH_GUI_TEXTURE);
+    protected void renderBg(GuiGraphics poseStack, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        this.blit(poseStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        poseStack.blit(POUCH_GUI_TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
-        this.blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
-        this.blit(poseStack, this.leftPos + this.imageWidth, this.topPos + 3, this.imageWidth + 8, 0, 68, 20);
+        poseStack.blit(POUCH_GUI_TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+        poseStack.blit(POUCH_GUI_TEXTURE, this.leftPos + this.imageWidth, this.topPos + 3, this.imageWidth + 8, 0, 68, 20);
 
         for (int k = 0; k < this.grade; ++k) {
-            this.blit(poseStack, this.leftPos + this.imageWidth, this.topPos + 23 + k * 18, this.imageWidth + 8, 20, 68, 18);
+            poseStack.blit(POUCH_GUI_TEXTURE, this.leftPos + this.imageWidth, this.topPos + 23 + k * 18, this.imageWidth + 8, 20, 68, 18);
         }
 
-        this.blit(poseStack, this.leftPos + this.imageWidth, this.topPos + 23 + this.grade * 18, this.imageWidth + 8, 38, 68, 23);
-        this.blit(poseStack, this.leftPos + this.imageWidth + 1, this.topPos + 5, this.imageWidth + 8 + 48, 104 + 16, 16, 16);
+        poseStack.blit(POUCH_GUI_TEXTURE, this.leftPos + this.imageWidth, this.topPos + 23 + this.grade * 18, this.imageWidth + 8, 38, 68, 23);
+        poseStack.blit(POUCH_GUI_TEXTURE, this.leftPos + this.imageWidth + 1, this.topPos + 5, this.imageWidth + 8 + 48, 104 + 16, 16, 16);
     }
 
     @Override
-    protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
+    protected void renderLabels(GuiGraphics poseStack, int mouseX, int mouseY) {
         super.renderLabels(poseStack, mouseX, mouseY);
         MIMUtils.drawStringWithoutShadow(poseStack, this.font, Component.translatable(Text.pouchConfig), this.imageWidth + 18, 10, 4210752);
     }

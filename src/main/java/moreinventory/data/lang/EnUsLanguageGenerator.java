@@ -31,7 +31,7 @@ public class EnUsLanguageGenerator extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        add(MoreInventoryMODCreativeModeTab.MULTI_ENDER_CHEST_CREATIVE_TAB.getDisplayName().getString(), "MoreInventoryMOD");
+        add(MoreInventoryMODCreativeModeTab.MULTI_ENDER_CHEST_CREATIVE_TAB.get().getDisplayName().getString(), "MoreInventoryMOD");
 
         add(Blocks.CATCHALL.get(), "catchall");
         add(Items.TRANSPORTER.get(), "transporter");

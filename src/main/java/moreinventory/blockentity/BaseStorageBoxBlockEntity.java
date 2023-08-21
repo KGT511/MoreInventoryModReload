@@ -384,7 +384,7 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
 
         for (int i = storageItems.size() - 1; 0 <= i; i--) {
             var storedStack = storageItems.get(i);
-            if (!ItemStack.isSame(storedStack, contents)) {
+            if (!ItemStack.isSameItemSameTags(storedStack, contents)) {
                 continue;
             }
 

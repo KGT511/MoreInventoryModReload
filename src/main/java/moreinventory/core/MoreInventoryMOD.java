@@ -65,6 +65,7 @@ public class MoreInventoryMOD {
         BlockEntities.register(eventBus);
         Containers.register(eventBus);
         Recipes.register(eventBus);
+        MoreInventoryMODCreativeModeTab.register(eventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -87,12 +88,12 @@ public class MoreInventoryMOD {
         CHANNEL.messageBuilder(ServerboundImporterUpdatePacket.class, id++)
                 .encoder(ServerboundImporterUpdatePacket::encode)
                 .decoder(ServerboundImporterUpdatePacket::decode)
-                .consumer(ServerboundImporterUpdatePacket::handle)
+                .consumerMainThread(ServerboundImporterUpdatePacket::handle)
                 .add();
         CHANNEL.messageBuilder(ServerboundPouchUpdatePacket.class, id++)
                 .encoder(ServerboundPouchUpdatePacket::encode)
                 .decoder(ServerboundPouchUpdatePacket::decode)
-                .consumer(ServerboundPouchUpdatePacket::handle)
+                .consumerMainThread(ServerboundPouchUpdatePacket::handle)
                 .add();
     }
 
@@ -119,7 +120,7 @@ public class MoreInventoryMOD {
         MenuScreens.register(Containers.TRANSPORT_CONTAINER_TYPE.get(), TransportContainerScreen::new);
         MenuScreens.register(Containers.POUCH_CONTAINER_TYPE.get(), PouchContainerScreen::new);
 
-        ForgeHooksClient.registerLayerDefinition(ModelLayers.TRANPORT, TransportRenderer::createBodyLayer);
+        ForgeHooksClient.registerLayerDefinition(ModelLayers.TRANSPORTER, TransportRenderer::createBodyLayer);
     }
 
     @SubscribeEvent

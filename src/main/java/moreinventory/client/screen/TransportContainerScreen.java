@@ -1,17 +1,14 @@
 package moreinventory.client.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import moreinventory.blockentity.ImporterBlockEntity;
 import moreinventory.container.TransportContainer;
 import moreinventory.core.MoreInventoryMOD;
 import moreinventory.data.lang.Text;
 import moreinventory.network.ServerboundImporterUpdatePacket;
 import moreinventory.util.MIMUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -50,7 +47,7 @@ public class TransportContainerScreen extends AbstractContainerScreen<TransportC
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics poseStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(poseStack);
         super.render(poseStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(poseStack, mouseX, mouseY);
@@ -65,10 +62,10 @@ public class TransportContainerScreen extends AbstractContainerScreen<TransportC
             var isWhite = importerBlockEntity.getIswhite();
             var registerTxt = Component.translatable(isRegister ? Text.importerRegisterOn : Text.importerRegisterOff);
             var moveTxt = Component.translatable(isWhite ? Text.importerMoveWhite : Text.importerMoveBlack);
-            drawCenteredString(poseStack, this.font, registerTxt, 30 + xOffset, 40 + yOffset, 14737632);
-            drawCenteredString(poseStack, this.font, moveTxt, imageWidth - 30 + xOffset, 40 + yOffset, 14737632);
-            this.drawCenteredStringWithoutShadow(poseStack, Component.translatable(Text.importerMove), imageWidth - 30 + xOffset, 20 + yOffset, 328965);
-            this.drawCenteredStringWithoutShadow(poseStack, Component.translatable(Text.importerRegister), 30 + xOffset, 20 + yOffset, 328965);
+            poseStack.drawCenteredString(this.font, registerTxt, 30 + xOffset, 40 + yOffset, 14737632);
+            poseStack.drawCenteredString(this.font, moveTxt, imageWidth - 30 + xOffset, 40 + yOffset, 14737632);
+            MIMUtils.drawCenteredStringWithoutShadow(poseStack, font, Component.translatable(Text.importerMove), imageWidth - 30 + xOffset, 20 + yOffset, 328965);
+            MIMUtils.drawCenteredStringWithoutShadow(poseStack, font, Component.translatable(Text.importerRegister), 30 + xOffset, 20 + yOffset, 328965);
             isWhiteButton.onValueUpdate(importerBlockEntity);
             isRegisterButton.onValueUpdate(importerBlockEntity);
 
@@ -76,16 +73,14 @@ public class TransportContainerScreen extends AbstractContainerScreen<TransportC
     }
 
     @Override
-    protected void renderBg(PoseStack poseStack, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, DISPENSER_GUI_TEXTURE);
+    protected void renderBg(GuiGraphics poseStack, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        this.blit(poseStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        poseStack.blit(DISPENSER_GUI_TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
     }
 
     @Override
-    protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
+    protected void renderLabels(GuiGraphics poseStack, int mouseX, int mouseY) {
         super.renderLabels(poseStack, mouseX, mouseY);
         if (this.menu.getBlockEntity() instanceof ImporterBlockEntity) {
 
@@ -95,10 +90,6 @@ public class TransportContainerScreen extends AbstractContainerScreen<TransportC
             //                        this.isWhiteButton.renderToolTip(poseStack, mouseX, mouseY);
 
         }
-    }
-
-    private void drawCenteredStringWithoutShadow(PoseStack poseStack, Component string, float x, float y, int color) {
-        this.font.draw(poseStack, string, x - this.font.width(string) / 2, y, color);
     }
 
     @OnlyIn(Dist.CLIENT)

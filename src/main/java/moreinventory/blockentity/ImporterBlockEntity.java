@@ -93,7 +93,7 @@ public class ImporterBlockEntity extends BaseTransportBlockEntity {
         boolean result = !isWhite;
 
         for (ItemStack itemstack1 : this.slotItems) {
-            if (ItemStack.isSame(itemstack1, itemstack)) {
+            if (ItemStack.isSameItemSameTags(itemstack1, itemstack)) {
                 result = isWhite;
             }
         }
