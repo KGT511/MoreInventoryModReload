@@ -41,5 +41,6 @@
     "recipes": [
       "moreinventorymod:brush"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

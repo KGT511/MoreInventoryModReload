@@ -16,5 +16,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "moreinventorymod:blocks/storage_box_wood"
 }

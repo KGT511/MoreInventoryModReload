@@ -43,5 +43,6 @@
     "recipes": [
       "moreinventorymod:pouch"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

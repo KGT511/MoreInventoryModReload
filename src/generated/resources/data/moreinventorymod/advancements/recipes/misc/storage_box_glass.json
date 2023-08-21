@@ -43,5 +43,6 @@
     "recipes": [
       "moreinventorymod:storage_box_glass"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

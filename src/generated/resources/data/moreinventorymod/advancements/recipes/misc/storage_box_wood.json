@@ -28,5 +28,6 @@
     "recipes": [
       "moreinventorymod:storage_box_wood"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }
