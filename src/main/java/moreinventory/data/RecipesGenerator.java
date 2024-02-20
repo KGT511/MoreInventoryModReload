@@ -1,12 +1,10 @@
 package moreinventory.data;
 
-import java.util.function.Consumer;
-
 import moreinventory.block.Blocks;
 import moreinventory.recipe.Recipes;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.SpecialRecipeBuilder;
@@ -25,7 +23,7 @@ public class RecipesGenerator extends RecipeProvider {
     }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
+    protected void buildRecipes(RecipeOutput consumer) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Blocks.CATCHALL.get())
                 .pattern("P P")
                 .pattern("PCP")
@@ -147,15 +145,15 @@ public class RecipesGenerator extends RecipeProvider {
         //        registerPlatingRecipe(consumer, moreinventory.item.Items.STEEL_PLATING.get(), Items.IRON_INGOT);
     }
 
-    private void registerStorageBoxRecipe(Consumer<FinishedRecipe> consumer, Block block, TagKey<Item> material) {
+    private void registerStorageBoxRecipe(RecipeOutput consumer, Block block, TagKey<Item> material) {
         registerStorageBoxRecipe(consumer, block, Ingredient.of(material));
     }
 
-    private void registerStorageBoxRecipe(Consumer<FinishedRecipe> consumer, Block block, ItemLike material) {
+    private void registerStorageBoxRecipe(RecipeOutput consumer, Block block, ItemLike material) {
         registerStorageBoxRecipe(consumer, block, Ingredient.of(material));
     }
 
-    private void registerStorageBoxRecipe(Consumer<FinishedRecipe> consumer, Block block, Ingredient material) {
+    private void registerStorageBoxRecipe(RecipeOutput consumer, Block block, Ingredient material) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, block, 3)
                 .pattern("MSM")
                 .pattern("MWM")
@@ -167,16 +165,16 @@ public class RecipesGenerator extends RecipeProvider {
                 .save(consumer);
     }
 
-    private void registerPlatingRecipe(Consumer<FinishedRecipe> consumer, Item item, TagKey<Item> material) {
+    private void registerPlatingRecipe(RecipeOutput consumer, Item item, TagKey<Item> material) {
         registerPlatinfRecipe(consumer, item, Ingredient.of(material));
 
     }
 
-    private void registerPlatingRecipe(Consumer<FinishedRecipe> consumer, Item item, ItemLike material) {
+    private void registerPlatingRecipe(RecipeOutput consumer, Item item, ItemLike material) {
         registerPlatinfRecipe(consumer, item, Ingredient.of(material));
     }
 
-    private void registerPlatinfRecipe(Consumer<FinishedRecipe> consumer, Item item, Ingredient material) {
+    private void registerPlatinfRecipe(RecipeOutput consumer, Item item, Ingredient material) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, item)
                 .pattern("IIM")
                 .pattern("B  ")
@@ -187,4 +185,5 @@ public class RecipesGenerator extends RecipeProvider {
                 .unlockedBy("has_brush", has(moreinventory.item.Items.BRUSH.get()))
                 .save(consumer);
     }
+
 }
