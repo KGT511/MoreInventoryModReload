@@ -28,7 +28,6 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
 
 public class CatchallBlock extends BaseEntityBlock {
 
@@ -72,7 +71,7 @@ public class CatchallBlock extends BaseEntityBlock {
             var namedContainerProvider = this.getMenuProvider(state, level, pos);
             if (namedContainerProvider != null) {
                 var serverPlayerEntity = (ServerPlayer) player;
-                NetworkHooks.openScreen(serverPlayerEntity, namedContainerProvider,
+                serverPlayerEntity.openMenu(namedContainerProvider,
                         (packetBuffer -> {
                             packetBuffer.writeBlockPos(pos);
                         }));

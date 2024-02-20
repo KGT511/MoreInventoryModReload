@@ -1,11 +1,9 @@
 package moreinventory.network;
 
-import java.util.function.Supplier;
-
 import moreinventory.inventory.PouchInventory;
 import moreinventory.item.PouchItem;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public class ServerboundPouchUpdatePacket {
     private int id;
@@ -33,9 +31,9 @@ public class ServerboundPouchUpdatePacket {
         buffer.writeInt(msg.val);
     }
 
-    public static void handle(ServerboundPouchUpdatePacket msg, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            var player = ctx.get().getSender();
+    public static void handle(ServerboundPouchUpdatePacket msg, CustomPayloadEvent.Context ctx) {
+        ctx.enqueueWork(() -> {
+            var player = ctx.getSender();
             var itemStack = player.getMainHandItem();
             if (itemStack != null && itemStack.getItem() instanceof PouchItem) {
                 var pouch_ = new PouchInventory(player, itemStack);
@@ -43,6 +41,6 @@ public class ServerboundPouchUpdatePacket {
             }
         });
 
-        ctx.get().setPacketHandled(true);
+        ctx.setPacketHandled(true);
     }
 }

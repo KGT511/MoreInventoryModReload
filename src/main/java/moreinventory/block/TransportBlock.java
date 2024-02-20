@@ -34,7 +34,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
 
 public class TransportBlock extends BaseEntityBlock {
 
@@ -137,7 +136,7 @@ public class TransportBlock extends BaseEntityBlock {
             var menuProvider = this.getMenuProvider(state, level, pos);
             if (menuProvider != null) {
                 var serverPlayerEntity = (ServerPlayer) player;
-                NetworkHooks.openScreen(serverPlayerEntity, menuProvider, level.getBlockEntity(pos).getBlockPos());
+                serverPlayerEntity.openMenu(menuProvider, level.getBlockEntity(pos).getBlockPos());
             }
         } else if (player.getMainHandItem().isEmpty()) {
             if (state.getBlock() instanceof TransportBlock) {

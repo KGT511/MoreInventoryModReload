@@ -45,7 +45,7 @@ public class MoreInventoryMOD {
     private static final Logger LOGGER = LogManager.getLogger();
     //    public static final SimpleNetworkWrapper network = new SimpleNetworkWrapper(MOD_ID);
     private static final String PROTOCOL_VERSION = "1";
-    public static final SimpleChannel CHANNEL = ChannelBuilder.named(new ResourceLocation(MODID, "main")).simpleChannel();
+    public static final SimpleChannel CHANNEL = ChannelBuilder.named(new ResourceLocation(MOD_ID, "main")).simpleChannel();
 
     public MoreInventoryMOD() {
         initNetwork();

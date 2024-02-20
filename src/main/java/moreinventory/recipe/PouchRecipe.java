@@ -3,7 +3,6 @@ package moreinventory.recipe;
 import moreinventory.inventory.PouchInventory;
 import moreinventory.item.PouchItem;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
@@ -16,8 +15,8 @@ import net.minecraft.world.level.Level;
 
 public class PouchRecipe extends CustomRecipe {
 
-    public PouchRecipe(ResourceLocation resource, CraftingBookCategory category) {
-        super(resource, category);
+    public PouchRecipe(CraftingBookCategory category) {
+        super(category);
     }
 
     //染料と色変え可能なアイテムが1つずつあるかチェック
