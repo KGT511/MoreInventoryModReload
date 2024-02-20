@@ -6,6 +6,7 @@ import moreinventory.core.MoreInventoryMOD;
 import moreinventory.data.lang.Text;
 import moreinventory.network.ServerboundImporterUpdatePacket;
 import moreinventory.util.MIMUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -48,7 +49,7 @@ public class TransportContainerScreen extends AbstractContainerScreen<TransportC
 
     @Override
     public void render(GuiGraphics poseStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(poseStack);
+        this.renderBackground(poseStack, mouseX, mouseY, partialTicks);
         super.render(poseStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(poseStack, mouseX, mouseY);
 
@@ -100,7 +101,7 @@ public class TransportContainerScreen extends AbstractContainerScreen<TransportC
 
         protected Button(int x, int y, Component trueDisplayTxt, Component falseDisplayTxt, BlockPos blockPos, int id) {
             super(x, y, 53, 20, Component.empty(), (p) -> {
-                MoreInventoryMOD.CHANNEL.sendToServer(new ServerboundImporterUpdatePacket(blockPos, id));
+                MoreInventoryMOD.CHANNEL.send(new ServerboundImporterUpdatePacket(blockPos, id), Minecraft.getInstance().getConnection().getConnection());
             });
             this.trueTxt = trueDisplayTxt;
             this.falseTxt = falseDisplayTxt;

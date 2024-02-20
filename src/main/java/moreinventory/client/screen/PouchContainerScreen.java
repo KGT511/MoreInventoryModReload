@@ -7,6 +7,7 @@ import moreinventory.inventory.PouchInventory;
 import moreinventory.network.ServerboundPouchUpdatePacket;
 import moreinventory.util.HoverChecker;
 import moreinventory.util.MIMUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -43,7 +44,7 @@ public class PouchContainerScreen extends AbstractContainerScreen<PouchContainer
         this.isStorageBoxButton = new ConfigButton(PouchInventory.Val.STORAGE_BOX.ordinal(),
                 0, 0, 16, 16, 184, 120, inventory.getIsStorageBox(), Component.empty(),
                 (id, val) -> {
-                    MoreInventoryMOD.CHANNEL.sendToServer(new ServerboundPouchUpdatePacket(id, val));
+                    MoreInventoryMOD.CHANNEL.send(new ServerboundPouchUpdatePacket(id, val), Minecraft.getInstance().getConnection().getConnection());
                 });
         this.isStorageBoxButton.setX(this.leftPos + this.imageWidth + 6);
         this.isStorageBoxButton.setY(this.topPos + 25 + this.grade * 18);
@@ -51,7 +52,7 @@ public class PouchContainerScreen extends AbstractContainerScreen<PouchContainer
         this.isHotBarButton = new ConfigButton(PouchInventory.Val.HOT_BAR.ordinal(),
                 0, 0, 16, 16, 200, 120, inventory.getIsHotBar(), Component.empty(),
                 (id, val) -> {
-                    MoreInventoryMOD.CHANNEL.sendToServer(new ServerboundPouchUpdatePacket(id, val));
+                    MoreInventoryMOD.CHANNEL.send(new ServerboundPouchUpdatePacket(id, val), Minecraft.getInstance().getConnection().getConnection());
                 });
         this.isHotBarButton.setX(this.leftPos + this.imageWidth + 24);
         this.isHotBarButton.setY(this.isStorageBoxButton.getY());
@@ -59,7 +60,7 @@ public class PouchContainerScreen extends AbstractContainerScreen<PouchContainer
         this.isAutoCollectButton = new ConfigButton(PouchInventory.Val.AUTO_COLLECT.ordinal(),
                 0, 0, 16, 16, 216, 120, inventory.getIsAUtoCollect(), Component.empty(),
                 (id, val) -> {
-                    MoreInventoryMOD.CHANNEL.sendToServer(new ServerboundPouchUpdatePacket(id, val));
+                    MoreInventoryMOD.CHANNEL.send(new ServerboundPouchUpdatePacket(id, val), Minecraft.getInstance().getConnection().getConnection());
                 });
         this.isAutoCollectButton.setX(this.leftPos + this.imageWidth + 42);
         this.isAutoCollectButton.setY(this.isStorageBoxButton.getY());
@@ -79,7 +80,7 @@ public class PouchContainerScreen extends AbstractContainerScreen<PouchContainer
 
     @Override
     public void render(GuiGraphics poseStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(poseStack);
+        this.renderBackground(poseStack, mouseX, mouseY, partialTicks);
         super.render(poseStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(poseStack, mouseX, mouseY);
 
