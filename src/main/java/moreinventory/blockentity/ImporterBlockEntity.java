@@ -125,10 +125,12 @@ public class ImporterBlockEntity extends BaseTransportBlockEntity {
 
     private void setIsRegister(boolean val) {
         this.register = val;
+        this.setChanged();
     }
 
     private void setIsWhite(boolean val) {
         this.isWhite = val;
+        this.setChanged();
     }
 
     public void setValByID(int id, int val) {
