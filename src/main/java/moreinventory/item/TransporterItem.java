@@ -262,8 +262,7 @@ public class TransporterItem extends Item {
                 return false;
             }
 
-            var tag = itemStack.get(DataComponents.CUSTOM_DATA).copyTag();
-            //            var tag = (CompoundTag) itemStack.saveOptional(provider);
+            var tag = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
             tag.putInt("x", blockEntity.getBlockPos().getX());
             tag.putInt("y", blockEntity.getBlockPos().getY());
             tag.putInt("z", blockEntity.getBlockPos().getZ());
