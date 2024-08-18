@@ -116,8 +116,10 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
 
         compound.putString(tagKeyTypeName, this.type.name());
         MIMUtils.writeNonNullListShort(compound, this.storageItems, provider, true);
-        var tag = contents.save(provider);
-        compound.put(tagKeyContents, tag);
+        if (!contents.isEmpty()) {
+            var tag = contents.save(provider);
+            compound.put(tagKeyContents, tag);
+        }
     }
 
     @Override

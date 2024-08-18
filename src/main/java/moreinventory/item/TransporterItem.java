@@ -99,7 +99,7 @@ public class TransporterItem extends Item {
 
         var provider = level.registryAccess();
         var itemStack = context.getItemInHand();
-        if (itemStack.get(DataComponents.CUSTOM_DATA).contains(tagKey)) {
+        if (itemStack.has(DataComponents.CUSTOM_DATA) && itemStack.get(DataComponents.CUSTOM_DATA).contains(tagKey)) {
             var nbt = itemStack.get(DataComponents.CUSTOM_DATA);
 
             if (nbt == null) {
@@ -110,11 +110,12 @@ public class TransporterItem extends Item {
             if (containerBlock.isEmpty()) {
                 return InteractionResult.PASS;
             }
-            int damage = itemStack.getDamageValue() + 1;
             if (this.placeBlock(context, containerBlock, provider)) {
                 var player = context.getPlayer();
 
-                itemStack.hurtAndBreak(damage, player, EquipmentSlot.MAINHAND);
+                itemStack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
+
+                return InteractionResult.PASS;
             }
         }
 
@@ -124,7 +125,7 @@ public class TransporterItem extends Item {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
-        if (stack.has(DataComponents.CUSTOM_DATA)) {
+        if (!stack.has(DataComponents.CUSTOM_DATA)) {
             return;
         }
         var contents = stack.get(DataComponents.CUSTOM_DATA).copyTag().getCompound(tagKey);
@@ -189,12 +190,12 @@ public class TransporterItem extends Item {
         var blockState = level.getBlockState(blockPos);
 
         var blockEntity = level.getBlockEntity(blockPos);
-        if (blockEntity == null || !(blockEntity instanceof Container) || itemStack.get(DataComponents.CUSTOM_DATA).copyTag().contains(tagKey)) {
+        if (blockEntity == null || !(blockEntity instanceof Container) || itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().contains(tagKey)) {
             return false;
         }
 
         if (blockEntity != null && checkMatryoshka((Container) blockEntity)) {
-            var nbt = itemStack.get(DataComponents.CUSTOM_DATA).copyTag();
+            var nbt = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
             var blockEntityTag = blockEntity.saveWithFullMetadata(provider);
             nbt.merge(blockEntityTag);
 
@@ -261,8 +262,8 @@ public class TransporterItem extends Item {
                 return false;
             }
 
-            var customData = itemStack.get(DataComponents.CUSTOM_DATA);
-            var tag = (CompoundTag) itemStack.saveOptional(provider);
+            var tag = itemStack.get(DataComponents.CUSTOM_DATA).copyTag();
+            //            var tag = (CompoundTag) itemStack.saveOptional(provider);
             tag.putInt("x", blockEntity.getBlockPos().getX());
             tag.putInt("y", blockEntity.getBlockPos().getY());
             tag.putInt("z", blockEntity.getBlockPos().getZ());
@@ -271,6 +272,11 @@ public class TransporterItem extends Item {
             block.setPlacedBy(level, blockEntity.getBlockPos(), blockEntity.getBlockState(), context.getPlayer(), containerBlock);
             blockEntity.setChanged();
             itemStack.remove(DataComponents.CUSTOM_DATA);
+            itemStack.remove(DataComponents.CUSTOM_MODEL_DATA);
+
+            var worldPosition = blockEntity.getBlockPos();
+            var newState = level.getBlockState(worldPosition);
+            level.sendBlockUpdated(worldPosition, blockEntity.getBlockState(), newState, 0);
             return true;
         }
         return false;
