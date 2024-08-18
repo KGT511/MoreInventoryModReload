@@ -8,6 +8,7 @@ import moreinventory.item.PouchItem;
 import moreinventory.util.MIMUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -41,10 +42,12 @@ public class PouchInventory implements Container {
 
     public Component customName;
 
+    private Provider provider;//TODO
+
     public PouchInventory(Player player, ItemStack itemStack) {
         this.usingPouch = itemStack;
         this.customName = itemStack.getDisplayName();
-        this.readToNBT(this.usingPouch.getOrCreateTag());
+        this.readToNBT((CompoundTag) this.usingPouch.saveOptional(this.provider));
     }
 
     public PouchInventory(ItemStack itemStack) {
@@ -57,7 +60,7 @@ public class PouchInventory implements Container {
                 return;
             }
             this.slotItems = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-            ContainerHelper.loadAllItems(nbt, this.slotItems);
+            ContainerHelper.loadAllItems(nbt, this.slotItems, this.provider);
             this.isStorageBox = (nbt.contains(isStorageBoxTagKey) ? nbt.getBoolean(isStorageBoxTagKey) : this.isStorageBox);
             this.isHotBar = (nbt.contains(isHotBarTagKey) ? nbt.getBoolean(isHotBarTagKey) : this.isHotBar);
             this.isAutoCollect = (nbt.contains(isAutoCollectTagKey) ? nbt.getBoolean(isAutoCollectTagKey) : this.isAutoCollect);
@@ -71,17 +74,21 @@ public class PouchInventory implements Container {
     }
 
     public void writeItemsToNBT() {
-        this.writeItemsToNBT(this.usingPouch.getOrCreateTag());
+        var tag = (CompoundTag) this.usingPouch.saveOptional(this.provider);
+        this.writeItemsToNBT(tag);
+        this.usingPouch = ItemStack.parseOptional(this.provider, tag);
     }
 
     public void writeItemsToNBT(CompoundTag nbt) {
         if (this.usingPouch != null) {
-            ContainerHelper.saveAllItems(nbt, this.slotItems);
+            ContainerHelper.saveAllItems(nbt, this.slotItems, this.provider);
         }
     }
 
     public void writeValsToNBT() {
-        this.writeValsToNBT(this.usingPouch.getOrCreateTag());
+        var tag = (CompoundTag) this.usingPouch.saveOptional(this.provider);
+        this.writeValsToNBT(tag);
+        this.usingPouch = ItemStack.parseOptional(this.provider, tag);
     }
 
     public void writeValsToNBT(CompoundTag nbt) {
@@ -131,7 +138,7 @@ public class PouchInventory implements Container {
 
     @Override
     public void startOpen(Player player) {
-        this.readToNBT(this.usingPouch.getOrCreateTag());
+        this.readToNBT((CompoundTag) this.usingPouch.saveOptional(this.provider));
     }
 
     @Override
@@ -299,7 +306,7 @@ public class PouchInventory implements Container {
             for (int i = 0; i < size; ++i) {
                 var item = inventory.getItem(i);
 
-                if (item != null && item.getItem() == itemstack.getItem() && itemstack.getDamageValue() == item.getDamageValue() && ItemStack.isSameItemSameTags(itemstack, item)) {
+                if (item != null && item.getItem() == itemstack.getItem() && itemstack.getDamageValue() == item.getDamageValue() && ItemStack.isSameItemSameComponents(itemstack, item)) {
                     if (MIMUtils.canAccessFromSide(inventory, i, side) && MIMUtils.canInsertFromSide(inventory, itemstack, i, side)) {
                         int sum = item.getCount() + itemstack.getCount();
 

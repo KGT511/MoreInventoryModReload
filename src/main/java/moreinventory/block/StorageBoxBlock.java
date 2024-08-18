@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.annotation.Nullable;
 
+import com.mojang.serialization.MapCodec;
+
 import moreinventory.blockentity.BaseStorageBoxBlockEntity;
 import moreinventory.storagebox.StorageBox;
 import moreinventory.storagebox.StorageBoxType;
@@ -11,7 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -37,6 +38,9 @@ import net.minecraft.world.phys.BlockHitResult;
 public class StorageBoxBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     private StorageBoxType type;
+
+    //codec
+    public static final MapCodec<StorageBoxBlock> CODEC = simpleCodec((props) -> new StorageBoxBlock(StorageBoxType.WOOD));
 
     protected StorageBoxBlock(StorageBoxType typeIn) {
         super(Properties.of()
@@ -79,7 +83,7 @@ public class StorageBoxBlock extends BaseEntityBlock {
 
     @Override
     //right click
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (level.isClientSide)
             return InteractionResult.SUCCESS;
 
@@ -143,6 +147,11 @@ public class StorageBoxBlock extends BaseEntityBlock {
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
         return level.isClientSide ? null : createTickerHelper(blockEntityType, StorageBox.storageBoxMap.get(type).blockEntity, BaseStorageBoxBlockEntity::tickFunc);
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
 }

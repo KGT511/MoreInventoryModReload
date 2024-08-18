@@ -2,6 +2,8 @@ package moreinventory.block;
 
 import javax.annotation.Nullable;
 
+import com.mojang.serialization.MapCodec;
+
 import moreinventory.blockentity.BaseTransportBlockEntity;
 import moreinventory.blockentity.BlockEntities;
 import moreinventory.blockentity.ExporterBlockEntity;
@@ -10,7 +12,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -110,6 +111,9 @@ public class TransportBlock extends BaseEntityBlock {
             Block.box(11.0D, 5.0D, 5.0D, 12.0D, 11.0D, 11.0D),
             Block.box(10.0D, 6.0D, 6.0D, 11.0D, 10.0D, 10.0D));
 
+    //codec
+    public static final MapCodec<TransportBlock> CODEC = simpleCodec((props) -> new TransportBlock(false));
+
     protected TransportBlock(boolean isImporterIn) {
         super(Properties.of()
                 .sound(SoundType.STONE)
@@ -128,7 +132,7 @@ public class TransportBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         }
@@ -278,6 +282,11 @@ public class TransportBlock extends BaseEntityBlock {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
         var blockEntity = isImporter ? BlockEntities.IMPORTER_BLOCK_ENTITY_TYPE : BlockEntities.EXPORTER_BLOCK_ENTITY_TYPE;
         return level.isClientSide ? null : createTickerHelper(blockEntityType, blockEntity.get(), BaseTransportBlockEntity::tickFunc);
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 
 }

@@ -14,7 +14,9 @@ import moreinventory.storagebox.StorageBoxType;
 import moreinventory.util.MIMUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
@@ -92,14 +94,14 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag nbt, Provider provider) {
+        super.loadAdditional(nbt, provider);
 
         this.type = StorageBoxType.valueOf(nbt.getString(tagKeyTypeName));
         this.storageItems = NonNullList.withSize(getStorageStackSize(type), ItemStack.EMPTY);
-        MIMUtils.readNonNullListShort(nbt, this.storageItems);
+        MIMUtils.readNonNullListShort(nbt, this.storageItems, provider);
         var contentsNBT = nbt.getCompound(tagKeyContents);
-        var tmp = ItemStack.of(contentsNBT);
+        var tmp = ItemStack.parseOptional(provider, contentsNBT);
         if (tmp.getItem() == ItemStack.EMPTY.getItem() && tmp.getCount() == ItemStack.EMPTY.getCount()) {
             this.contents = ItemStack.EMPTY;
         } else {
@@ -109,14 +111,13 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound) {
-        super.saveAdditional(compound);
+    protected void saveAdditional(CompoundTag compound, Provider provider) {
+        super.saveAdditional(compound, provider);
 
         compound.putString(tagKeyTypeName, this.type.name());
-        MIMUtils.writeNonNullListShort(compound, this.storageItems, true);
-        var nbt = new CompoundTag();
-        contents.save(nbt);
-        compound.put(tagKeyContents, nbt);
+        MIMUtils.writeNonNullListShort(compound, this.storageItems, provider, true);
+        var tag = contents.save(provider);
+        compound.put(tagKeyContents, tag);
     }
 
     @Override
@@ -145,20 +146,20 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        this.load(pkt.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, Provider provider) {
+        this.loadAdditional(pkt.getTag(), provider);
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(Provider provider) {
         CompoundTag compoundtag = new CompoundTag();
-        this.saveAdditional(compoundtag);
+        this.saveAdditional(compoundtag, provider);
         return compoundtag;
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag tag) {
-        this.load(tag);
+    public void handleUpdateTag(CompoundTag tag, Provider provider) {
+        this.loadAdditional(tag, provider);
     }
 
     @Override
@@ -215,7 +216,7 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
     }
 
     public boolean registerItems(ItemStack stack) {
-        if (stack.getTag() != null && stack.getTag().contains("Items")) {
+        if (stack.has(DataComponents.CUSTOM_DATA) && stack.get(DataComponents.CUSTOM_DATA).contains("Items")) {
             return false;
         }
         if (!hasContents() && stack.getItem() != ItemStack.EMPTY.getItem()) {
@@ -243,7 +244,7 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
 
         for (int i = 0; i < this.getContainerSize(); ++i) {
             var slotItem = this.getItem(i);
-            if (ItemStack.isSameItemSameTags(stack, slotItem)) {
+            if (ItemStack.isSameItemSameComponents(stack, slotItem)) {
                 //airじゃないスタックに追加
                 if (slotItem.getCount() == slotItem.getMaxStackSize()) {
                     continue;
@@ -278,7 +279,7 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
         if (this.level.getBlockEntity(this.worldPosition) == null)
             return false;
 
-        boolean result = ItemStack.isSameItemSameTags(this.getContents(), stack) && mergeItemStack(stack);
+        boolean result = ItemStack.isSameItemSameComponents(this.getContents(), stack) && mergeItemStack(stack);
         var newState = this.level.getBlockState(this.worldPosition);
         this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), newState, 0);
         return result;
@@ -384,7 +385,7 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
 
         for (int i = storageItems.size() - 1; 0 <= i; i--) {
             var storedStack = storageItems.get(i);
-            if (!ItemStack.isSameItemSameTags(storedStack, contents)) {
+            if (!ItemStack.isSameItemSameComponents(storedStack, contents)) {
                 continue;
             }
 

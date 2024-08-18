@@ -6,6 +6,7 @@ import moreinventory.blockentity.storagebox.network.IStorageBoxNetwork;
 import moreinventory.container.TransportContainer;
 import moreinventory.util.MIMUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -31,15 +32,15 @@ public class ImporterBlockEntity extends BaseTransportBlockEntity {
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(CompoundTag nbt, Provider provider) {
+        super.loadAdditional(nbt, provider);
         this.register = nbt.getBoolean(registerKey);
         this.isWhite = nbt.getBoolean(isWhiteKey);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound) {
-        super.saveAdditional(compound);
+    protected void saveAdditional(CompoundTag compound, Provider provider) {
+        super.saveAdditional(compound, provider);
         compound.putBoolean(registerKey, this.register);
         compound.putBoolean(isWhiteKey, this.isWhite);
     }
@@ -93,7 +94,7 @@ public class ImporterBlockEntity extends BaseTransportBlockEntity {
         boolean result = !isWhite;
 
         for (ItemStack itemstack1 : this.slotItems) {
-            if (ItemStack.isSameItemSameTags(itemstack1, itemstack)) {
+            if (ItemStack.isSameItemSameComponents(itemstack1, itemstack)) {
                 result = isWhite;
             }
         }

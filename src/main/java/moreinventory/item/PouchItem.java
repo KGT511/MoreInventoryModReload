@@ -108,11 +108,10 @@ public class PouchItem extends Item {
     public static ItemStack setColor(ItemStack itemStack, int color) {
         if (!(itemStack.getItem() instanceof PouchItem))
             return itemStack;
-        var tag = itemStack.getOrCreateTag();
+        var tag = itemStack.getComponents();
         var newPouch = (color == 0 ? Items.POUCH.get() : byColor(DyeColor.byId(color - 1)));
         itemStack = new ItemStack(newPouch);
-        itemStack.setTag(tag);
-
+        itemStack.applyComponents(tag);
         return itemStack;
     }
 

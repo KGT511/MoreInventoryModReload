@@ -1,12 +1,13 @@
 package moreinventory.block;
 
+import com.mojang.serialization.MapCodec;
+
 import moreinventory.blockentity.CatchallBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -37,6 +38,9 @@ public class CatchallBlock extends BaseEntityBlock {
     protected static final VoxelShape renderShape = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
     protected static final VoxelShape shape = Shapes.join(renderShape, insideShape, BooleanOp.ONLY_FIRST);
 
+    //codec
+    public static final MapCodec<CatchallBlock> CODEC = simpleCodec((props) -> new CatchallBlock());
+
     public CatchallBlock() {
         super(Properties.of()
                 .sound(SoundType.WOOD)
@@ -58,7 +62,7 @@ public class CatchallBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         }
@@ -120,4 +124,10 @@ public class CatchallBlock extends BaseEntityBlock {
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new CatchallBlockEntity(pos, state);
     }
+
+    @Override
+    protected MapCodec<CatchallBlock> codec() {
+        return CODEC;
+    }
+
 }
