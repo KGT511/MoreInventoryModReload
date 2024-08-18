@@ -18,7 +18,7 @@
     "   "
   ],
   "result": {
-    "item": "moreinventorymod:plating_copper"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "moreinventorymod:plating_copper"
+  }
 }

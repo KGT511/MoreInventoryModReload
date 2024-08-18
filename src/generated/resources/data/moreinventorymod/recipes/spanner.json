@@ -15,7 +15,7 @@
     "SSS"
   ],
   "result": {
-    "item": "moreinventorymod:spanner"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "moreinventorymod:spanner"
+  }
 }

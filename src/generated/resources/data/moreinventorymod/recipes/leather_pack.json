@@ -15,7 +15,7 @@
     "LLL"
   ],
   "result": {
-    "item": "moreinventorymod:leather_pack"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "moreinventorymod:leather_pack"
+  }
 }

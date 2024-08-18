@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:chest"
-            ]
+            "items": "minecraft:chest"
           }
         ]
       },
@@ -30,6 +28,5 @@
     "recipes": [
       "moreinventorymod:catchall"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

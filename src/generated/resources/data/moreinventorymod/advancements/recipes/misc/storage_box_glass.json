@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:glass"
-            ]
+            "items": "minecraft:glass"
           }
         ]
       },
@@ -17,9 +15,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:glass_pane"
-            ]
+            "items": "minecraft:glass_pane"
           }
         ]
       },
@@ -43,6 +39,5 @@
     "recipes": [
       "moreinventorymod:storage_box_glass"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

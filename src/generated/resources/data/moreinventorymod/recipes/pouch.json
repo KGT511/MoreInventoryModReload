@@ -18,7 +18,7 @@
     "LPL"
   ],
   "result": {
-    "item": "moreinventorymod:pouch"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "moreinventorymod:pouch"
+  }
 }

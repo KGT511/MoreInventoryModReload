@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "moreinventorymod:brush"
-            ]
+            "items": "moreinventorymod:brush"
           }
         ]
       },
@@ -30,6 +28,5 @@
     "recipes": [
       "moreinventorymod:plating_gold"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

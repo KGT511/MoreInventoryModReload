@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:iron_ingot"
-            ]
+            "items": "minecraft:iron_ingot"
           }
         ]
       },
@@ -17,9 +15,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:stone"
-            ]
+            "items": "minecraft:stone"
           }
         ]
       },
@@ -43,6 +39,5 @@
     "recipes": [
       "moreinventorymod:spanner"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }
