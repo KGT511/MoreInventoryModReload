@@ -43,7 +43,7 @@ public class PouchRecipe extends CustomRecipe {
             }
         }
         if (0 < enderPearlCnt) {
-            int grade = new PouchInventory(pouch).getGrade();
+            int grade = new PouchInventory(level.registryAccess(), pouch).getGrade();
             if (PouchInventory.maxUpgradeNumCollectableSlot < grade + enderPearlCnt)
                 return false;
         }
@@ -75,7 +75,7 @@ public class PouchRecipe extends CustomRecipe {
         if (dyeColor != null)
             pouch = PouchItem.setColor(pouch, dyeColor);
         if (0 < gradeUpCnt) {
-            var pouchInventory = new PouchInventory(pouch);
+            var pouchInventory = new PouchInventory(provider, pouch);
             for (int i = 0; i < gradeUpCnt; ++i)
                 pouchInventory.increaseGrade();
         }

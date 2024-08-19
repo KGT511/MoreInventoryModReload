@@ -14,6 +14,7 @@ import moreinventory.storagebox.StorageBoxType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -54,12 +55,12 @@ public class StorageBoxNetworkManager {
         return this.network;
     }
 
-    public void storeInventoryToNetwork(Container inventory, BlockPos originPos) {
+    public void storeInventoryToNetwork(Player player, Container inventory, BlockPos originPos) {
         for (int i = 0; i < inventory.getContainerSize(); ++i) {
             var stack = inventory.getItem(i);
             if (!stack.isEmpty()) {
                 if (stack.getItem() instanceof PouchItem) {
-                    var pouch = new PouchInventory(stack);
+                    var pouch = new PouchInventory(player, stack);
                     if (pouch.getIsStorageBox()) {
                         pouch.storeToNetwork(this, originPos);
                     }

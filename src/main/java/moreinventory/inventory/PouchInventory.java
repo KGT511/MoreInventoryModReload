@@ -10,12 +10,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 
 public class PouchInventory implements Container {
 
@@ -42,16 +44,17 @@ public class PouchInventory implements Container {
 
     public Component customName;
 
-    private Provider provider;//TODO
+    private Provider provider;
 
     public PouchInventory(Player player, ItemStack itemStack) {
-        this.usingPouch = itemStack;
-        this.customName = itemStack.getDisplayName();
-        this.readToNBT((CompoundTag) this.usingPouch.saveOptional(this.provider));
+        this(player.level().registryAccess(), itemStack);
     }
 
-    public PouchInventory(ItemStack itemStack) {
-        this(null, itemStack);
+    public PouchInventory(Provider provider, ItemStack itemStack) {
+        this.usingPouch = itemStack;
+        this.customName = itemStack.getDisplayName();
+        this.provider = provider;
+        this.readToNBT(this.usingPouch.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag());
     }
 
     public void readToNBT(CompoundTag nbt) {
@@ -74,9 +77,9 @@ public class PouchInventory implements Container {
     }
 
     public void writeItemsToNBT() {
-        var tag = (CompoundTag) this.usingPouch.saveOptional(this.provider);
+        var tag = this.usingPouch.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         this.writeItemsToNBT(tag);
-        this.usingPouch = ItemStack.parseOptional(this.provider, tag);
+        this.usingPouch.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
     }
 
     public void writeItemsToNBT(CompoundTag nbt) {
@@ -86,9 +89,9 @@ public class PouchInventory implements Container {
     }
 
     public void writeValsToNBT() {
-        var tag = (CompoundTag) this.usingPouch.saveOptional(this.provider);
+        var tag = this.usingPouch.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         this.writeValsToNBT(tag);
-        this.usingPouch = ItemStack.parseOptional(this.provider, tag);
+        this.usingPouch.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
     }
 
     public void writeValsToNBT(CompoundTag nbt) {
@@ -138,7 +141,7 @@ public class PouchInventory implements Container {
 
     @Override
     public void startOpen(Player player) {
-        this.readToNBT((CompoundTag) this.usingPouch.saveOptional(this.provider));
+        this.readToNBT(this.usingPouch.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag());
     }
 
     @Override
@@ -199,7 +202,7 @@ public class PouchInventory implements Container {
         this.setChanged();
     }
 
-    public void collectAllItemStack(Container inventory, boolean flag) {
+    public void collectAllItemStack(Player player, Container inventory, boolean flag) {
         int origin = (isHotBar ? 0 : 9);
 
         for (int i = origin; i < inventory.getContainerSize(); i++) {
@@ -209,9 +212,9 @@ public class PouchInventory implements Container {
                 continue;
 
             if (itemStack.getItem() instanceof PouchItem) {
-                var pouch = new PouchInventory(itemStack);
+                var pouch = new PouchInventory(player, itemStack);
                 if (pouch.isAutoCollect && flag && itemStack != this.usingPouch) {
-                    pouch.collectAllItemStack(inventory, false);
+                    pouch.collectAllItemStack(player, inventory, false);
                 }
             } else {
                 if (isCollectableItem(itemStack)) {

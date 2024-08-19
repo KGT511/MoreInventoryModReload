@@ -26,7 +26,7 @@ public class GlassStorageBoxBlockEntity extends BaseStorageBoxBlockEntity {
         case 3:
             clickCount = 0;
 
-            getStorageBoxNetworkManager().storeInventoryToNetwork(player.getInventory(), this.worldPosition);
+            getStorageBoxNetworkManager().storeInventoryToNetwork(player, player.getInventory(), this.worldPosition);
             player.tick();
             break;
         default:

@@ -26,7 +26,7 @@ public class MIMEventHooks {
                     //                    String uuid = player.getStringUUID();
 
                     if (itemstack.getItem() instanceof PouchItem) {
-                        PouchInventory pouch = new PouchInventory(itemstack);
+                        PouchInventory pouch = new PouchInventory(player, itemstack);
 
                         if (pouch.canAutoCollect(item)) {
                             PouchInventory.mergeItemStack(item, pouch);

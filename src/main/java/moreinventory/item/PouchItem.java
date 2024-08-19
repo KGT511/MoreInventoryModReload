@@ -69,10 +69,10 @@ public class PouchItem extends Item {
         if (player.isShiftKeyDown()) {
             var tile = level.getBlockEntity(blockPos);
             var itemStack = player.getMainHandItem();
-            var inventory = new PouchInventory(itemStack);
+            var inventory = new PouchInventory(player, itemStack);
 
             if (tile == null) {
-                inventory.collectAllItemStack(player.getInventory(), true);
+                inventory.collectAllItemStack(player, player.getInventory(), true);
             } else if (tile instanceof Container) {
                 inventory.transferToChest((Container) tile);
             }

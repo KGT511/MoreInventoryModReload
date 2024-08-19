@@ -287,7 +287,7 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
         return result;
     }
 
-    private void storeItemInInventory(Container inventory) {
+    private void storeItemInInventory(Player player, Container inventory) {
         if (!hasContents())
             return;
 
@@ -295,7 +295,7 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
             var stack = inventory.getItem(i);
             if (!stack.isEmpty()) {
                 if (stack.getItem() instanceof PouchItem) {
-                    var pouch = new PouchInventory(stack);
+                    var pouch = new PouchInventory(player, stack);
                     if (pouch.getIsStorageBox()) {
                         pouch.collectedByStorageBox(this);
                     }
@@ -324,13 +324,13 @@ public class BaseStorageBoxBlockEntity extends RandomizableContainerBlockEntity 
 
             break;
         case 2:
-            storeItemInInventory(player.getInventory());
+            storeItemInInventory(player, player.getInventory());
             player.tick();
             break;
         case 3:
             clickCount = 0;
 
-            getStorageBoxNetworkManager().storeInventoryToNetwork(player.getInventory(), this.worldPosition);
+            getStorageBoxNetworkManager().storeInventoryToNetwork(player, player.getInventory(), this.worldPosition);
             player.tick();
             break;
         default:
