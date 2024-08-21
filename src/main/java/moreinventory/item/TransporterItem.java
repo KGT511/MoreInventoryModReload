@@ -276,6 +276,7 @@ public class TransporterItem extends Item {
             if (block instanceof ChestBlock) {
                 //v1.20.6からすでに置いてあるチェストの隣にトランスポーターでチェストを置いた時に、トランスポーターで置いたチェストは連結しようとするが、すでに置いてあるチェストが連結しなくなった（シングルのまま）問題が発生。
                 //これを解決するために、トランスポーターで置くブロックがチェストであるかつ周囲に連結できるチェストがすでにあった場合、そのチェストに対して連結できるようにする。
+
                 for (var direction : Direction.values()) {
                     if (direction.getAxis().isHorizontal()) {
                         var neighborPos = setBlockPos.relative(direction);
@@ -283,12 +284,12 @@ public class TransporterItem extends Item {
                         if (neighborEntity != null && neighborEntity instanceof ChestBlockEntity) {
                             var oldState = level.getBlockState(neighborPos);
                             var neighborState = Block.updateFromNeighbourShapes(level.getBlockState(neighborPos), level, neighborPos);
+                            level.setBlockAndUpdate(neighborPos, neighborState);
                             level.sendBlockUpdated(neighborPos, oldState, neighborState, 0);
                         }
                     }
                 }
             }
-
             blockEntity.setChanged();
             itemStack.remove(DataComponents.CUSTOM_DATA);
             itemStack.remove(DataComponents.CUSTOM_MODEL_DATA);
