@@ -8,6 +8,7 @@ import moreinventory.blockentity.BaseStorageBoxBlockEntity;
 import moreinventory.storagebox.StorageBoxType;
 import moreinventory.util.MIMUtils;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
@@ -31,6 +32,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.FurnaceBlock;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
@@ -274,10 +276,19 @@ public class TransporterItem extends Item {
             if (block instanceof ChestBlock) {
                 //v1.20.6からすでに置いてあるチェストの隣にトランスポーターでチェストを置いた時に、トランスポーターで置いたチェストは連結しようとするが、すでに置いてあるチェストが連結しなくなった（シングルのまま）問題が発生。
                 //これを解決するために、トランスポーターで置くブロックがチェストであるかつ周囲に連結できるチェストがすでにあった場合、そのチェストに対して連結できるようにする。
-                var neighborPos = blockPos;
-                var neighborState = Block.updateFromNeighbourShapes(level.getBlockEntity(neighborPos).getBlockState(), level, neighborPos);
-                level.setBlockAndUpdate(neighborPos, neighborState);
+                for (var direction : Direction.values()) {
+                    if (direction.getAxis().isHorizontal()) {
+                        var neighborPos = setBlockPos.relative(direction);
+                        var neighborEntity = level.getBlockEntity(neighborPos);
+                        if (neighborEntity != null && neighborEntity instanceof ChestBlockEntity) {
+                            var oldState = level.getBlockState(neighborPos);
+                            var neighborState = Block.updateFromNeighbourShapes(level.getBlockState(neighborPos), level, neighborPos);
+                            level.sendBlockUpdated(neighborPos, oldState, neighborState, 0);
+                        }
+                    }
+                }
             }
+
             blockEntity.setChanged();
             itemStack.remove(DataComponents.CUSTOM_DATA);
             itemStack.remove(DataComponents.CUSTOM_MODEL_DATA);
