@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class ConfigButton extends AbstractWidget {
-    public static final ResourceLocation POUCH_GUI_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/gui/pouch.png");;
+    public static final ResourceLocation POUCH_GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(MoreInventoryMOD.MOD_ID, "textures/gui/pouch.png");;
 
     private int iconIndexX, iconIndexY;
     private boolean val;

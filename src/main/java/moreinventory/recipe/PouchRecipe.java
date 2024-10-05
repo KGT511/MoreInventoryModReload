@@ -3,12 +3,12 @@ package moreinventory.recipe;
 import moreinventory.inventory.PouchInventory;
 import moreinventory.item.PouchItem;
 import net.minecraft.core.HolderLookup.Provider;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -21,13 +21,13 @@ public class PouchRecipe extends CustomRecipe {
 
     //染料と色変え可能なアイテムが1つずつあるかチェック
     @Override
-    public boolean matches(CraftingContainer inventory, Level level) {
+    public boolean matches(CraftingInput inventory, Level level) {
         int pouchCnt = 0;
         int dyeCnt = 0;
         int enderPearlCnt = 0;
         var pouch = ItemStack.EMPTY;
 
-        for (int k = 0; k < inventory.getContainerSize(); ++k) {
+        for (int k = 0; k < inventory.size(); ++k) {
             var itemStack = inventory.getItem(k);
             if (!itemStack.isEmpty()) {
                 if (itemStack.getItem() instanceof PouchItem) {
@@ -53,12 +53,12 @@ public class PouchRecipe extends CustomRecipe {
 
     //完成品を返す
     @Override
-    public ItemStack assemble(CraftingContainer inventory, Provider provider) {
+    public ItemStack assemble(CraftingInput inventory, Provider provider) {
         var pouch = ItemStack.EMPTY;
         DyeColor dyeColor = null;
         int gradeUpCnt = 0;
 
-        for (int i = 0; i < inventory.getContainerSize(); ++i) {
+        for (int i = 0; i < inventory.size(); ++i) {
             var itemStack = inventory.getItem(i);
             if (!itemStack.isEmpty()) {
                 if (itemStack.getItem() instanceof PouchItem) {

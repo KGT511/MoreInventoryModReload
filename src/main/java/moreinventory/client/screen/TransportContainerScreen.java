@@ -21,7 +21,7 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 @OnlyIn(Dist.CLIENT)
 public class TransportContainerScreen extends AbstractContainerScreen<TransportContainer> {
 
-    private static ResourceLocation DISPENSER_GUI_TEXTURE = new ResourceLocation("textures/gui/container/dispenser.png");
+    private static ResourceLocation DISPENSER_GUI_TEXTURE = ResourceLocation.parse("textures/gui/container/dispenser.png");
     private Button isWhiteButton;
     private Button isRegisterButton;
 

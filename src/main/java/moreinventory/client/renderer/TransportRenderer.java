@@ -21,10 +21,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
 public class TransportRenderer implements BlockEntityRenderer<BaseTransportBlockEntity> {
-    private static ResourceLocation IMPORTER_LIGHT_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/importer.png");
-    private static ResourceLocation IMPORTER_DARK_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/importer_black.png");
-    private static ResourceLocation EXPORTER_LIGHT_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/exporter.png");
-    private static ResourceLocation EXPORTER_DARK_TEXTURE = new ResourceLocation(MoreInventoryMOD.MOD_ID, "textures/block/exporter_black.png");
+    private static ResourceLocation IMPORTER_LIGHT_TEXTURE = ResourceLocation.fromNamespaceAndPath(MoreInventoryMOD.MOD_ID, "textures/block/importer.png");
+    private static ResourceLocation IMPORTER_DARK_TEXTURE = ResourceLocation.fromNamespaceAndPath(MoreInventoryMOD.MOD_ID, "textures/block/importer_black.png");
+    private static ResourceLocation EXPORTER_LIGHT_TEXTURE = ResourceLocation.fromNamespaceAndPath(MoreInventoryMOD.MOD_ID, "textures/block/exporter.png");
+    private static ResourceLocation EXPORTER_DARK_TEXTURE = ResourceLocation.fromNamespaceAndPath(MoreInventoryMOD.MOD_ID, "textures/block/exporter_black.png");
 
     private final ModelPart in1;
     private final ModelPart in2;

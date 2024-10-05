@@ -63,7 +63,7 @@ public class ItemModelGenerator extends ItemModelProvider {
     }
 
     public static ResourceLocation prefix(String name) {
-        return new ResourceLocation(MoreInventoryMOD.MOD_ID, name.toLowerCase(Locale.ROOT));
+        return ResourceLocation.fromNamespaceAndPath(MoreInventoryMOD.MOD_ID, name.toLowerCase(Locale.ROOT));
     }
 
     private ItemModelBuilder singleTexTool(Item item) {
@@ -96,7 +96,7 @@ public class ItemModelGenerator extends ItemModelProvider {
 
         var name = "item/" + name(Items.TRANSPORTER.get());
         var builder = tool(name(Items.TRANSPORTER.get()), prefix(name));
-        var predicateName = new ResourceLocation("custom_model_data");
+        var predicateName = ResourceLocation.parse("custom_model_data");
         for (var transportableBlock : TransporterItem.transportableBlocks) {
             var transportableBlockName = BlockStateGenerator.name(transportableBlock);
             int num = TransporterItem.transportableBlocks.indexOf(transportableBlock) + 1;

@@ -8,5 +8,5 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelLayers {
-    public static final ModelLayerLocation TRANSPORTER = new ModelLayerLocation(new ResourceLocation(MoreInventoryMOD.MOD_ID, "transport"), "main");
+    public static final ModelLayerLocation TRANSPORTER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(MoreInventoryMOD.MOD_ID, "transport"), "main");
 }

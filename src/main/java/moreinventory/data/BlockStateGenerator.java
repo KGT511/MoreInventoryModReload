@@ -234,7 +234,7 @@ public class BlockStateGenerator extends BlockStateProvider {
         var exporterName = name(Blocks.EXPORTER.get());
         var makeExporterBuilder = (Function<String, BlockModelBuilder>) (str) -> {
             return models().withExistingParent("block/" + exporterName + "/" + exporterName + str,
-                    new ResourceLocation(MoreInventoryMOD.MOD_ID, "block/" + importerName + "/" + importerName + str))
+                    ResourceLocation.fromNamespaceAndPath(MoreInventoryMOD.MOD_ID, "block/" + importerName + "/" + importerName + str))
                     .texture("all", texture(exporterName + "_black"))
                     .texture("blue", texture(exporterName))
                     .texture("black", black_texture);
